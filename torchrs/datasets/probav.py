@@ -72,8 +72,8 @@ class PROBAV(torch.utils.data.Dataset):
 
         Note: 
         lr/qm original size is (128, 128),
-        hr/sm original size is (384, 384) (3x lr/qm size)
-        t is the number of lr images for an image set (min=9)
+        hr/sm original size is (384, 384) (scale factor = 3)
+        t is the number of lr images for an image set (min = 9)
         """
         imgset = self.imgsets[idx]
 
