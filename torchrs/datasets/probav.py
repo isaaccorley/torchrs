@@ -80,8 +80,8 @@ class PROBAV(torch.utils.data.Dataset):
         # Load
         lrs = [np.array(Image.open(lr), dtype="int32") for lr in imgset["lr"]]
         qms = [np.array(Image.open(qm), dtype="bool") for qm in imgset["qm"]]
-        hr = np.array(Image.open(imgset["hr"]))
-        sm = np.array(Image.open(imgset["sm"]))
+        hr = np.array(Image.open(imgset["hr"]), dtype="int32")
+        sm = np.array(Image.open(imgset["sm"]), dtype="bool")
 
         # Transform
         lrs = torch.stack([self.lr_transform(lr) for lr in lrs])
