@@ -65,11 +65,15 @@ class PROBAV(torch.utils.data.Dataset):
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
         """ Returns a dict containing lrs, qms, hr, sm
-        Note: lr/qm original size is (128, 128), hr/sm original size is (384, 384) (3x lr/qm size)
-        lrs: (t, h, w) where t is number of low resolution images in the set
-        qms: (t, h, w) where t is number of low resolution image quality mask images in the set
-        hr: (3h, 3w) high resolution image status mask
-        sm: (3h, 3w) high resolution image status mask
+        lrs: (t, h, w) low resolution images
+        qms: (t, h, w) low resolution image quality masks
+        hr: (h, w) high resolution image
+        sm: (h, w) high resolution image status mask
+
+        Note: 
+        lr/qm original size is (128, 128),
+        hr/sm original size is (384, 384) (3x lr/qm size)
+        t is the number of lr images for an image set (min=9)
         """
         imgset = self.imgsets[idx]
 
