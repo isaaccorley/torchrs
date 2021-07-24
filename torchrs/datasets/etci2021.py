@@ -1,16 +1,15 @@
 import os
 from glob import glob
-from typing import List, Tuple, Dict
+from typing import List, Dict
 
 import torch
 import numpy as np
-import torchvision.transforms as T
 from PIL import Image
 
-from torchrs.transforms import ToTensor
+from torchrs.transforms import Compose, ToTensor
 
 
-class PROBAV(torch.utils.data.Dataset):
+class ETCI2021(torch.utils.data.Dataset):
     """Sentinel-1 Synthetic Aperature Radar (SAR) segmentation dataset from the ETCI 2021 Competition on Flood Detection
     https://nasa-impact.github.io/etci2021/
     https://competitions.codalab.org/competitions/30440
@@ -20,59 +19,50 @@ class PROBAV(torch.utils.data.Dataset):
     and 12,348 tiles for each polarization. Each tile includes 3 RGB channels which have been converted
     by tiling 54 labeled GeoTiff files generated from Sentinel-1 C-band synthetic aperture radar (SAR)
     imagery data using Hybrid Pluggable Processing Pipeline hyp3.'
+
+    Note that hyp3 preprocessing generates 3 band for each band so VV and VH are both of shape (256, 256, 3)
     """
     bands = ["VV", "VH"]
-    splits = dict(train="train", val="testing", test="testing_internal")
+    splits = dict(train="train", val="test", test="test_internal")
 
     def __init__(
         self,
         root: str =".data/etci2021",
         split: str = "train",
-        transform: T.Compose = T.Compose([ToTensor()]),
+        transform: Compose = Compose([ToTensor()]),
     ):
         assert split in self.splits.keys()
         self.transform = transform
-        self.images = self.load_files(root, split)
+        self.images = self.load_files(root, self.splits[split])
 
     @staticmethod
     def load_files(root: str, split: str) -> List[Dict]:
-        imgsets = []
-        folders = sorted(glob(os.path.join(root, split, band, "imgset*")))
+        images = []
+        folders = sorted(glob(os.path.join(root, split, "*")))
+        folders = [f + "/tiles" for f in folders]
         for folder in folders:
-            lr = sorted(glob(os.path.join(folder, "LR*.png")))
-            qm = sorted(glob(os.path.join(folder, "QM*.png")))
-            sm = glob(os.path.join(folder, "SM.png"))[0]
-            hr = glob(os.path.join(folder, "HR.png"))[0]
-            imgsets.append(dict(lr=lr, qm=qm, hr=hr, sm=sm))
-        return imgsets
+            vvs = glob(os.path.join(folder, "vv", "*.png"))
+            vhs = glob(os.path.join(folder, "vh", "*.png"))
+            flood_masks = glob(os.path.join(folder, "flood_label", "*.png"))
+            water_masks = glob(os.path.join(folder, "water_body_label", "*.png"))
+            for vv, vh, flood_mask, water_mask in zip(vvs, vhs, flood_masks, water_masks):
+                images.append(dict(vv=vv, vh=vh, flood_mask=flood_mask, water_mask=water_mask))
+        return images
 
     def len(self) -> int:
-        return len(self.imgsets)
+        return len(self.images)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
-        """ Returns a dict containing lrs, qms, hr, sm
-        lrs: (t, h, w) low resolution images
-        qms: (t, h, w) low resolution image quality masks
-        hr: (h, w) high resolution image
-        sm: (h, w) high resolution image status mask
-
-        Note: 
-        lr/qm original size is (128, 128),
-        hr/sm original size is (384, 384) (scale factor = 3)
-        t is the number of lr images for an image set (min = 9)
+    def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
+        """ Returns a dict containing vv, vh, flood mask, water mask
+        vv: (3, h, w)
+        vh: (3, h, w)
+        flood mask: (1, h, w) flood mask
+        water mask: (1, h, w) water mask
         """
-        imgset = self.imgsets[idx]
-
-        # Load
-        lrs = [np.array(Image.open(lr), dtype="int32") for lr in imgset["lr"]]
-        qms = [np.array(Image.open(qm), dtype="bool") for qm in imgset["qm"]]
-        hr = np.array(Image.open(imgset["hr"]), dtype="int32")
-        sm = np.array(Image.open(imgset["sm"]), dtype="bool")
-
-        # Transform
-        lrs = torch.stack([self.lr_transform(lr) for lr in lrs])
-        qms = torch.stack([torch.from_numpy(qm) for qm in qms])
-        hr = self.hr_transform(hr)
-        sm = torch.from_numpy(sm)
-
-        return dict(lr=lrs, qm=qms, hr=hr, sm=sm)
+        images = self.images[idx]
+        vv = np.array(Image.open(images["vv"]), dtype="uint8")
+        vh = np.array(Image.open(images["vh"]), dtype="uint8")
+        flood_mask = np.array(Image.open(images["flood_mask"]).convert("L"), dtype="bool")
+        water_mask = np.array(Image.open(images["water_mask"]).convert("L"), dtype="bool")
+        vv, vh, flood_mask, water_mask = self.transform([vv, vh, flood_mask, water_mask])
+        return dict(vv=vv, vh=vh, flood_mask=flood_mask, water_mask=water_mask)
