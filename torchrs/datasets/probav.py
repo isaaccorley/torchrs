@@ -1,6 +1,6 @@
 import os
 from glob import glob
-from typing import List, Tuple, Dict
+from typing import List, Dict
 
 import torch
 import numpy as np
@@ -63,14 +63,14 @@ class PROBAV(torch.utils.data.Dataset):
     def len(self) -> int:
         return len(self.imgsets)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
+    def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
         """ Returns a dict containing lrs, qms, hr, sm
-        lrs: (t, h, w) low resolution images
-        qms: (t, h, w) low resolution image quality masks
-        hr: (h, w) high resolution image
-        sm: (h, w) high resolution image status mask
+        lrs: (t, 1, h, w) low resolution images
+        qms: (t, 1, h, w) low resolution image quality masks
+        hr: (1, h, w) high resolution image
+        sm: (1, h, w) high resolution image status mask
 
-        Note: 
+        Note:
         lr/qm original size is (128, 128),
         hr/sm original size is (384, 384) (scale factor = 3)
         t is the number of lr images for an image set (min = 9)
@@ -85,13 +85,8 @@ class PROBAV(torch.utils.data.Dataset):
 
         # Transform
         lrs = torch.stack([self.lr_transform(lr) for lr in lrs])
-        qms = torch.stack([torch.from_numpy(qm) for qm in qms])
+        qms = torch.stack([torch.from_numpy(qm) for qm in qms]).unsqueeze(1)
         hr = self.hr_transform(hr)
-        sm = torch.from_numpy(sm)
-
-        lrs = lrs.unsqueeze(dim=1)
-        qms = qms.unsqueeze(dim=1)
-        hr = hr.unsqueeze(dim=0)
-        sm = sm.unsqueeze(dim=0)
+        sm = torch.from_numpy(sm).unsqueeze(0)
 
         return dict(lr=lrs, qm=qms, hr=hr, sm=sm)
