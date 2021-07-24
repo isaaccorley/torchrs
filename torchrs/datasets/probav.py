@@ -1,6 +1,6 @@
 import os
 from glob import glob
-from typing import List, Tuple, Dict
+from typing import List, Dict
 
 import torch
 import numpy as np
@@ -23,7 +23,7 @@ class PROBAV(torch.utils.data.Dataset):
 
     Each image comes with a quality map, indicating which pixels in the image are concealed
     (i.e. clouds, cloud shadows, ice, water, missing, etc) and which should be considered clear. For an image to be
-    included in the dataset, at least 75% of its pixels have to be clear for 100m resolution images, and 60% for 
+    included in the dataset, at least 75% of its pixels have to be clear for 100m resolution images, and 60% for
     300m resolution images. Each data-point consists of exactly one 100m resolution image and several 300m resolution
     images from the same scene. In total, the dataset contains 1450 scenes, which are split into 1160 scenes for
     training and 290 scenes for testing. On average, each scene comes with 19 different low resolution images and
@@ -44,6 +44,7 @@ class PROBAV(torch.utils.data.Dataset):
     ):
         assert split in self.splits
         assert band in self.bands
+        self.split = split
         self.lr_transform = lr_transform
         self.hr_transform = hr_transform
         self.imgsets = self.load_files(root, split, band)
@@ -56,21 +57,26 @@ class PROBAV(torch.utils.data.Dataset):
             lr = sorted(glob(os.path.join(folder, "LR*.png")))
             qm = sorted(glob(os.path.join(folder, "QM*.png")))
             sm = glob(os.path.join(folder, "SM.png"))[0]
-            hr = glob(os.path.join(folder, "HR.png"))[0]
+
+            if split == "train":
+                hr = glob(os.path.join(folder, "HR.png"))[0]
+            else:
+                hr = None
+
             imgsets.append(dict(lr=lr, qm=qm, hr=hr, sm=sm))
         return imgsets
 
     def len(self) -> int:
         return len(self.imgsets)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
+    def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
         """ Returns a dict containing lrs, qms, hr, sm
-        lrs: (t, h, w) low resolution images
-        qms: (t, h, w) low resolution image quality masks
-        hr: (h, w) high resolution image
-        sm: (h, w) high resolution image status mask
+        lrs: (t, 1, h, w) low resolution images
+        qms: (t, 1, h, w) low resolution image quality masks
+        hr: (1, h, w) high resolution image
+        sm: (1, h, w) high resolution image status mask
 
-        Note: 
+        Note:
         lr/qm original size is (128, 128),
         hr/sm original size is (384, 384) (scale factor = 3)
         t is the number of lr images for an image set (min = 9)
@@ -80,18 +86,18 @@ class PROBAV(torch.utils.data.Dataset):
         # Load
         lrs = [np.array(Image.open(lr), dtype="int32") for lr in imgset["lr"]]
         qms = [np.array(Image.open(qm), dtype="bool") for qm in imgset["qm"]]
-        hr = np.array(Image.open(imgset["hr"]), dtype="int32")
         sm = np.array(Image.open(imgset["sm"]), dtype="bool")
 
         # Transform
         lrs = torch.stack([self.lr_transform(lr) for lr in lrs])
-        qms = torch.stack([torch.from_numpy(qm) for qm in qms])
-        hr = self.hr_transform(hr)
-        sm = torch.from_numpy(sm)
+        qms = torch.stack([torch.from_numpy(qm) for qm in qms]).unsqueeze(1)
+        sm = torch.from_numpy(sm).unsqueeze(0)
 
-        lrs = lrs.unsqueeze(dim=1)
-        qms = qms.unsqueeze(dim=1)
-        hr = hr.unsqueeze(dim=0)
-        sm = sm.unsqueeze(dim=0)
+        if self.split == "train":
+            hr = np.array(Image.open(imgset["hr"]), dtype="int32")
+            hr = self.hr_transform(hr)
+            output = dict(lr=lrs, qm=qms, hr=hr, sm=sm)
+        else:
+            output = dict(lr=lrs, qm=qms, sm=sm)
 
-        return dict(lr=lrs, qm=qms, hr=hr, sm=sm)
+        return output
