@@ -12,11 +12,15 @@ pip install git+https://github.com/isaaccorley/torchrs
 
 ## Datasets
 
+### Table of Contents
+* [PROBA-V Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
+* [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
+
 ### PROBA-V Super Resolution
 
 <img src="./assets/proba-v.jpg" width="500px"></img>
 
-The [PROBA-V Super Resolution Challenge Dataset](https://kelvins.esa.int/proba-v-super-resolution/home/) is a Multi-image Super Resolution (MISR) dataset of images taken by the [ESA PROBA-Vegetation satellite](https://earth.esa.int/eogateway/missions/proba-v). The dataset contains sets of 300m low resolution (LR) images which can be used to generate single 100m high resolution (HR) images for both Near Infrared (NIR) and Red bands. In addition, Quality Masks (QM) for each LR image and Status Masks (SM) for each HR image are available. The PROBA-V contains sensors which take imagery at 100m and 300m spatial resolutions with 5 and 1 day revisit rates, respectively. Generating high resolution imagery estimates would effectively increase the frequency at which HR imagery is available for vegetation monitoring.
+The [PROBA-V Super Resolution Challenge Dataset](https://kelvins.esa.int/proba-v-super-resolution/home/) is a Multi-image Super Resolution (MISR) dataset of images taken by the [ESA PROBA-Vegetation satellite](https://earth.esa.int/eogateway/missions/proba-v). The dataset contains sets of unregistered 300m low resolution (LR) images which can be used to generate single 100m high resolution (HR) images for both Near Infrared (NIR) and Red bands. In addition, Quality Masks (QM) for each LR image and Status Masks (SM) for each HR image are available. The PROBA-V contains sensors which take imagery at 100m and 300m spatial resolutions with 5 and 1 day revisit rates, respectively. Generating high resolution imagery estimates would effectively increase the frequency at which HR imagery is available for vegetation monitoring.
 
 The dataset can be downloaded using the `scripts/download_probav.sh` script and then used as below:
 
@@ -47,7 +51,41 @@ t varies by set of images (minimum of 9)
 """
 ```
 
+### ETCI 2021 Flood Detection
+
+<img src="./assets/etci2021.jpg" width="500px"></img>
+
+The [ETCI 2021 Dataset](https://nasa-impact.github.io/etci2021/) is a Flood Detection segmentation dataset of SAR images taken by the [ESA Sentinel-1 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-1). The dataset contains pairs of VV and VH polarization images processed by the Hybrid Pluggable Processing Pipeline (hyp3) along with corresponding binary flood and water body ground truth masks. Generating high resolution imagery estimates would effectively increase the frequency at which HR imagery is available for vegetation monitoring.
+
+The dataset can be downloaded using the `scripts/download_etci2021.sh` script and then used as below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import ETCI2021
+
+transform = Compose([ToTensor()])
+
+dataset = ETCI2021(
+    root="path/to/dataset/",
+    split="train",          # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    vv:         (3, 256, 256)
+    vh:         (3, 256, 256)
+    flood_mask: (1, 256, 256)
+    water_mask: (1, 256, 256)
+)
+"""
+```
+
 ## Models
+
+## Table of Contents
+* [RAMS](https://github.com/isaaccorley/torchrs#rams)
 
 ### RAMS
 
@@ -57,11 +95,7 @@ Residual Attention Multi-image Super-resolution Network (RAMS) from
 ["Multi-Image Super Resolution of Remotely Sensed Images Using Residual Attention Deep Neural Networks",
 Salvetti et al. (2021)](https://www.mdpi.com/2072-4292/12/14/2207)
 
-<<<<<<< HEAD
 RAMS is currently one of the top performers on the [PROBA-V Super Resolution Challenge](https://kelvins.esa.int/proba-v-super-resolution/home/). This Multi-image Super Resolution (MISR) architecture utilizes attention based methods to extract spatial and spatiotemporal features from a set of unregistered low resolution images to form a single high resolution image.
-=======
-RAMS is currently one of the top performers on the [PROBA-V Super Resolution Challenge](https://kelvins.esa.int/proba-v-super-resolution/home/). This Multi-image Super Resolution (MISR) architecture utilizes attention based methods to extract spatial and spatiotemporal features amongst a set of unregistered low resolution images to form a single high resolution image.
->>>>>>> f15f2a2c763fbb9a405b839b079080fae18cf98f
 
 ```python
 import torch
@@ -81,9 +115,8 @@ lr = torch.randn(1, 9, 1, 128, 128)
 sr = model(x) # (1, 1, 384, 384)
 ```
 
-
 ## Tests
 
-```
+```bash
 $ pytest -ra
 ```

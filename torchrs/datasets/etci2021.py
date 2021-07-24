@@ -32,6 +32,7 @@ class ETCI2021(torch.utils.data.Dataset):
         transform: Compose = Compose([ToTensor()]),
     ):
         assert split in self.splits.keys()
+        self.split = split
         self.transform = transform
         self.images = self.load_files(root, self.splits[split])
 
@@ -43,8 +44,13 @@ class ETCI2021(torch.utils.data.Dataset):
         for folder in folders:
             vvs = glob(os.path.join(folder, "vv", "*.png"))
             vhs = glob(os.path.join(folder, "vh", "*.png"))
-            flood_masks = glob(os.path.join(folder, "flood_label", "*.png"))
             water_masks = glob(os.path.join(folder, "water_body_label", "*.png"))
+
+            if split == "test_internal":
+                flood_masks = [None] * len(water_masks)
+            else:
+                flood_masks = glob(os.path.join(folder, "flood_label", "*.png"))
+
             for vv, vh, flood_mask, water_mask in zip(vvs, vhs, flood_masks, water_masks):
                 images.append(dict(vv=vv, vh=vh, flood_mask=flood_mask, water_mask=water_mask))
         return images
@@ -62,7 +68,14 @@ class ETCI2021(torch.utils.data.Dataset):
         images = self.images[idx]
         vv = np.array(Image.open(images["vv"]), dtype="uint8")
         vh = np.array(Image.open(images["vh"]), dtype="uint8")
-        flood_mask = np.array(Image.open(images["flood_mask"]).convert("L"), dtype="bool")
         water_mask = np.array(Image.open(images["water_mask"]).convert("L"), dtype="bool")
-        vv, vh, flood_mask, water_mask = self.transform([vv, vh, flood_mask, water_mask])
-        return dict(vv=vv, vh=vh, flood_mask=flood_mask, water_mask=water_mask)
+
+        if self.split == "test":
+            vv, vh, water_mask = self.transform([vv, vh, water_mask])
+            output = dict(vv=vv, vh=vh, water_mask=water_mask)
+        else:
+            flood_mask = np.array(Image.open(images["flood_mask"]).convert("L"), dtype="bool")
+            vv, vh, flood_mask, water_mask = self.transform([vv, vh, flood_mask, water_mask])
+            output = dict(vv=vv, vh=vh, flood_mask=flood_mask, water_mask=water_mask)
+
+        return output
