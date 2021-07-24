@@ -6,6 +6,10 @@
 pip install git+https://github.com/isaaccorley/torchrs
 ```
 
+## Table of Contents
+* [Datasets](https://github.com/isaaccorley/torchrs#datasets)
+* [Models](https://github.com/isaaccorley/torchrs#models)
+
 ## Datasets
 
 ### PROBA-V Super Resolution
@@ -53,7 +57,7 @@ Residual Attention Multi-image Super-resolution Network (RAMS) from
 ["Multi-Image Super Resolution of Remotely Sensed Images Using Residual Attention Deep Neural Networks",
 Salvetti et al. (2021)](https://www.mdpi.com/2072-4292/12/14/2207)
 
-RAMS is currently one of the top performers on the [PROBA-V Super Resolution Challenge](https://kelvins.esa.int/proba-v-super-resolution/home/). This Multi-image Super Resolution (MISR) architecture utilizes attention based method to extract spatial and 'temporal' features amongst a set of unregistered low resolution images to form a single high resolution image.
+RAMS is currently one of the top performers on the [PROBA-V Super Resolution Challenge](https://kelvins.esa.int/proba-v-super-resolution/home/). This Multi-image Super Resolution (MISR) architecture utilizes attention based methods to extract spatial and spatiotemporal features from a set of unregistered low resolution images to form a single high resolution image.
 
 ```python
 import torch
