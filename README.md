@@ -57,7 +57,11 @@ Residual Attention Multi-image Super-resolution Network (RAMS) from
 ["Multi-Image Super Resolution of Remotely Sensed Images Using Residual Attention Deep Neural Networks",
 Salvetti et al. (2021)](https://www.mdpi.com/2072-4292/12/14/2207)
 
+<<<<<<< HEAD
 RAMS is currently one of the top performers on the [PROBA-V Super Resolution Challenge](https://kelvins.esa.int/proba-v-super-resolution/home/). This Multi-image Super Resolution (MISR) architecture utilizes attention based methods to extract spatial and spatiotemporal features from a set of unregistered low resolution images to form a single high resolution image.
+=======
+RAMS is currently one of the top performers on the [PROBA-V Super Resolution Challenge](https://kelvins.esa.int/proba-v-super-resolution/home/). This Multi-image Super Resolution (MISR) architecture utilizes attention based methods to extract spatial and spatiotemporal features amongst a set of unregistered low resolution images to form a single high resolution image.
+>>>>>>> f15f2a2c763fbb9a405b839b079080fae18cf98f
 
 ```python
 import torch
