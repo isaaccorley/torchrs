@@ -89,4 +89,9 @@ class PROBAV(torch.utils.data.Dataset):
         hr = self.hr_transform(hr)
         sm = torch.from_numpy(sm)
 
+        lrs = lrs.unsqueeze(dim=1)
+        qms = qms.unsqueeze(dim=1)
+        hr = hr.unsqueeze(dim=0)
+        sm = sm.unsqueeze(dim=0)
+
         return dict(lr=lrs, qm=qms, hr=hr, sm=sm)
