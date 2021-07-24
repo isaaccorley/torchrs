@@ -1,30 +1,33 @@
+import math
+
 import torch
 import torch.nn as nn
 from einops import rearrange
 from einops.layers.torch import Rearrange, Reduce
 
 
-class TemporalAttention(nn.Module):
+class ReflectionPad3d(nn.Module):
+    """ Custom 3D reflection padding for only h, w dims """
+    def __init__(self, padding):
+        super().__init__()
+        self.pad = nn.ReflectionPad2d(padding)
 
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        b, t, c, h, w = x.shape
+        x = rearrange(x, "b t c h w -> b (t c) h w")
+        x = self.pad(x)
+        x = rearrange(x, "b (t c) h w -> b t c h w", t=t, c=c)
+        return x
+
+class TemporalAttention(nn.Module):
+    """ Temporal Attention Block """
     def __init__(self, channels: int, kernel_size: int, r: int):
         super().__init__()
         self.model = nn.Sequential(
             Reduce("b c h w -> b c () ()", "mean"),
-            nn.Conv2d(
-                in_channels=channels,
-                out_channels=channels//r,
-                kernel_size=kernel_size,
-                stride=1,
-                padding=kernel_size//2
-            ),
+            nn.Conv2d(channels, channels//r, kernel_size, stride=1, padding=kernel_size//2),
             nn.ReLU(),
-            nn.Conv2d(
-                in_channels=channels//r,
-                out_channels=channels,
-                kernel_size=kernel_size,
-                stride=1,
-                padding=kernel_size//2
-            ),
+            nn.Conv2d(channels//r, channels, kernel_size, stride=1, padding=kernel_size//2),
             nn.Sigmoid()
         )
 
@@ -33,53 +36,30 @@ class TemporalAttention(nn.Module):
 
 
 class FeatureAttention(nn.Module):
-
+    """ Feature Attention Block """
     def __init__(self, channels: int, kernel_size: int, r: int):
         super().__init__()
         self.model = nn.Sequential(
-            Reduce("b t c h w -> b () c () ()", "mean"),
-            nn.Conv3d(
-                in_channels=channels,
-                out_channels=channels//r,
-                kernel_size=kernel_size,
-                stride=1,
-                padding=kernel_size//2
-            ),
+            Reduce("b c t h w -> b c () () ()", "mean"),
+            nn.Conv3d(channels, channels//r, kernel_size, stride=1, padding=kernel_size//2),
             nn.ReLU(),
-            nn.Conv3d(
-                in_channels=channels//r,
-                out_channels=channels,
-                kernel_size=kernel_size,
-                stride=1,
-                padding=kernel_size//2
-            ),
+            nn.Conv3d(channels//r, channels, kernel_size, stride=1, padding=kernel_size//2),
             nn.Sigmoid()
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return x + self.model(x)
+        return x * self.model(x)
+
 
 class RTAB(nn.Module):
     """ Residual Temporal Attention Block """
     def __init__(self, channels: int, kernel_size: int, r: int):
         super().__init__()
         self.model = nn.Sequential(
-            nn.Conv2d(
-                in_channels=channels,
-                out_channels=channels,
-                kernel_size=kernel_size,
-                stride=1,
-                padding=kernel_size // 2,
-            ),
+            nn.Conv2d(channels, channels, kernel_size, stride=1, padding=kernel_size // 2),
             nn.ReLU(),
-            nn.Conv2d(
-                in_channels=channels,
-                out_channels=channels,
-                kernel_size=kernel_size,
-                stride=1,
-                padding=kernel_size // 2,
-            ),
-            TemporalAttention(channels=channels, kernel_size=kernel_size, r=r)
+            nn.Conv2d(channels, channels, kernel_size, stride=1, padding=kernel_size // 2),
+            TemporalAttention(channels, kernel_size, r)
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -91,63 +71,88 @@ class RFAB(nn.Module):
     def __init__(self, channels: int, kernel_size: int, r: int):
         super().__init__()
         self.model = nn.Sequential(
-            nn.Conv2d(
-                in_channels=channels,
-                out_channels=channels,
-                kernel_size=kernel_size,
-                stride=1,
-                padding=kernel_size // 2,
-            ),
+            nn.Conv3d(channels, channels, kernel_size, stride=1, padding=kernel_size // 2),
             nn.ReLU(),
-            nn.Conv2d(
-                in_channels=channels,
-                out_channels=channels,
-                kernel_size=kernel_size,
-                stride=1,
-                padding=kernel_size // 2,
-            ),
-            FeatureAttention(channels=channels, kernel_size=kernel_size, r=r)
+            nn.Conv3d(channels, channels, kernel_size, stride=1, padding=kernel_size // 2),
+            FeatureAttention(channels, kernel_size, r)
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return x + self.model(x)
 
 
+class TemporalReductionBlock(nn.Module):
+    """ Temporal Reduction Block """
+    def __init__(self, channels: int, kernel_size: int, r: int):
+        super().__init__()
+        self.model = nn.Sequential(
+            ReflectionPad3d(1),
+            RFAB(channels, kernel_size, r),
+            nn.Conv3d(channels, channels, kernel_size, stride=1, padding=0),
+            nn.ReLU()
+        )
+    
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.model(x)
+
 
 class RAMS(nn.Module):
     """
+    Residual Attention Multi-image Super-resolution Network (RAMS)
+    'Multi-Image Super Resolution of Remotely Sensed Images Using Residual Attention Deep Neural Networks'
+    Salvetti et al. (2021)
     https://www.mdpi.com/2072-4292/12/14/2207
+
+    Note this model was built to work with t=9 input images. Other values of t may not work
     """
     def __init__(
         self,
-        scale_factor: int = 2,
+        scale_factor: int = 3,
         t: int = 9,
-        channels: int = 1,
+        c: int = 1,
         num_feature_attn_blocks: int = 12,
     ):
         super().__init__()
         filters = 32
         kernel_size = 3
         r = 8
+
         self.temporal_attn = nn.Sequential(
             Rearrange("b t c h w -> b (t c) h w"),
-            RTAB(channels=t*c, kernel_size=kernel_size, r=r),
-            nn.Conv2d(
-                in_channels=t*c,
-                out_channels=scale_factor * c,
-                kernel_size=kernel_size,
-                stride=1,
-                padding=kernel_size//2
-            ),
-            nn.PixelShuffle(scale_factor),
-            Rearrange("b (t c) h w -> b t c h w", t=t, c=c)
+            nn.ReflectionPad2d(1),
+            RTAB(t * c, kernel_size, r),
         )
-        self.head = nn.Sequential()
-        self.feature_attn = nn.Sequential()
-        self.temporal_redn = nn.Sequential()
+        self.residual_upsample = nn.Sequential(
+            nn.Conv2d(t * c, c * scale_factor ** 2, kernel_size, stride=1, padding=0),
+            nn.PixelShuffle(scale_factor)
+        )
+        self.head = nn.Sequential(
+            Rearrange("b t c h w -> b c t h w"),
+            ReflectionPad3d(1),
+            nn.Conv3d(c, filters, kernel_size, stride=1, padding=kernel_size//2)
+        )
+        self.feature_attn = nn.Sequential(
+            *[RFAB(filters, kernel_size, r) for _ in range(num_feature_attn_blocks)],
+            nn.Conv3d(filters, filters, kernel_size, stride=1, padding=kernel_size//2)
+        )
+        self.temporal_redn = nn.Sequential(
+            *[TemporalReductionBlock(filters, kernel_size, r) for _ in range(math.floor((t-1)/(kernel_size-1) - 1))]
+        )
+        self.main_upsample = nn.Sequential(
+            nn.Conv3d(filters, c * scale_factor ** 2, kernel_size, stride=1, padding=0),
+            Rearrange("b c t h w -> b (c t) h w"),
+            nn.PixelShuffle(scale_factor),
+        )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        b, t, c, h, w = x.shape
-        t_attn = self.temporal_attn(x)
-        f_attn = x + self.feature_attn(x)
-        return t_attn + 
+        # Main branch
+        h = self.head(x)
+        feature_attn = h + self.feature_attn(h)
+        temporal_redn = self.temporal_redn(feature_attn)
+        temporal_redn = self.main_upsample(temporal_redn)
+
+        # Global residual branch
+        temporal_attn = self.temporal_attn(x)
+        temporal_attn = self.residual_upsample(temporal_attn)
+
+        return temporal_attn + temporal_redn
