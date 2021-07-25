@@ -88,7 +88,7 @@ x: dict(
 
 The [RSVQA LR](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA: Visual Question Answering for Remote Sensing Data", Lobry et al.](https://arxiv.org/abs/2003.07333) is a visual question answering (VQA) dataset of RGB images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). Each image is annotated with a set of questions and their corresponding answers. Among other applications, this dataset can be used to train VQA models to perform scene understanding of medium resolution remote sensing imagery.
 
-The dataset can be downloaded using the `scripts/download_etci2021.sh` script and then used as below:
+The dataset can be downloaded using the `scripts/download_rsvqa_lr.sh` script and then used as below:
 
 ```python
 from torchrs.transforms import Compose, ToTensor
