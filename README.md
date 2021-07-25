@@ -12,7 +12,6 @@ pip install git+https://github.com/isaaccorley/torchrs
 
 ## Datasets
 
-### Table of Contents
 * [PROBA-V Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
 * [Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
@@ -115,7 +114,6 @@ x: dict(
 
 ## Models
 
-## Table of Contents
 * [RAMS](https://github.com/isaaccorley/torchrs#rams)
 
 ### RAMS
