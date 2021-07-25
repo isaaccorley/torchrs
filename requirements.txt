@@ -3,4 +3,3 @@ torchvision
 einops
 numpy
 pillow
-tifffile
