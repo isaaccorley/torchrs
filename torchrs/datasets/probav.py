@@ -66,7 +66,7 @@ class PROBAV(torch.utils.data.Dataset):
             imgsets.append(dict(lr=lr, qm=qm, hr=hr, sm=sm))
         return imgsets
 
-    def len(self) -> int:
+    def __len__(self) -> int:
         return len(self.imgsets)
 
     def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:

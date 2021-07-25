@@ -15,6 +15,7 @@ pip install git+https://github.com/isaaccorley/torchrs
 ### Table of Contents
 * [PROBA-V Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
+* [Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)](https://github.com/isaaccorley/torchrs#rsvqa-lr)
 
 ### PROBA-V Super Resolution
 
@@ -25,11 +26,10 @@ The [PROBA-V Super Resolution Challenge Dataset](https://kelvins.esa.int/proba-v
 The dataset can be downloaded using the `scripts/download_probav.sh` script and then used as below:
 
 ```python
-import torchvision.transforms as T
-from torchrs.transforms import ToTensor
+from torchrs.transforms import Compose, ToTensor
 from torchrs.datasets import PROBAV
 
-transform = T.Compose([ToTensor()])
+transform = Compose([ToTensor()])
 
 dataset = PROBAV(
     root="path/to/dataset/",
@@ -78,6 +78,37 @@ x: dict(
     vh:         (3, 256, 256)
     flood_mask: (1, 256, 256)
     water_mask: (1, 256, 256)
+)
+"""
+```
+
+### Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)
+
+<img src="./assets/rsvqa_lr.png" width="800px"></img>
+
+The [RSVQA LR](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA: Visual Question Answering for Remote Sensing Data", Lobry et al.](https://arxiv.org/abs/2003.07333) is a visual question answering (VQA) dataset of RGB images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). Each image is annotated with a set of questions and their corresponding answers. Among other applications, this dataset can be used to train VQA models to perform scene understanding of medium resolution remote sensing imagery.
+
+The dataset can be downloaded using the `scripts/download_etci2021.sh` script and then used as below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import RSVQALR
+
+transform = Compose([ToTensor()])
+
+dataset = RSVQALR(
+    root="path/to/dataset/",
+    split="train",          # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:         (3, 256, 256)
+    questions:  List[str]
+    answers:    List[str]
+    types:      List[str]
 )
 """
 ```

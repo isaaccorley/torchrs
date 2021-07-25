@@ -55,7 +55,7 @@ class ETCI2021(torch.utils.data.Dataset):
                 images.append(dict(vv=vv, vh=vh, flood_mask=flood_mask, water_mask=water_mask))
         return images
 
-    def len(self) -> int:
+    def __len__(self) -> int:
         return len(self.images)
 
     def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
