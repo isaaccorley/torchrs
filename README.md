@@ -55,7 +55,7 @@ t varies by set of images (minimum of 9)
 
 <img src="./assets/etci2021.jpg" width="500px"></img>
 
-The [ETCI 2021 Dataset](https://nasa-impact.github.io/etci2021/) is a Flood Detection segmentation dataset of SAR images taken by the [ESA Sentinel-1 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-1). The dataset contains pairs of VV and VH polarization images processed by the Hybrid Pluggable Processing Pipeline (hyp3) along with corresponding binary flood and water body ground truth masks. Generating high resolution imagery estimates would effectively increase the frequency at which HR imagery is available for vegetation monitoring.
+The [ETCI 2021 Dataset](https://nasa-impact.github.io/etci2021/) is a Flood Detection segmentation dataset of SAR images taken by the [ESA Sentinel-1 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-1). The dataset contains pairs of VV and VH polarization images processed by the Hybrid Pluggable Processing Pipeline (hyp3) along with corresponding binary flood and water body ground truth masks.
 
 The dataset can be downloaded using the `scripts/download_etci2021.sh` script and then used as below:
 
