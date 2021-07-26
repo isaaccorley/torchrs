@@ -8,7 +8,15 @@ from PIL import Image
 
 
 class RSICD(torch.utils.data.Dataset):
+    """ Image Captioning Dataset from 'Exploring Models and Data for
+    Remote Sensing Image Caption Generation', Lu et al. (2017)
+    https://arxiv.org/abs/1712.07835
 
+    'RSICD is used for remote sensing image captioning task. more than ten thousands
+    remote sensing images are collected from Google Earth, Baidu Map, MapABC, Tianditu.
+    The images are fixed to 224X224 pixels with various resolutions. The total number of
+    remote sensing images are 10921, with five sentences descriptions per image.'
+    """
     def __init__(
         self,
         root: str = ".data/rsicd",
