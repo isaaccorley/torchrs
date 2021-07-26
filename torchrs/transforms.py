@@ -29,6 +29,10 @@ class ToTensor(object):
         self.permute_dims = permute_dims
 
     def __call__(self, x: np.ndarray) -> torch.Tensor:
+
+        if x.dtype == "uint16":
+            x = x.astype("int32")
+
         x = torch.from_numpy(x)
 
         if x.ndim == 2:
