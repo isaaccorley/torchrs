@@ -6,10 +6,10 @@ class RESISC45(ImageFolder):
 
     def __init__(
         self,
-        root: str,
-        transforms: T.Compose
+        root: str = ".data/NWPU-RESISC45",
+        transform: T.Compose = T.Compose([T.ToTensor()])
     ):
         super().__init__(
             root=root,
-            transform=transforms
+            transform=transform
         )

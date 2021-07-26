@@ -1,44 +1,38 @@
 import os
 import json
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 import torch
 import torchvision.transforms as T
 from PIL import Image
-
-from torchrs.transforms import ToTensor
 
 
 class RSICD(torch.utils.data.Dataset):
 
     def __init__(
         self,
-        root: str = ".data/rscid",
-        annotations_path: Optional[str] = None,
+        root: str = ".data/rsicd",
         split: str = "train",
-        transforms: T.Compose = T.Compose([ToTensor()])
+        transform: T.Compose = T.Compose([T.ToTensor()])
     ):
         assert split in ["train", "val", "test"]
         self.root = root
-        self.transforms = transforms
+        self.transform = transform
+        self.captions = self.load_captions(os.path.join(root, "dataset_rsicd.json"), split)
 
-        
-        self.annotations = self.load_annotations(annotations_path, split)
-        print(f"RSICD {split} dataset loaded with {len(self.annotations)} annotations")
-
-    def load_annotations(self, path: str, split: str) -> List[Dict]:
+    @staticmethod
+    def load_captions(path: str, split: str) -> List[Dict]:
         with open(path) as f:
-            annotations = json.load(f)["images"]
-
-        return [a for a in annotations if a["split"] == split]
+            captions = json.load(f)["images"]
+        return [c for c in captions if c["split"] == split]
 
     def __len__(self) -> int:
-        return len(self.annotations)
+        return len(self.captions)
 
     def __getitem__(self, idx: int) -> Dict:
-        annotation = self.annotations[idx]
-        path = os.path.join(self.root, annotation["filename"])
+        captions = self.captions[idx]
+        path = os.path.join(self.root, "RSICD_images", captions["filename"])
         x = Image.open(path).convert("RGB")
-        x = self.transforms(x)
-        captions = [sentence["raw"] for sentence in annotation["sentences"]]
-        return dict(x=x, captions=captions)
+        x = self.transform(x)
+        sentences = [sentence["raw"] for sentence in captions["sentences"]]
+        return dict(x=x, captions=sentences)
