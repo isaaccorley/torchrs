@@ -122,7 +122,7 @@ x: dict(
 
 <img src="./assets/rsicd.png" width="500px"></img>
 
-The [RSICD](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Exploring Models and Data for Remote Sensing Image Caption Generation", Lu et al.](https://arxiv.org/abs/1712.07835) is an image captioning dataset with 5 captions per image for 10,921 RGB images extracted using [Google Earth](https://earth.google.com/web/), [Baidu Map](https://map.baidu.com/), [MapABC](https://www.mapabc.com/) and [Tianditu](https://www.tianditu.gov.cn/). This dataset contains 5 captions per image. While one of the larger remote sensing image captioning datasets, this dataset contains very repetitive language with little detail and many captions are duplicated.
+The [RSICD](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Exploring Models and Data for Remote Sensing Image Caption Generation", Lu et al.](https://arxiv.org/abs/1712.07835) is an image captioning dataset with 5 captions per image for 10,921 RGB images extracted using [Google Earth](https://earth.google.com/web/), [Baidu Map](https://map.baidu.com/), [MapABC](https://www.mapabc.com/) and [Tianditu](https://www.tianditu.gov.cn/). While one of the larger remote sensing image captioning datasets, this dataset contains very repetitive language with little detail and many captions are duplicated.
 
 The dataset can be downloaded using the `scripts/download_rsicd.sh` script and then used as below:
 
@@ -138,10 +138,12 @@ dataset = RSICD(
     transform=transform
 )
 
-x, y = dataset[0]
+x = dataset[0]
 """
-x: (3, 224, 224)
-captions: List[str]
+x: dict(
+    x:        (3, 224, 224)
+    captions: List[str]
+)
 """
 ```
 
@@ -182,7 +184,7 @@ dataset.classes
 
 The [EuroSAT](https://github.com/phelber/eurosat) dataset, proposed in ["EuroSAT: A Novel Dataset and Deep Learning Benchmark for Land Use and Land Cover Classification", Helber et al.](https://arxiv.org/abs/1709.00029) is a land cover classification dataset of 27,000 images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 10 land cover classes with 2-3k images per class from over 34 European countries. The dataset is available in the form of RGB only or all [Multispectral (MS) Sentinel-2 bands](https://sentinels.copernicus.eu/web/sentinel/user-guides/sentinel-2-msi/resolutions/spatial). This dataset is fairly easy with ~98.6% accuracy achieved with a ResNet-50.
 
-The dataset can be downloaded using the `scripts/download_eurosat_rgb.sh` and `scripts/download_eurosat_ms.sh` scripts and then used as below:
+The dataset can be downloaded using the `scripts/download_eurosat_rgb.sh` or `scripts/download_eurosat_ms.sh` scripts and then used as below:
 
 ```python
 import torchvision.transforms as T
