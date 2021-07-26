@@ -1,3 +1,4 @@
+""" Referenced from official TF implementation https://github.com/EscVM/RAMS/blob/master/utils/network.py """
 import math
 
 import torch
@@ -18,6 +19,7 @@ class ReflectionPad3d(nn.Module):
         x = self.pad(x)
         x = rearrange(x, "b (t c) h w -> b t c h w", t=t, c=c)
         return x
+
 
 class TemporalAttention(nn.Module):
     """ Temporal Attention Block """
@@ -91,7 +93,7 @@ class TemporalReductionBlock(nn.Module):
             nn.Conv3d(channels, channels, kernel_size, stride=1, padding=0),
             nn.ReLU()
         )
-    
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.model(x)
 
@@ -103,7 +105,9 @@ class RAMS(nn.Module):
     Salvetti et al. (2021)
     https://www.mdpi.com/2072-4292/12/14/2207
 
-    Note this model was built to work with t=9 input images. Other values of t may not work
+    Note this model was built to work with t=9 input images and kernel_size=3. Other values may not work.
+    t must satisfy the constraints of ((t-1)/(kernel_size-1) - 1) % 1 == 0 where kernel_size=3 and t >= 5.
+    Some valid t's are [9, 11, 13, ...]
     """
     def __init__(
         self,
@@ -116,6 +120,10 @@ class RAMS(nn.Module):
         filters = 32
         kernel_size = 3
         r = 8
+        num_temporal_redn_blocks = ((t-1)/(kernel_size-1) - 1)
+        err = """t must satisfy the ((t-1)/(kernel_size-1) - 1) % 1 == 0 where kernel_size=3
+                and t >= 5. Some valid t's are [9, 11, 13, 15, ...] """
+        assert num_temporal_redn_blocks % 1 == 0 and t >= 9, err
 
         self.temporal_attn = nn.Sequential(
             Rearrange("b t c h w -> b (t c) h w"),
@@ -136,7 +144,7 @@ class RAMS(nn.Module):
             nn.Conv3d(filters, filters, kernel_size, stride=1, padding=kernel_size//2)
         )
         self.temporal_redn = nn.Sequential(
-            *[TemporalReductionBlock(filters, kernel_size, r) for _ in range(math.floor((t-1)/(kernel_size-1) - 1))]
+            *[TemporalReductionBlock(filters, kernel_size, r) for _ in range(int(num_temporal_redn_blocks))]
         )
         self.main_upsample = nn.Sequential(
             nn.Conv3d(filters, c * scale_factor ** 2, kernel_size, stride=1, padding=0),
