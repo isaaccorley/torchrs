@@ -10,7 +10,7 @@ setup_requires = ["pytest-runner"]
 tests_require = ["pytest", "pytest-cov", "mock", "mypy", "black", "pylint"]
 
 url = "https://github.com/isaaccorley/torchrs"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 setup(
     name="torch-rs",
