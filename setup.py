@@ -14,7 +14,7 @@ __version__ = "0.0.2"
 
 setup(
     name="torch-rs",
-    version="0.0.1",
+    version=__version__,
     license='MIT License',
     author="Isaac Corley",
     author_email="isaac.corley@my.utsa.edu",
