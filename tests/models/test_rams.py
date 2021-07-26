@@ -8,7 +8,7 @@ from torchrs.models import RAMS
 DTYPE = torch.float32
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 IMAGE_SIZE = 128
-T = [9]
+T = [9, 11, 13, 15, 17, 19, 21]
 SCALE_FACTOR = [2, 3, 4]
 CHANNELS = [1, 3]
 BATCH_SIZE = [1, 2]
