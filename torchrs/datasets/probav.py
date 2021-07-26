@@ -70,9 +70,9 @@ class PROBAV(torch.utils.data.Dataset):
         return len(self.imgsets)
 
     def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
-        """ Returns a dict containing lrs, qms, hr, sm
-        lrs: (t, 1, h, w) low resolution images
-        qms: (t, 1, h, w) low resolution image quality masks
+        """ Returns a dict containing lr, qm, hr, sm
+        lr: (t, 1, h, w) low resolution images
+        qm: (t, 1, h, w) low resolution image quality masks
         hr: (1, h, w) high resolution image
         sm: (1, h, w) high resolution image status mask
 

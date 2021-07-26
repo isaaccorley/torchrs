@@ -1,3 +1,4 @@
+pip install gdown
 mkdir -p .data/etci2021
 
 # train dataset (3GB)

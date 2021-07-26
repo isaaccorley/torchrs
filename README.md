@@ -32,7 +32,7 @@ pip install git+https://github.com/isaaccorley/torchrs
 
 The [PROBA-V Super Resolution Challenge](https://kelvins.esa.int/proba-v-super-resolution/home/) dataset is a Multi-image Super Resolution (MISR) dataset of images taken by the [ESA PROBA-Vegetation satellite](https://earth.esa.int/eogateway/missions/proba-v). The dataset contains sets of unregistered 300m low resolution (LR) images which can be used to generate single 100m high resolution (HR) images for both Near Infrared (NIR) and Red bands. In addition, Quality Masks (QM) for each LR image and Status Masks (SM) for each HR image are available. The PROBA-V contains sensors which take imagery at 100m and 300m spatial resolutions with 5 and 1 day revisit rates, respectively. Generating high resolution imagery estimates would effectively increase the frequency at which HR imagery is available for vegetation monitoring.
 
-The dataset can be downloaded using the `scripts/download_probav.sh` script and then used as below:
+The dataset can be downloaded (0.83GB) using `scripts/download_probav.sh` and instantiated below:
 
 ```python
 from torchrs.transforms import Compose, ToTensor
@@ -66,7 +66,7 @@ t varies by set of images (minimum of 9)
 
 The [ETCI 2021 Dataset](https://nasa-impact.github.io/etci2021/) is a Flood Detection segmentation dataset of SAR images taken by the [ESA Sentinel-1 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-1). The dataset contains pairs of VV and VH polarization images processed by the Hybrid Pluggable Processing Pipeline (hyp3) along with corresponding binary flood and water body ground truth masks.
 
-The dataset can be downloaded using the `scripts/download_etci2021.sh` script and then used as below:
+The dataset can be downloaded (5.6GB) using `scripts/download_etci2021.sh` and instantiated below:
 
 ```python
 from torchrs.transforms import Compose, ToTensor
@@ -97,7 +97,7 @@ x: dict(
 
 The [RSVQA LR](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA: Visual Question Answering for Remote Sensing Data", Lobry et al.](https://arxiv.org/abs/2003.07333) is a visual question answering (VQA) dataset of RGB images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). Each image is annotated with a set of questions and their corresponding answers. Among other applications, this dataset can be used to train VQA models to perform scene understanding of medium resolution remote sensing imagery.
 
-The dataset can be downloaded using the `scripts/download_rsvqa_lr.sh` script and then used as below:
+The dataset can be downloaded (0.2GB) using `scripts/download_rsvqa_lr.sh` and instantiated below:
 
 ```python
 import torchvision.transforms as T
@@ -128,7 +128,7 @@ x: dict(
 
 The [RSICD](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Exploring Models and Data for Remote Sensing Image Caption Generation", Lu et al.](https://arxiv.org/abs/1712.07835) is an image captioning dataset with 5 captions per image for 10,921 RGB images extracted using [Google Earth](https://earth.google.com/web/), [Baidu Map](https://map.baidu.com/), [MapABC](https://www.mapabc.com/) and [Tianditu](https://www.tianditu.gov.cn/). While one of the larger remote sensing image captioning datasets, this dataset contains very repetitive language with little detail and many captions are duplicated.
 
-The dataset can be downloaded using the `scripts/download_rsicd.sh` script and then used as below:
+The dataset can be downloaded (0.57GB) using `scripts/download_rsicd.sh` and instantiated below:
 
 ```python
 import torchvision.transforms as T
@@ -157,7 +157,7 @@ x: dict(
 
 The [RESISC45](http://www.escience.cn/people/JunweiHan/NWPU-RESISC45.html) dataset, proposed in ["Remote Sensing Image Scene Classification: Benchmark and State of the Art", Cheng et al.](https://arxiv.org/abs/1703.00121) is an image classification dataset of 31,500 RGB images extracted using [Google Earth Engine](https://earthengine.google.com/). The dataset contains 45 scenes with 700 images per class from over 100 countries and was selected to optimize for high variability in image conditions (spatial resolution, occlusion, weather, illumination, etc.).
 
-The dataset can be downloaded using the `scripts/download_resisc45.sh` script and then used as below:
+The dataset can be downloaded (0.47GB) using `scripts/download_resisc45.sh` and instantiated below:
 
 ```python
 import torchvision.transforms as T
@@ -193,7 +193,7 @@ dataset.classes
 
 The [EuroSAT](https://github.com/phelber/eurosat) dataset, proposed in ["EuroSAT: A Novel Dataset and Deep Learning Benchmark for Land Use and Land Cover Classification", Helber et al.](https://arxiv.org/abs/1709.00029) is a land cover classification dataset of 27,000 images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 10 land cover classes with 2-3k images per class from over 34 European countries. The dataset is available in the form of RGB only or all [Multispectral (MS) Sentinel-2 bands](https://sentinels.copernicus.eu/web/sentinel/user-guides/sentinel-2-msi/resolutions/spatial). This dataset is fairly easy with ~98.6% accuracy achieved with a ResNet-50.
 
-The dataset can be downloaded using the `scripts/download_eurosat_rgb.sh` or `scripts/download_eurosat_ms.sh` scripts and then used as below:
+The dataset can be downloaded (.13GB and 2.8GB) using `scripts/download_eurosat_rgb.sh` or `scripts/download_eurosat_ms.sh` and instantiated below:
 
 ```python
 import torchvision.transforms as T
@@ -245,7 +245,7 @@ Residual Attention Multi-image Super-resolution Network (RAMS) from
 ["Multi-Image Super Resolution of Remotely Sensed Images Using Residual Attention Deep Neural Networks",
 Salvetti et al. (2021)](https://www.mdpi.com/2072-4292/12/14/2207)
 
-RAMS is currently one of the top performers on the [PROBA-V Super Resolution Challenge](https://kelvins.esa.int/proba-v-super-resolution/home/). This Multi-image Super Resolution (MISR) architecture utilizes attention based methods to extract spatial and spatiotemporal features from a set of unregistered low resolution images to form a single high resolution image.
+RAMS is currently one of the top performers on the [PROBA-V Super Resolution Challenge](https://kelvins.esa.int/proba-v-super-resolution/home/). This Multi-image Super Resolution (MISR) architecture utilizes attention based methods to extract spatial and spatiotemporal features from a set of low resolution images to form a single high resolution image. Note that the attention methods are effectively Squeeze-and-Excitation blocks from ["Squeeze-and-Excitation Networks", Hu et al.](https://arxiv.org/abs/1709.01507).
 
 ```python
 import torch
@@ -262,7 +262,7 @@ model = RAMS(
 # Input should be of shape (bs, t, c, h, w), where t is the number
 # of low resolution input images and c is the number of channels/bands
 lr = torch.randn(1, 9, 1, 128, 128)
-sr = model(x) # (1, 1, 384, 384)
+sr = model(lr) # (1, 1, 384, 384)
 ```
 
 ## Tests
