@@ -13,7 +13,7 @@ url = "https://github.com/isaaccorley/torchrs"
 __version__ = "0.0.1"
 
 setup(
-    name="torchrs",
+    name="torch-rs",
     version="0.0.1",
     license='MIT License',
     author="Isaac Corley",
