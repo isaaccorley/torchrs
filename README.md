@@ -21,6 +21,7 @@ pip install git+https://github.com/isaaccorley/torchrs
 
 * [PROBA-V Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
+* [Onera Satellite Change Detection (OSCD)](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
 * [Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
 * [Remote Sensing Image Captioning Dataset (RSICD)](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
 * [Remote Sensing Image Scene Classification (RESISC45)](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
@@ -42,8 +43,8 @@ transform = Compose([ToTensor()])
 
 dataset = PROBAV(
     root="path/to/dataset/",
-    split="train",          # or 'test'
-    band="RED",             # or 'NIR'
+    split="train",  # or 'test'
+    band="RED",     # or 'NIR'
     lr_transform=transform,
     hr_transform=transform
 )
@@ -76,7 +77,7 @@ transform = Compose([ToTensor()])
 
 dataset = ETCI2021(
     root="path/to/dataset/",
-    split="train",          # or 'val', 'test'
+    split="train",  # or 'val', 'test'
     transform=transform
 )
 
@@ -87,6 +88,35 @@ x: dict(
     vh:         (3, 256, 256)
     flood_mask: (1, 256, 256)
     water_mask: (1, 256, 256)
+)
+"""
+```
+
+### Onera Satellite Change Detection (OSCD)
+
+<img src="./assets/oscd.png" width="500px"></img>
+
+The [Onera Satellite Change Detection (OSCD)](https://rcdaudt.github.io/oscd/) dataset, proposed in ["Urban Change Detection for Multispectral Earth Observation Using Convolutional Neural Networks", Daudt et al.](https://arxiv.org/abs/1810.08468) is a Change Detection dataset of 13 band multispectral (MS) images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 24 registered image pairs from multiple continents between 2015-2018 along with binary change masks.
+
+The dataset can be downloaded (0.73GB) using `scripts/download_oscd.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import OSCD
+
+transform = Compose([ToTensor(permute_dims=False)])
+
+dataset = OSCD(
+    root="path/to/dataset/",
+    split="train",  # or 'test'
+    transform=transform,
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x: (2, 13, h, w)
+    mask: (1, h, w)
 )
 """
 ```
@@ -107,7 +137,7 @@ transform = T.Compose([T.ToTensor()])
 
 dataset = RSVQALR(
     root="path/to/dataset/",
-    split="train",          # or 'val', 'test'
+    split="train",  # or 'val', 'test'
     transform=transform
 )
 
@@ -138,7 +168,7 @@ transform = T.Compose([T.ToTensor()])
 
 dataset = RSICD(
     root="path/to/dataset/",
-    split="train",
+    split="train",  # or 'val', 'test'
     transform=transform
 )
 
