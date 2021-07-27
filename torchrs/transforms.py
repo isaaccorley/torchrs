@@ -36,7 +36,10 @@ class ToTensor(object):
         x = torch.from_numpy(x)
 
         if x.ndim == 2:
-            x = x[:, :, None]
+            if self.permute_dims:
+                x = x[:, :, None]
+            else:
+                x = x[None, :, :]
 
         # Convert HWC->CHW
         if self.permute_dims:

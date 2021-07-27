@@ -1,6 +1,8 @@
 mkdir -p .data/rsicd
 
 # Download images
+pip install gdown
+apt-get install unrar
 gdown --id 0B1jt7lJDEXy3SmZEdDd0aWpXcWc
 unrar x RSICD_images.rar .data/rscid
 rm RSICD_images.rar
