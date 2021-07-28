@@ -94,7 +94,7 @@ x: dict(
 
 ### Onera Satellite Change Detection (OSCD)
 
-<img src="./assets/oscd.png" width="500px"></img>
+<img src="./assets/oscd.png" width="750px"></img>
 
 The [Onera Satellite Change Detection (OSCD)](https://rcdaudt.github.io/oscd/) dataset, proposed in ["Urban Change Detection for Multispectral Earth Observation Using Convolutional Neural Networks", Daudt et al.](https://arxiv.org/abs/1810.08468) is a Change Detection dataset of 13 band multispectral (MS) images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 24 registered image pairs from multiple continents between 2015-2018 along with binary change masks.
 
@@ -123,7 +123,7 @@ x: dict(
 
 ### Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)
 
-<img src="./assets/rsvqa_lr.png" width="800px"></img>
+<img src="./assets/rsvqa_lr.png" width="850px"></img>
 
 The [RSVQA LR](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA: Visual Question Answering for Remote Sensing Data", Lobry et al.](https://arxiv.org/abs/2003.07333) is a visual question answering (VQA) dataset of RGB images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). Each image is annotated with a set of questions and their corresponding answers. Among other applications, this dataset can be used to train VQA models to perform scene understanding of medium resolution remote sensing imagery.
 
