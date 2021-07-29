@@ -121,6 +121,35 @@ x: dict(
 """
 ```
 
+### LEVIR Change Detection + (LEVIR-CD+)
+
+<img src="./assets/levircd_plus.png" width="750px"></img>
+
+The [LEVIR-CD+](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is an urban Change Detection dataset of 985 very high resolution (VHR) 0.5m RGB image pairs extracted from Google Earth. The dataset contains building/land use change masks from 20 different regions of Texas between 2002-2020 with a temporal difference of 5 years.
+
+The dataset can be downloaded (3.6GB) using `scripts/download_levircd_plus.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import LEVIRCD_Plus
+
+transform = Compose([ToTensor()])
+
+dataset = LEVIRCD_Plus(
+    root="path/to/dataset/",
+    split="train",  # or 'test'
+    transform=transform,
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x: (2, 3, 1024, 1024)
+    mask: (1, 1024, 1024)
+)
+"""
+```
+
 ### Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)
 
 <img src="./assets/rsvqa_lr.png" width="850px"></img>
