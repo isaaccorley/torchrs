@@ -48,7 +48,7 @@ class LEVIRCD_Plus(torch.utils.data.Dataset):
         return len(self.files)
 
     def __getitem__(self, idx: int) -> Dict:
-        """ Returns a dict containing x, mask, region, dates
+        """ Returns a dict containing x, mask
         x: (2, 13, h, w)
         mask: (1, h, w)
         """

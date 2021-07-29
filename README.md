@@ -22,6 +22,7 @@ pip install git+https://github.com/isaaccorley/torchrs
 * [PROBA-V Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
 * [Onera Satellite Change Detection (OSCD)](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
+* [Satellite Side-Looking (S2Looking) Change Detection](https://github.com/isaaccorley/torchrs#satellite-side-looking-s2looking-change-detection)
 * [LEVIR Change Detection+ (LEVIR-CD+)](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd-)
 * [Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
 * [Remote Sensing Image Captioning Dataset (RSICD)](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
@@ -122,11 +123,42 @@ x: dict(
 """
 ```
 
+
+### Satellite Side-Looking (S2Looking) Change Detection
+
+<img src="./assets/s2looking.png" width="500px"></img>
+
+The [S2Looking](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is a rural building Change Detection dataset of 5,000 very high resolution (VHR) 0.5-0.8m registered RGB image pairs of varying off-nadir angles taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1), [SuperView (SV)](https://eos.com/find-satellite/superview-1/), and [BeiJing-2 (BJ-2)](https://space.oscar.wmo.int/satelliteprogrammes/view/beijing_2) satellites. The dataset contains separate new and demolished building masks from regions all over the Earth a time span of 1-3 years. This dataset was proposed along with the LEVIR-CD+ dataset and is considered difficult due to the rural locations and off-nadir angles.
+
+The dataset can be downloaded (11GB) using `scripts/download_s2looking.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import S2Looking
+
+transform = Compose([ToTensor()])
+
+dataset = S2Looking(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform,
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x: (2, 3, 1024, 1024)
+    build_mask: (1, 1024, 1024),
+    demolish_mask: (1, 1024, 1024)
+)
+"""
+```
+
 ### LEVIR Change Detection+ (LEVIR-CD+)
 
 <img src="./assets/levircd_plus.png" width="600px"></img>
 
-The [LEVIR-CD+](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is an urban Change Detection dataset of 985 very high resolution (VHR) 0.5m RGB image pairs extracted from Google Earth. The dataset contains building/land use change masks from 20 different regions of Texas between 2002-2020 with a temporal difference of 5 years.
+The [LEVIR-CD+](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is an urban building Change Detection dataset of 985 very high resolution (VHR) 0.5m RGB image pairs extracted from Google Earth. The dataset contains building/land use change masks from 20 different regions of Texas between 2002-2020 with a time span of 5 years. This dataset was proposed along with the S2Looking dataset and is considered the easier version due to the urban locations and near-nadir angles.
 
 The dataset can be downloaded (3.6GB) using `scripts/download_levircd_plus.sh` and instantiated below:
 
