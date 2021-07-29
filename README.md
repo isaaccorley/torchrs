@@ -23,7 +23,7 @@ pip install git+https://github.com/isaaccorley/torchrs
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
 * [Onera Satellite Change Detection (OSCD)](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
 * [Satellite Side-Looking (S2Looking) Change Detection](https://github.com/isaaccorley/torchrs#satellite-side-looking-s2looking-change-detection)
-* [LEVIR Change Detection+ (LEVIR-CD+)](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd-)
+* [LEVIR Change Detection+ (LEVIR-CD+)](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd)
 * [Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
 * [Remote Sensing Image Captioning Dataset (RSICD)](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
 * [Remote Sensing Image Scene Classification (RESISC45)](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
