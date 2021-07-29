@@ -11,9 +11,9 @@ from torchrs.transforms import Compose, ToTensor
 
 
 class S2Looking(torch.utils.data.Dataset):
-    """ The Onera Satellite Change Detection (OSCD) dataset from 'Urban Change Detection for
-    Multispectral Earth Observation Using Convolutional Neural Networks', Daudt at al. (2018)
-    https://arxiv.org/abs/1703.00121
+    """ The Satellite Side-Looking (S2Looking) dataset from 'S2Looking: A Satellite Side-Looking
+    Dataset for Building Change Detection', Shen at al. (2021)
+    https://arxiv.org/abs/2107.09244
 
     'S2Looking is a building change detection dataset that contains large-scale side-looking
     satellite images captured at varying off-nadir angles. The S2Looking dataset consists of
@@ -25,18 +25,18 @@ class S2Looking(torch.utils.data.Dataset):
     """
     def __init__(
         self,
-        root: str = ".data/oscd",
+        root: str = ".data/s2looking",
         split: str = "train",
-        transform: Compose = Compose([ToTensor(permute_dims=False)]),
+        transform: Compose = Compose([ToTensor()]),
     ):
         assert split in ["train", "test"]
         self.root = root
         self.transform = transform
-        self.regions = self.load_files(root, split)
+        self.files = self.load_files(root, split)
 
     @staticmethod
     def load_files(root: str, split: str):
-        regions = []
+        images = []
         labels_root = os.path.join(root, f"{split}_labels")
         images_root = os.path.join(root, "images")
         folders = glob(os.path.join(labels_root, "*/"))
