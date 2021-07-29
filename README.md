@@ -22,6 +22,7 @@ pip install git+https://github.com/isaaccorley/torchrs
 * [PROBA-V Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
 * [Onera Satellite Change Detection (OSCD)](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
+* [LEVIR Change Detection+ (LEVIR-CD+)](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd-)
 * [Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
 * [Remote Sensing Image Captioning Dataset (RSICD)](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
 * [Remote Sensing Image Scene Classification (RESISC45)](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
@@ -121,9 +122,9 @@ x: dict(
 """
 ```
 
-### LEVIR Change Detection + (LEVIR-CD+)
+### LEVIR Change Detection+ (LEVIR-CD+)
 
-<img src="./assets/levircd_plus.png" width="750px"></img>
+<img src="./assets/levircd_plus.png" width="600px"></img>
 
 The [LEVIR-CD+](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is an urban Change Detection dataset of 985 very high resolution (VHR) 0.5m RGB image pairs extracted from Google Earth. The dataset contains building/land use change masks from 20 different regions of Texas between 2002-2020 with a temporal difference of 5 years.
 
