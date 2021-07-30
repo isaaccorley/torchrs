@@ -26,6 +26,7 @@ pip install git+https://github.com/isaaccorley/torchrs
 * [S2Looking - Satellite Side-Looking Change Detection](https://github.com/isaaccorley/torchrs#satellite-side-looking-s2looking-change-detection)
 * [LEVIR-CD+ - LEVIR Change Detection+](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd)
 * [RSVQA LR - Remote Sensing Visual Question Answering Low Resolution](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
+* [RSVQAxBEN - Remote Sensing Visual Question Answering BigEarthNet](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-bigearthnet-rsvqaxben)
 * [RSICD - Remote Sensing Image Captioning Dataset](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
 * [RESISC45 - Remote Sensing Image Scene Classification](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
 * [EuroSAT](https://github.com/isaaccorley/torchrs#eurosat)
@@ -238,6 +239,37 @@ x = dataset[0]
 """
 x: dict(
     x:         (3, 256, 256)
+    questions:  List[str]
+    answers:    List[str]
+    types:      List[str]
+)
+"""
+```
+
+### Remote Sensing Visual Question Answering BigEarthNet (RSVQAxBEN)
+
+<img src="./assets/rsvqaxben.png" width="600px"></img>
+
+The [RSVQAxBEN](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA Meets BigEarthNet: A New, Large-Scale, Visual Question Answering Dataset for Remote Sensing", Lobry et al.](https://rsvqa.sylvainlobry.com/IGARSS21.pdf) is a visual question answering (VQA) dataset for the [BigEarthNet](http://bigearth.net/) dataset using the same method applied to the [RSVQA LR](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr) to generate VQA annotations. The dataset consists of RGB Sentinel-2 imagery annotated with a set of questions and their corresponding answers.
+
+The dataset can be downloaded (35.4GB) using `scripts/download_rsvqaxben.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import RSVQAxBEN
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = RSVQAxBEN(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:         (3, h, w)
     questions:  List[str]
     answers:    List[str]
     types:      List[str]
