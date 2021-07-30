@@ -7,9 +7,11 @@ from .rsicd import RSICD
 from .oscd import OSCD
 from .s2looking import S2Looking
 from .levircd import LEVIRCD_Plus
+from .fair1m import FAIR1M
 
 
 __all__ = [
     "PROBAV", "ETCI2021", "RSVQALR", "EuroSATRGB", "EuroSATMS",
-    "RESISC45", "RSICD", "OSCD", "S2Looking", "LEVIRCD_Plus"
+    "RESISC45", "RSICD", "OSCD", "S2Looking", "LEVIRCD_Plus",
+    "FAIR1M"
 ]

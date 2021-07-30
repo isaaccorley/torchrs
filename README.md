@@ -21,12 +21,13 @@ pip install git+https://github.com/isaaccorley/torchrs
 
 * [PROBA-V Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
-* [Onera Satellite Change Detection (OSCD)](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
-* [Satellite Side-Looking (S2Looking) Change Detection](https://github.com/isaaccorley/torchrs#satellite-side-looking-s2looking-change-detection)
-* [LEVIR Change Detection+ (LEVIR-CD+)](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd)
-* [Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
-* [Remote Sensing Image Captioning Dataset (RSICD)](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
-* [Remote Sensing Image Scene Classification (RESISC45)](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
+* [FAIR1M Fine-grained Object Recognition](https://github.com/isaaccorley/torchrs#fair1m--fine-grained-object-recognition)
+* [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
+* [S2Looking - Satellite Side-Looking Change Detection](https://github.com/isaaccorley/torchrs#satellite-side-looking-s2looking-change-detection)
+* [LEVIR-CD+ - LEVIR Change Detection+](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd)
+* [RSVQA LR - Remote Sensing Visual Question Answering Low Resolution](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
+* [RSICD - Remote Sensing Image Captioning Dataset](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
+* [RESISC45 - Remote Sensing Image Scene Classification](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
 * [EuroSAT](https://github.com/isaaccorley/torchrs#eurosat)
 
 ### PROBA-V Super Resolution
@@ -94,6 +95,37 @@ x: dict(
 """
 ```
 
+### FAIR1M - Fine-grained Object Recognition
+
+<img src="./assets/fair1m.jpg" width="550px"></img>
+
+The [FAIR1M](https://rcdaudt.github.io/oscd/) dataset, proposed in ["FAIR1M: A Benchmark Dataset for Fine-grained Object Recognition in High-Resolution Remote Sensing Imagery", Sun et al.](https://arxiv.org/abs/2103.05569) is a Fine-grained Object Recognition/Detection dataset of 15,000 high resolution (0.3-0.8m) RGB images taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1) satellites and extracted from [Google Earth](https://earth.google.com/web/). The dataset contains rotated bounding boxes for objects of 5 (ships, vehicles, airplanes, courts, and roads) categories and 37 sub-categories. This dataset is a part of the [ISPRS Benchmark on Object Detection in High-Resolution Satellite Images](http://gaofen-challenge.com/benchmark). Note that only a portion of dataset has been released so far for the challenge (1,732/15,000 images).
+
+The dataset can be downloaded (8.7GB) using `scripts/download_fair1m.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import FAIR1M
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = FAIR1M(
+    root="path/to/dataset/",
+    split="train",  # only 'train' for now
+    transform=transform,
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x: (3, h, w)
+    y: (N,)
+    points: (N, 5, 2)
+)
+where N is the number of objects in the image
+"""
+```
+
 ### Onera Satellite Change Detection (OSCD)
 
 <img src="./assets/oscd.png" width="750px"></img>
@@ -122,7 +154,6 @@ x: dict(
 )
 """
 ```
-
 
 ### Satellite Side-Looking (S2Looking) Change Detection
 
