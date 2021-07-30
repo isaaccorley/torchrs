@@ -110,7 +110,7 @@ class RSVQAxBEN(torch.utils.data.Dataset):
     """
     def __init__(
         self,
-        root: str = ".data/RSVQA_LR",
+        root: str = ".data/rsvqaxben",
         split: str = "train",
         transform: Compose = Compose([ToTensor()]),
     ):
