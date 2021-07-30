@@ -10,8 +10,14 @@ from PIL import Image
 from torchrs.transforms import Compose, ToTensor
 
 
+def sort(x):
+    x = os.path.basename(x)
+    x = os.path.splitext(x)[0]
+    return int(x)
+
+
 class RSVQALR(torch.utils.data.Dataset):
-    """Remote Sensing Visual Question Answering (RSVQA) dataset from 
+    """Remote Sensing Visual Question Answering (RSVQA) dataset from
     'RSVQA: Visual Question Answering for Remote Sensing Data', Lobry et al (2020)
     https://arxiv.org/abs/2003.07333
 
@@ -26,7 +32,7 @@ class RSVQALR(torch.utils.data.Dataset):
     """
     def __init__(
         self,
-        root: str =".data/RSVQA_LR",
+        root: str = ".data/RSVQA_LR",
         split: str = "train",
         transform: Compose = Compose([ToTensor()]),
     ):
@@ -39,7 +45,7 @@ class RSVQALR(torch.utils.data.Dataset):
     @staticmethod
     def load_files(root: str, split: str) -> Tuple[List[int], List[str], List[Dict], List[Dict], List[Dict]]:
         paths = glob(os.path.join(root, "Images_LR", "*.tif"))
-        paths = sorted(paths, key=lambda x: int(os.path.splitext(os.path.basename(x))[0]))
+        paths = sorted(paths, key=sort)
         with open(os.path.join(root, "questions.json")) as f:
             questions = json.load(f)["questions"]
         with open(os.path.join(root, "answers.json")) as f:
@@ -70,10 +76,11 @@ class RSVQALR(torch.utils.data.Dataset):
         return len(self.ids)
 
     def __getitem__(self, idx: int) -> Dict:
-        """ Returns a dict containing vv, vh, flood mask, water mask
+        """ Returns a dict containing x, questions, answers, q/a category
         x: (3, h, w)
         questions: List[str]
         answers: List[str]
+        types: List[str]
         """
         id = self.ids[idx]
         x = np.array(Image.open(os.path.join(self.root, "Images_LR", f"{id}.tif")))
@@ -89,3 +96,55 @@ class RSVQALR(torch.utils.data.Dataset):
             output = dict(x=x, questions=questions, answers=answers, types=types)
 
         return output
+
+
+class RSVQAxBEN(torch.utils.data.Dataset):
+    """Remote Sensing Visual Question Answering BigEarthNet (RSVQAxBEN) dataset from
+    'RSVQA Meets BigEarthNet: A New, Large-Scale, Visual Question Answering Dataset for Remote Sensing', Lobry et al (2021)
+    https://rsvqa.sylvainlobry.com/IGARSS21.pdf
+
+    'We introduce a new dataset to tackle the task of visual question answering on remote
+    sensing images: this largescale, open access dataset extracts image/question/answer triplets
+    from the BigEarthNet dataset. This new dataset contains close to 15 millions samples and is openly
+    available.'
+    """
+    def __init__(
+        self,
+        root: str = ".data/RSVQA_LR",
+        split: str = "train",
+        transform: Compose = Compose([ToTensor()]),
+    ):
+        assert split in ["train", "val", "test"]
+        self.root = root
+        self.split = split
+        self.transform = transform
+        self.ids, self.paths, self.images, self.questions, self.answers = self.load_files(root, split)
+
+    @staticmethod
+    def load_files(root: str, split: str) -> Tuple[List[int], List[str], List[Dict], List[Dict], List[Dict]]:
+        paths = glob(os.path.join(root, "Images", "*.tif"))
+        paths = sorted(paths, key=sort)
+        with open(os.path.join(root, f"RSVQAxBEN_split_{split}_questions.json")) as f:
+            questions = json.load(f)["questions"]
+        with open(os.path.join(root, f"RSVQAxBEN_split_{split}_answers.json")) as f:
+            answers = json.load(f)["answers"]
+        with open(os.path.join(root, f"RSVQAxBEN_split_{split}_images.json")) as f:
+            images = json.load(f)["images"]
+        ids = [x["id"] for x in images if x["active"]]
+        return ids, paths, images, questions, answers
+
+    def __getitem__(self, idx: int) -> Dict:
+        """ Returns a dict containing x, questions, answers, q/a category
+        x: (3, h, w)
+        questions: List[str]
+        answers: List[str]
+        types: List[str]
+        """
+        id = self.ids[idx]
+        x = np.array(Image.open(os.path.join(self.root, "Images", f"{id}.tif")))
+        x = self.transform(x)
+        questions = [self.questions[i] for i in self.images[id]["questions_ids"]]
+        answers = [self.answers[q["answers_ids"][0]]["answer"] for q in questions]
+        types = [q["type"] for q in questions]
+        questions = [q["question"] for q in questions]
+        return dict(x=x, questions=questions, answers=answers, types=types)

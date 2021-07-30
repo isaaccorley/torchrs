@@ -11,5 +11,7 @@ wget https://zenodo.org/record/5084904/files/RSVQAxBEN_split_train_images.json?d
 wget https://zenodo.org/record/5084904/files/RSVQAxBEN_split_train_questions.json?download=1 -O .data/rsvqaxben/RSVQAxBEN_split_train_questions.json
 wget https://zenodo.org/record/5084904/files/RSVQAxBEN_split_val_answers.json?download=1 -O .data/rsvqaxben/RSVQAxBEN_split_val_answers.json
 wget https://zenodo.org/record/5084904/files/RSVQAxBEN_split_val_images.json?download=1 -O .data/rsvqaxben/RSVQAxBEN_split_val_images.json
-wget https://zenodo.org/record/5084904/files/RSVQAxBEN_split_val_questions.json?download=1 .data/rsvqaxben/RSVQAxBEN_split_val_questions.json
+wget https://zenodo.org/record/5084904/files/RSVQAxBEN_split_val_questions.json?download=1 -O .data/rsvqaxben/RSVQAxBEN_split_val_questions.json
 wget https://zenodo.org/record/5084904/files/Images.zip?download=1 -O .data/rsvqaxben/Images.zip
+unzip .data/rsvqaxben/Images.zip -I .data/rsvqaxben/
+rm .data/rsvqaxben/Images.zip
