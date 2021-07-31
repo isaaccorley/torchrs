@@ -82,7 +82,7 @@ class FAIR1M(torch.utils.data.Dataset):
     ):
         assert split in ["train"]
         self.root = root
-        self.image_root = os.path.join(root, "train", "part1", "images")
+        self.image_root = os.path.join(root, split, "part1", "images")
         self.transform = transform
         self.images = self.load_files(root, split)
         self.idx2cls = {i: c for i, c in enumerate(self.classes)}

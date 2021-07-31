@@ -30,20 +30,16 @@ class PROBAV(torch.utils.data.Dataset):
     always with at least 9. We expect you to submit a 384x384 image for each of the 290 test-scenes, for which we
     will not provide a high resolution image.'
     """
-    url = "https://kelvins.esa.int/media/competitions/proba-v-super-resolution/probav_data.zip"
-    bands = ["RED", "NIR"]
-    splits = ["train", "test"]
-
     def __init__(
         self,
-        root: str =".data/probav",
+        root: str = ".data/probav",
         split: str = "train",
         band: str = "RED",
         lr_transform: T.Compose = T.Compose([ToTensor()]),
         hr_transform: T.Compose = T.Compose([ToTensor()]),
     ):
-        assert split in self.splits
-        assert band in self.bands
+        assert split in ["train", "test"]
+        assert band in ["RED", "NIR"]
         self.split = split
         self.lr_transform = lr_transform
         self.hr_transform = hr_transform
