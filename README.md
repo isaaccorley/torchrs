@@ -8,14 +8,21 @@
 # pypi
 pip install torch-rs
 
+# pypi with training extras
+pip install torch-rs[train]
+
 # latest
 pip install git+https://github.com/isaaccorley/torchrs
+
+# latest with training extras
+pip install -e git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]
 ```
 
 ## Table of Contents
 
 * [Datasets](https://github.com/isaaccorley/torchrs#datasets)
 * [Models](https://github.com/isaaccorley/torchrs#models)
+* [Training](https://github.com/isaaccorley/torchrs#training)
 
 ## Datasets
 
@@ -196,11 +203,11 @@ The dataset can be downloaded (3.6GB) using `scripts/download_levircd_plus.sh` a
 
 ```python
 from torchrs.transforms import Compose, ToTensor
-from torchrs.datasets import LEVIRCD_Plus
+from torchrs.datasets import LEVIRCDPlus
 
 transform = Compose([ToTensor()])
 
-dataset = LEVIRCD_Plus(
+dataset = LEVIRCDPlus(
     root="path/to/dataset/",
     split="train",  # or 'test'
     transform=transform,
@@ -418,6 +425,66 @@ model = RAMS(
 # of low resolution input images and c is the number of channels/bands
 lr = torch.randn(1, 9, 1, 128, 128)
 sr = model(lr) # (1, 1, 384, 384)
+```
+
+## Training
+
+For training purposes, each model and dataset has been adapted into [Pytorch Lightning](https://www.pytorchlightning.ai/) [LightningModules](https://pytorch-lightning.readthedocs.io/en/stable/common/lightning_module.html) and [LightningDataModules](https://pytorch-lightning.readthedocs.io/en/stable/extensions/datamodules.html), respectively. The modules can be found in `torchrs.train.modules` and `torchrs.train.datamodules`. Among other things, Pytorch Lightning has the benefits of reducing boilerplate code, requiring minimal rewrite for multi-gpu/cluster training, supports mixed precision training, gradient accumulation, callbacks, logging metrics, etc.
+
+To use the training features the `train` extras must be installed:
+
+```bash
+# pypi
+pip install torch-rs[train]
+
+# latest
+pip install -e git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]
+```
+
+A simple training example:
+
+```python
+import torch
+import torch.nn as nn
+import pytorch_lightning as pl
+import torchvision.transforms as T
+from torchrs.train.modules import RAMSModule
+from torchrs.train.datamodules import PROBAVDataModule
+from torchrs.transforms import ToTensor
+
+
+model = RAMSModule(
+    scale_factor=3,
+    t=9,
+    c=1,
+    loss=nn.MSELoss(),
+    opt=torch.optim.Adam,
+    lr=3E-4
+)
+dm = PROBAVDataModule(
+    root="path/to/dataset",
+    band="RED",
+    lr_transform=T.Compose([ToTensor()]),
+    hr_transform=T.Compose([ToTensor()]),
+    batch_size=16,
+    num_workers=0,
+    prefetch_factor=2,
+    pin_memory=True
+)
+callbacks = [
+    pl.callbacks.ModelCheckpoint(monitor="train_loss", mode="min", verbose=True, save_top_k=1),
+    pl.callbacks.EarlyStopping(monitor="train_loss", mode="min", patience=5)
+]
+trainer = pl.Trainer(
+    gpus=1,
+    precision=16,
+    max_epochs=25,
+    callbacks=callbacks,
+    weights_summary="top"
+)
+trainer.fit(model, datamodule=dm)
+trainer.test(datamodule=dm)
+
 ```
 
 ## Tests

@@ -27,7 +27,7 @@ class ETCI2021(torch.utils.data.Dataset):
 
     def __init__(
         self,
-        root: str =".data/etci2021",
+        root: str = ".data/etci2021",
         split: str = "train",
         transform: Compose = Compose([ToTensor()]),
     ):

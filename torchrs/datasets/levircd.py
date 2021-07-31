@@ -9,7 +9,7 @@ from PIL import Image
 from torchrs.transforms import Compose, ToTensor
 
 
-class LEVIRCD_Plus(torch.utils.data.Dataset):
+class LEVIRCDPlus(torch.utils.data.Dataset):
     """ LEVIR-CD+ dataset from 'S2Looking: A Satellite Side-Looking
     Dataset for Building Change Detection', Shen at al. (2021)
     https://arxiv.org/abs/2107.09244
