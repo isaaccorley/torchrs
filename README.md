@@ -8,23 +8,34 @@
 # pypi
 pip install torch-rs
 
+# pypi with training extras
+pip install torch-rs[train]
+
 # latest
 pip install git+https://github.com/isaaccorley/torchrs
+
+# latest with training extras
+pip install -e git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]
 ```
 
 ## Table of Contents
 
 * [Datasets](https://github.com/isaaccorley/torchrs#datasets)
 * [Models](https://github.com/isaaccorley/torchrs#models)
+* [Training](https://github.com/isaaccorley/torchrs#training)
 
 ## Datasets
 
-* [PROBA-V Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
+* [PROBA-V Multi-Image Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
-* [Onera Satellite Change Detection (OSCD)](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
-* [Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
-* [Remote Sensing Image Captioning Dataset (RSICD)](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
-* [Remote Sensing Image Scene Classification (RESISC45)](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
+* [FAIR1M Fine-grained Object Recognition](https://github.com/isaaccorley/torchrs#fair1m---fine-grained-object-recognition)
+* [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
+* [S2Looking - Satellite Side-Looking Change Detection](https://github.com/isaaccorley/torchrs#satellite-side-looking-s2looking-change-detection)
+* [LEVIR-CD+ - LEVIR Change Detection+](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd)
+* [RSVQA LR - Remote Sensing Visual Question Answering Low Resolution](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
+* [RSVQAxBEN - Remote Sensing Visual Question Answering BigEarthNet](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-bigearthnet-rsvqaxben)
+* [RSICD - Remote Sensing Image Captioning Dataset](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
+* [RESISC45 - Remote Sensing Image Scene Classification](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
 * [EuroSAT](https://github.com/isaaccorley/torchrs#eurosat)
 
 ### PROBA-V Super Resolution
@@ -92,6 +103,37 @@ x: dict(
 """
 ```
 
+### FAIR1M - Fine-grained Object Recognition
+
+<img src="./assets/fair1m.jpg" width="550px"></img>
+
+The [FAIR1M](https://rcdaudt.github.io/oscd/) dataset, proposed in ["FAIR1M: A Benchmark Dataset for Fine-grained Object Recognition in High-Resolution Remote Sensing Imagery", Sun et al.](https://arxiv.org/abs/2103.05569) is a Fine-grained Object Recognition/Detection dataset of 15,000 high resolution (0.3-0.8m) RGB images taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1) satellites and extracted from [Google Earth](https://earth.google.com/web/). The dataset contains rotated bounding boxes for objects of 5 (ships, vehicles, airplanes, courts, and roads) categories and 37 sub-categories. This dataset is a part of the [ISPRS Benchmark on Object Detection in High-Resolution Satellite Images](http://gaofen-challenge.com/benchmark). Note that only a portion of dataset has been released so far for the challenge (1,732/15,000 images).
+
+The dataset can be downloaded (8.7GB) using `scripts/download_fair1m.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import FAIR1M
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = FAIR1M(
+    root="path/to/dataset/",
+    split="train",  # only 'train' for now
+    transform=transform,
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x: (3, h, w)
+    y: (N,)
+    points: (N, 5, 2)
+)
+where N is the number of objects in the image
+"""
+```
+
 ### Onera Satellite Change Detection (OSCD)
 
 <img src="./assets/oscd.png" width="750px"></img>
@@ -121,6 +163,65 @@ x: dict(
 """
 ```
 
+### Satellite Side-Looking (S2Looking) Change Detection
+
+<img src="./assets/s2looking.png" width="500px"></img>
+
+The [S2Looking](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is a rural building Change Detection dataset of 5,000 very high resolution (VHR) 0.5-0.8m registered RGB image pairs of varying off-nadir angles taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1), [SuperView (SV)](https://eos.com/find-satellite/superview-1/), and [BeiJing-2 (BJ-2)](https://space.oscar.wmo.int/satelliteprogrammes/view/beijing_2) satellites. The dataset contains separate new and demolished building masks from regions all over the Earth a time span of 1-3 years. This dataset was proposed along with the LEVIR-CD+ dataset and is considered difficult due to the rural locations and off-nadir angles.
+
+The dataset can be downloaded (11GB) using `scripts/download_s2looking.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import S2Looking
+
+transform = Compose([ToTensor()])
+
+dataset = S2Looking(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform,
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x: (2, 3, 1024, 1024)
+    build_mask: (1, 1024, 1024),
+    demolish_mask: (1, 1024, 1024)
+)
+"""
+```
+
+### LEVIR Change Detection+ (LEVIR-CD+)
+
+<img src="./assets/levircd_plus.png" width="600px"></img>
+
+The [LEVIR-CD+](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is an urban building Change Detection dataset of 985 very high resolution (VHR) 0.5m RGB image pairs extracted from Google Earth. The dataset contains building/land use change masks from 20 different regions of Texas between 2002-2020 with a time span of 5 years. This dataset was proposed along with the S2Looking dataset and is considered the easier version due to the urban locations and near-nadir angles.
+
+The dataset can be downloaded (3.6GB) using `scripts/download_levircd_plus.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import LEVIRCDPlus
+
+transform = Compose([ToTensor()])
+
+dataset = LEVIRCDPlus(
+    root="path/to/dataset/",
+    split="train",  # or 'test'
+    transform=transform,
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x: (2, 3, 1024, 1024)
+    mask: (1, 1024, 1024)
+)
+"""
+```
+
 ### Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)
 
 <img src="./assets/rsvqa_lr.png" width="850px"></img>
@@ -145,6 +246,37 @@ x = dataset[0]
 """
 x: dict(
     x:         (3, 256, 256)
+    questions:  List[str]
+    answers:    List[str]
+    types:      List[str]
+)
+"""
+```
+
+### Remote Sensing Visual Question Answering BigEarthNet (RSVQAxBEN)
+
+<img src="./assets/rsvqaxben.png" width="600px"></img>
+
+The [RSVQAxBEN](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA Meets BigEarthNet: A New, Large-Scale, Visual Question Answering Dataset for Remote Sensing", Lobry et al.](https://rsvqa.sylvainlobry.com/IGARSS21.pdf) is a visual question answering (VQA) dataset for the [BigEarthNet](http://bigearth.net/) dataset using the same method applied to the [RSVQA LR](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr) to generate VQA annotations. The dataset consists of RGB Sentinel-2 imagery annotated with a set of questions and their corresponding answers.
+
+The dataset can be downloaded (35.4GB) using `scripts/download_rsvqaxben.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import RSVQAxBEN
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = RSVQAxBEN(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:         (3, h, w)
     questions:  List[str]
     answers:    List[str]
     types:      List[str]
@@ -265,9 +397,11 @@ dataset.classes
 
 ## Models
 
-* [RAMS](https://github.com/isaaccorley/torchrs#rams)
+* [Multi-Image Super Resolution - RAMS](https://github.com/isaaccorley/torchrs#multi-image-super-resolution---rams)
+* [Change Detection - FC-EF, FC-Siam-conc, and FC-Siam-diff](https://github.com/isaaccorley/torchrs#change-detection---fully-convolutional-early-fusion-fc-ef-siamese-concatenation-fc-siam-conc-and-siamese-difference-fc-siam-diff)
+* [Change Detection - EarlyFusion (EF) and Siamese (Siam)](https://github.com/isaaccorley/torchrs#change-detection---early-fusion-ef-and-siamese-siam)
 
-### RAMS
+### Multi-Image Super Resolution - RAMS
 
 <img src="./assets/rams.png" width="500px"></img>
 
@@ -293,6 +427,124 @@ model = RAMS(
 # of low resolution input images and c is the number of channels/bands
 lr = torch.randn(1, 9, 1, 128, 128)
 sr = model(lr) # (1, 1, 384, 384)
+```
+
+### Change Detection - Fully Convolutional Early Fusion (FC-EF), Siamese Concatenation (FC-Siam-conc), and Siamese Difference (FC-Siam-diff)
+
+<img src="./assets/fc_cd.png" width="700px"></img>
+
+Fully Convolutional Early Fusion (FC-EF), Siamese Concatenation (FC-Siam-conc), Siamese Difference (FC-Siam-conc) and are change detection architectures proposed in ["Fully Convolutional Siamese Networks for Change Detection", Daudt et al.](https://arxiv.org/abs/1810.08462). The architectures are essentially modified U-Nets from ["U-Net: Convolutional Networks for Biomedical Image Segmentation", Ronneberger et al.](https://arxiv.org/abs/1505.04597) that are trained to perform change detection segmentation between a set (typically a pair) of images. FC-EF is a U-Net which takes as input the concatenated images. FC-Siam-conc and FC-Siam-diff are U-Nets with a shared encoder for all input images with the exception of FC-Siam-conc concatenating the skip connections and FC-Siam-diff taking the difference of skip connections. Both models been modified to work with any number of input images `t` and channels `c`.
+
+```python
+import torch
+from torchrs.models import FCEF, FCSiamConc, FCSiamDiff
+
+model = FCEF(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+model = FCSiamConc(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+model = FCSiamDiff(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+
+x = torch.randn(1, 2, 3, 128, 128)  # (b, t, c, h, w)
+model(x)                            # (b, num_classes, h, w)
+```
+
+### Change Detection - Early Fusion (EF) and Siamese (Siam)
+
+Early Fusion (EF) and Siamese (Siam) are patch-based change detection architectures proposed along with the [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd) dataset in ["Urban Change Detection for Multispectral Earth Observation Using Convolutional Neural Networks", Daudt et al.](https://arxiv.org/abs/1810.08468). The architectures are effectively CNN classifiers which are trained to classify whether the central pixel of a set (typically a pair) of input patches contains change/no change. EF takes as input the concatenated images while Siam is a extracts features vectors using a shared CNN and then feeds the concatenated vectors to a MLP classifier. Both models expect patches of size Cx15x15 but have been modified to work with any number of input images `t` and channels `c`.
+
+```python
+import torch
+from torchrs.models import EarlyFusion, Siam
+
+model = EarlyFusion(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+model = Siam(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+
+x = torch.randn(1, 2, 3, 15, 15)  # (b, t, c, h, w)
+model(x)                          # (b, num_classes, h, w)
+```
+
+## Training
+
+For training purposes, each model and dataset has been adapted into [Pytorch Lightning](https://www.pytorchlightning.ai/) [LightningModules](https://pytorch-lightning.readthedocs.io/en/stable/common/lightning_module.html) and [LightningDataModules](https://pytorch-lightning.readthedocs.io/en/stable/extensions/datamodules.html), respectively. The modules can be found in `torchrs.train.modules` and `torchrs.train.datamodules`. Among other things, Pytorch Lightning has the benefits of reducing boilerplate code, requiring minimal rewrite for multi-gpu/cluster training, supports mixed precision training, gradient accumulation, callbacks, logging metrics, etc.
+
+To use the training features the `train` extras must be installed:
+
+```bash
+# pypi
+pip install torch-rs[train]
+
+# latest
+pip install -e git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]
+```
+
+A simple training example:
+
+```python
+import torch
+import torch.nn as nn
+import pytorch_lightning as pl
+import torchvision.transforms as T
+from torchrs.train.modules import RAMSModule
+from torchrs.train.datamodules import PROBAVDataModule
+from torchrs.transforms import ToTensor
+
+
+model = RAMSModule(
+    scale_factor=3,
+    t=9,
+    c=1,
+    loss=nn.MSELoss(),
+    opt=torch.optim.Adam,
+    lr=3E-4
+)
+dm = PROBAVDataModule(
+    root="path/to/dataset",
+    band="RED",
+    lr_transform=T.Compose([ToTensor()]),
+    hr_transform=T.Compose([ToTensor()]),
+    batch_size=16,
+    num_workers=0,
+    prefetch_factor=2,
+    pin_memory=True
+)
+callbacks = [
+    pl.callbacks.ModelCheckpoint(monitor="train_loss", mode="min", verbose=True, save_top_k=1),
+    pl.callbacks.EarlyStopping(monitor="train_loss", mode="min", patience=5)
+]
+trainer = pl.Trainer(
+    gpus=1,
+    precision=16,
+    max_epochs=25,
+    callbacks=callbacks,
+    weights_summary="top"
+)
+trainer.fit(model, datamodule=dm)
+trainer.test(datamodule=dm)
+
 ```
 
 ## Tests
