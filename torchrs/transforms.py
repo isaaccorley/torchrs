@@ -49,7 +49,7 @@ class ToTensor(object):
 
 
 class ToDtype(object):
-    
+
     def __init__(self, dtype: torch.dtype):
         self.dtype = dtype
 

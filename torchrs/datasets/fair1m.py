@@ -1,7 +1,7 @@
 import os
 from glob import glob
 from xml.etree import ElementTree
-from typing import List, Dict, Tuple
+from typing import List, Dict
 
 import torch
 import numpy as np
@@ -74,6 +74,7 @@ class FAIR1M(torch.utils.data.Dataset):
         "Intersection":     {"id": 35, "category": "Road"},
         "Bridge":           {"id": 36, "category": "Road"}
     }
+
     def __init__(
         self,
         root: str = ".data/fair1m",

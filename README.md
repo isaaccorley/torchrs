@@ -1,6 +1,6 @@
 # PyTorch Remote Sensing (torchrs)
 
-(WIP) PyTorch implementation of popular datasets and models in remote sensing tasks (Change Detection, Image Super Resolution, Land Cover Classification/Segmentation, Image-to-Image Translation, etc.) for various Optical (Sentinel-2, Landsat, etc.) and Synthetic Aperture Radar (SAR) (Sentinel-1) sensors.
+(WIP) PyTorch implementation of popular datasets and models in remote sensing tasks (Change Detection, Image Super Resolution, Land Cover Classification/Segmentation, Image-to-Image Translation, Image Captioning, etc.) for various Optical (Sentinel-2, Landsat, etc.) and Synthetic Aperture Radar (SAR) (Sentinel-1) sensors.
 
 ## Installation
 
@@ -9,13 +9,13 @@
 pip install torch-rs
 
 # pypi with training extras
-pip install torch-rs[train]
+pip install 'torch-rs[train]'
 
 # latest
 pip install git+https://github.com/isaaccorley/torchrs
 
-# latest with training extras
-pip install -e git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]
+# latest with extras
+pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 ```
 
 ## Table of Contents
@@ -313,6 +313,64 @@ x: dict(
 """
 ```
 
+### Sydney Captions
+
+<img src="./assets/sydney_captions.png" width="500px"></img>
+
+The [Sydney Captions](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Deep semantic understanding of high resolution remote sensing image", Qu et al.](https://ieeexplore.ieee.org/document/7546397) is a version of the Sydney scene classification dataset proposed in ["Saliency-Guided Unsupervised Feature Learning for Scene Classification", Zhang et al](https://ieeexplore.ieee.org/document/6910306). The dataset contains 613 500x500 1ft resolution RGB images of Sydney, Australia extracted using [Google Earth](https://earth.google.com/web/) and is annotated with 5 captions per image.
+
+The dataset can be downloaded (0.44GB) using `scripts/download_sydney_captions.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import SydneyCaptions
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = SydneyCaptions(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:        (3, 500, 500)
+    captions: List[str]
+)
+"""
+```
+
+### UC Merced (UCM) Captions
+
+<img src="./assets/ucm_captions.png" width="500px"></img>
+
+The [UC Merced (UCM) Captions](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Deep semantic understanding of high resolution remote sensing image", Qu et al.](https://ieeexplore.ieee.org/document/7546397) is a version of the [UCM dataset](http://weegee.vision.ucmerced.edu/datasets/landuse.html) for land use classification proposed in ["Bag-Of-Visual-Words and Spatial Extensions for Land-Use Classification", Yang et al](https://faculty.ucmerced.edu/snewsam/papers/Yang_ACMGIS10_BagOfVisualWords.pdf). The dataset contains 2100 256x256 1ft resolution RGB images of urban locations around the U.S. extracted from the [USGS National Map Urban Area Imagery collection](https://www.usgs.gov/core-science-systems/national-geospatial-program/national-map) and is annotated with 5 captions per image.
+
+The dataset can be downloaded (0.40GB) using `scripts/download_ucm_captions.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import UCMCaptions
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = UCMCaptions(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:        (3, 256, 256)
+    captions: List[str]
+)
+"""
+```
+
 ### Remote Sensing Image Scene Classification (RESISC45)
 
 <img src="./assets/resisc45.png" width="500px"></img>
@@ -433,7 +491,7 @@ sr = model(lr) # (1, 1, 384, 384)
 
 <img src="./assets/fc_cd.png" width="700px"></img>
 
-Fully Convolutional Early Fusion (FC-EF), Siamese Concatenation (FC-Siam-conc), Siamese Difference (FC-Siam-conc) and are change detection architectures proposed in ["Fully Convolutional Siamese Networks for Change Detection", Daudt et al.](https://arxiv.org/abs/1810.08462). The architectures are essentially modified U-Nets from ["U-Net: Convolutional Networks for Biomedical Image Segmentation", Ronneberger et al.](https://arxiv.org/abs/1505.04597) that are trained to perform change detection segmentation between a set (typically a pair) of images. FC-EF is a U-Net which takes as input the concatenated images. FC-Siam-conc and FC-Siam-diff are U-Nets with a shared encoder for all input images with the exception of FC-Siam-conc concatenating the skip connections and FC-Siam-diff taking the difference of skip connections. Both models been modified to work with any number of input images `t` and channels `c`.
+Fully Convolutional Early Fusion (FC-EF), Siamese Concatenation (FC-Siam-conc), Siamese Difference (FC-Siam-conc) and are change detection segmentation architectures proposed in ["Fully Convolutional Siamese Networks for Change Detection", Daudt et al.](https://arxiv.org/abs/1810.08462). The architectures are essentially modified U-Nets from ["U-Net: Convolutional Networks for Biomedical Image Segmentation", Ronneberger et al.](https://arxiv.org/abs/1505.04597). FC-EF is a U-Net which takes as input the concatenated images. FC-Siam-conc and FC-Siam-diff are U-Nets with a shared encoder which concatenate or take the difference of the skip connections, respectively. Both models been modified to work with any number of input images `t` and channels `c`.
 
 ```python
 import torch
@@ -464,7 +522,7 @@ model(x)                            # (b, num_classes, h, w)
 
 ### Change Detection - Early Fusion (EF) and Siamese (Siam)
 
-Early Fusion (EF) and Siamese (Siam) are patch-based change detection architectures proposed along with the [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd) dataset in ["Urban Change Detection for Multispectral Earth Observation Using Convolutional Neural Networks", Daudt et al.](https://arxiv.org/abs/1810.08468). The architectures are effectively CNN classifiers which are trained to classify whether the central pixel of a set (typically a pair) of input patches contains change/no change. EF takes as input the concatenated images while Siam is a extracts features vectors using a shared CNN and then feeds the concatenated vectors to a MLP classifier. Both models expect patches of size Cx15x15 but have been modified to work with any number of input images `t` and channels `c`.
+Early Fusion (EF) and Siamese (Siam) are change detection architectures proposed along with the [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd) dataset in ["Urban Change Detection for Multispectral Earth Observation Using Convolutional Neural Networks", Daudt et al.](https://arxiv.org/abs/1810.08468). The architectures are effectively CNN classifiers which are trained to classify whether the central pixel of a set (typically a pair) of input patches contains change/no change. EF takes as input the concatenated images while Siam extracts feature vectors using a shared CNN and then feeds the concatenated vectors to a MLP classifier. Both models expect patches of size Cx15x15 but have been modified to work with any number of input images `t` and channels `c`.
 
 ```python
 import torch
@@ -491,14 +549,14 @@ model(x)                          # (b, num_classes, h, w)
 
 For training purposes, each model and dataset has been adapted into [Pytorch Lightning](https://www.pytorchlightning.ai/) [LightningModules](https://pytorch-lightning.readthedocs.io/en/stable/common/lightning_module.html) and [LightningDataModules](https://pytorch-lightning.readthedocs.io/en/stable/extensions/datamodules.html), respectively. The modules can be found in `torchrs.train.modules` and `torchrs.train.datamodules`. Among other things, Pytorch Lightning has the benefits of reducing boilerplate code, requiring minimal rewrite for multi-gpu/cluster training, supports mixed precision training, gradient accumulation, callbacks, logging metrics, etc.
 
-To use the training features the `train` extras must be installed:
+To use the training features, torch-rs must be installed with the `train` extras.
 
 ```bash
 # pypi
-pip install torch-rs[train]
+pip install 'torch-rs[train]'
 
 # latest
-pip install -e git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]
+pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 ```
 
 A simple training example:

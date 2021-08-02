@@ -1,12 +1,17 @@
 from setuptools import setup, find_packages
 from setuptools.config import read_configuration
 
-with open("requirements.txt", "r") as f:
-    install_requires = f.read().strip().splitlines()
-
 extras = {
     "train": ["pytorch-lightning", "torchmetrics"],
 }
+install_requires = [
+    "torch",
+    "torchvision",
+    "einops",
+    "numpy",
+    "pillow",
+    "tifffile",
+]
 setup_requires = ["pytest-runner"]
 tests_require = ["pytest", "pytest-cov", "mock", "mypy", "black", "pylint"]
 
