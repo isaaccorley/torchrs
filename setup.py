@@ -1,9 +1,6 @@
 from setuptools import setup, find_packages
 from setuptools.config import read_configuration
 
-with open("requirements.txt", "r") as f:
-    install_requires = f.read().strip().splitlines()
-
 extras = {
     "train": ["pytorch-lightning", "torchmetrics"],
 }
@@ -25,8 +22,8 @@ setup(
     project_urls={"Bug Tracker": cfg["metadata"]["url"] + "/issues"},
     install_requires=install_requires,
     extras_require=extras,
-    setup_requires=setup_requires,
-    tests_require=tests_require,
+    setup_requires=install_requires + setup_requires,
+    tests_require=install_requires + tests_require,
     packages=find_packages(),
     python_requires=">=3.7",
 )
