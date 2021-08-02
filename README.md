@@ -222,6 +222,28 @@ x: dict(
 """
 ```
 
+### Sentinel-2 Multitemporal Cities Pairs (S2MTCP)
+
+<img src="./assets/s2mtcp.png" width="600px"></img>
+
+The [Sentinel-2 Multitemporal Cities Pairs (S2MTCP)](https://zenodo.org/record/4280482) dataset, proposed in ["Self-supervised pre-training enhances change detection in Sentinel-2 imagery", Leenstra et al.](https://arxiv.org/abs/2101.08122) is an urban Change Detection dataset of 1,520 medium resolution 10m optical image pairs taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset does not contain change masks and was originally used for self-supervised pretraining for other downstream change detection tasks (e.g. the [OSCD](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd) dataset). The imagery are roughly 600x600 in shape and contain all Sentinel-2 bands resampled to 10m.
+
+The dataset can be downloaded (10GB/139GB compressed/uncompressed) using `scripts/download_s2mtcp.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import S2MTCP
+
+transform = Compose([ToTensor()])
+
+dataset = S2MTCP(
+    root="path/to/dataset/",
+    transform=transform,
+)
+
+x = dataset[0]  # (2, 14, h, w)
+```
+
 ### Remote Sensing Visual Question Answering (RSVQA) Low Resolution (LR)
 
 <img src="./assets/rsvqa_lr.png" width="850px"></img>
