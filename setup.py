@@ -7,6 +7,14 @@ with open("requirements.txt", "r") as f:
 extras = {
     "train": ["pytorch-lightning", "torchmetrics"],
 }
+install_requires = [
+    "torch",
+    "torchvision",
+    "einops",
+    "numpy",
+    "pillow",
+    "tifffile",
+]
 setup_requires = ["pytest-runner"]
 tests_require = ["pytest", "pytest-cov", "mock", "mypy", "black", "pylint"]
 
