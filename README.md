@@ -313,6 +313,64 @@ x: dict(
 """
 ```
 
+### Sydney Captions
+
+<img src="./assets/sydney_captions.png" width="500px"></img>
+
+The [Sydney Captions](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Deep semantic understanding of high resolution remote sensing image", Qu et al.](https://ieeexplore.ieee.org/document/7546397) is a version of the Sydney scene classification dataset proposed in ["Saliency-Guided Unsupervised Feature Learning for Scene Classification", Zhang et al](https://ieeexplore.ieee.org/document/6910306). The dataset contains 613 500x500 1ft resolution RGB images of Sydney, Australia extracted using [Google Earth](https://earth.google.com/web/) and is annotated with 5 captions per image.
+
+The dataset can be downloaded (0.44GB) using `scripts/download_sydney_captions.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import SydneyCaptions
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = SydneyCaptions(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:        (3, 500, 500)
+    captions: List[str]
+)
+"""
+```
+
+### UC Merced (UCM) Captions
+
+<img src="./assets/ucm_captions.png" width="500px"></img>
+
+The [UC Merced (UCM) Captions](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Deep semantic understanding of high resolution remote sensing image", Qu et al.](https://ieeexplore.ieee.org/document/7546397) is a version of the [UCM dataset](http://weegee.vision.ucmerced.edu/datasets/landuse.html) for land use classification proposed in ["Bag-Of-Visual-Words and Spatial Extensions for Land-Use Classification", Yang et al](https://faculty.ucmerced.edu/snewsam/papers/Yang_ACMGIS10_BagOfVisualWords.pdf). The dataset contains 2100 256x256 1ft resolution RGB images of urban locations around the U.S. extracted from the [USGS National Map Urban Area Imagery collection](https://www.usgs.gov/core-science-systems/national-geospatial-program/national-map) and is annotated with 5 captions per image.
+
+The dataset can be downloaded (0.40GB) using `scripts/download_ucm_captions.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import UCMCaptions
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = UCMCaptions(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:        (3, 256, 256)
+    captions: List[str]
+)
+"""
+```
+
 ### Remote Sensing Image Scene Classification (RESISC45)
 
 <img src="./assets/resisc45.png" width="500px"></img>
