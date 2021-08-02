@@ -16,10 +16,12 @@ BATCH_SIZE = [1, 2]
 params = list(itertools.product(SCALE_FACTOR, T, CHANNELS, BATCH_SIZE))
 
 
+@torch.no_grad()
 @pytest.mark.parametrize("scale_factor, t, channels, batch_size", params)
 def test_rams(scale_factor, t, channels, batch_size):
     model = RAMS(scale_factor, t, channels, num_feature_attn_blocks=3)
     model = model.to(DEVICE)
+    model = model.eval()
     lr = torch.ones(batch_size, t, channels, IMAGE_SIZE, IMAGE_SIZE)
     lr = lr.to(DTYPE)
     lr = lr.to(DEVICE)

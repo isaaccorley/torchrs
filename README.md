@@ -26,7 +26,7 @@ pip install -e git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train
 
 ## Datasets
 
-* [PROBA-V Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
+* [PROBA-V Multi-Image Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
 * [FAIR1M Fine-grained Object Recognition](https://github.com/isaaccorley/torchrs#fair1m---fine-grained-object-recognition)
 * [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
@@ -397,9 +397,11 @@ dataset.classes
 
 ## Models
 
-* [RAMS](https://github.com/isaaccorley/torchrs#rams)
+* [Multi-Image Super Resolution - RAMS](https://github.com/isaaccorley/torchrs#multi-image-super-resolution---rams)
+* [Change Detection - FC-EF, FC-Siam-conc, and FC-Siam-diff](https://github.com/isaaccorley/torchrs#change-detection---fully-convolutional-early-fusion-fc-ef-siamese-concatenation-fc-siam-conc-and-siamese-difference-fc-siam-diff)
+* [Change Detection - EarlyFusion (EF) and Siamese (Siam)](https://github.com/isaaccorley/torchrs#change-detection---early-fusion-ef-and-siamese-siam)
 
-### RAMS
+### Multi-Image Super Resolution - RAMS
 
 <img src="./assets/rams.png" width="500px"></img>
 
@@ -425,6 +427,64 @@ model = RAMS(
 # of low resolution input images and c is the number of channels/bands
 lr = torch.randn(1, 9, 1, 128, 128)
 sr = model(lr) # (1, 1, 384, 384)
+```
+
+### Change Detection - Fully Convolutional Early Fusion (FC-EF), Siamese Concatenation (FC-Siam-conc), and Siamese Difference (FC-Siam-diff)
+
+<img src="./assets/fc_cd.png" width="700px"></img>
+
+Fully Convolutional Early Fusion (FC-EF), Siamese Concatenation (FC-Siam-conc), Siamese Difference (FC-Siam-conc) and are change detection architectures proposed in ["Fully Convolutional Siamese Networks for Change Detection", Daudt et al.](https://arxiv.org/abs/1810.08462). The architectures are essentially modified U-Nets from ["U-Net: Convolutional Networks for Biomedical Image Segmentation", Ronneberger et al.](https://arxiv.org/abs/1505.04597) that are trained to perform change detection segmentation between a set (typically a pair) of images. FC-EF is a U-Net which takes as input the concatenated images. FC-Siam-conc and FC-Siam-diff are U-Nets with a shared encoder for all input images with the exception of FC-Siam-conc concatenating the skip connections and FC-Siam-diff taking the difference of skip connections. Both models been modified to work with any number of input images `t` and channels `c`.
+
+```python
+import torch
+from torchrs.models import FCEF, FCSiamConc, FCSiamDiff
+
+model = FCEF(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+model = FCSiamConc(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+model = FCSiamDiff(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+
+x = torch.randn(1, 2, 3, 128, 128)  # (b, t, c, h, w)
+model(x)                            # (b, num_classes, h, w)
+```
+
+### Change Detection - Early Fusion (EF) and Siamese (Siam)
+
+Early Fusion (EF) and Siamese (Siam) are patch-based change detection architectures proposed along with the [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd) dataset in ["Urban Change Detection for Multispectral Earth Observation Using Convolutional Neural Networks", Daudt et al.](https://arxiv.org/abs/1810.08468). The architectures are effectively CNN classifiers which are trained to classify whether the central pixel of a set (typically a pair) of input patches contains change/no change. EF takes as input the concatenated images while Siam is a extracts features vectors using a shared CNN and then feeds the concatenated vectors to a MLP classifier. Both models expect patches of size Cx15x15 but have been modified to work with any number of input images `t` and channels `c`.
+
+```python
+import torch
+from torchrs.models import EarlyFusion, Siam
+
+model = EarlyFusion(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+model = Siam(
+    channels=3,
+    t=2,
+    num_classes=2
+)
+
+
+x = torch.randn(1, 2, 3, 15, 15)  # (b, t, c, h, w)
+model(x)                          # (b, num_classes, h, w)
 ```
 
 ## Training
