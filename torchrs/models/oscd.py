@@ -23,7 +23,7 @@ class EarlyFusion(nn.Module):
     and is essentially a simple CNN classifier of the central pixel in an input patch.
     Assumes (T*Cx15x15) patch size input
     """
-    def __init__(self, channels: int = 3, t: int = 2):
+    def __init__(self, channels: int = 3, t: int = 2, num_classes: int = 2):
         super().__init__()
         filters = [channels * t, 32, 32, 64, 64, 128, 128]
         kernel_size = 3
@@ -38,7 +38,7 @@ class EarlyFusion(nn.Module):
             nn.BatchNorm1d(8), 
             nn.ReLU(),
             nn.Dropout2d(dropout), 
-            nn.Linear(8, 2)
+            nn.Linear(8, num_classes)
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -49,7 +49,7 @@ class EarlyFusion(nn.Module):
 
 
 class Siam(nn.Module):
-    """ Early Fusion (EF) from 'Urban Change Detection for Multispectral Earth Observation
+    """ Siamese (Siam) from 'Urban Change Detection for Multispectral Earth Observation
     Using ConvolutionalNeural Networks', Daudt et al. (2018)
     https://arxiv.org/abs/1810.08468
 
@@ -57,7 +57,7 @@ class Siam(nn.Module):
     and is essentially a simple CNN classifier of the central pixel in an input patch.
     Assumes (T*Cx15x15) patch size input
     """
-    def __init__(self, channels: int = 3, t: int = 2):
+    def __init__(self, channels: int = 3, t: int = 2, num_classes: int = 2):
         super().__init__()
         filters = [channels, 64, 64, 128]
         kernel_size = 3
@@ -71,7 +71,7 @@ class Siam(nn.Module):
             nn.BatchNorm1d(64), 
             nn.ReLU(),
             nn.Dropout2d(dropout), 
-            nn.Linear(64, 2)
+            nn.Linear(64, num_classes)
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
