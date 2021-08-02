@@ -22,8 +22,8 @@ setup(
     project_urls={"Bug Tracker": cfg["metadata"]["url"] + "/issues"},
     install_requires=install_requires,
     extras_require=extras,
-    setup_requires=install_requires + setup_requires,
-    tests_require=install_requires + tests_require,
+    setup_requires=setup_requires,
+    tests_require=tests_require,
     packages=find_packages(),
     python_requires=">=3.7",
 )
