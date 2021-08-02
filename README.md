@@ -9,7 +9,7 @@
 pip install torch-rs
 
 # pypi with training extras
-pip install torch-rs, pytorch-lightning, torchmetrics
+pip install torch-rs pytorch-lightning torchmetrics
 
 # latest
 pip install git+https://github.com/isaaccorley/torchrs
