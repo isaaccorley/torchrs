@@ -10,10 +10,11 @@ from .levircd import LEVIRCDPlus
 from .fair1m import FAIR1M
 from .sydney_captions import SydneyCaptions
 from .ucm_captions import UCMCaptions
+from .s2mtcp import S2MTCP
 
 
 __all__ = [
     "PROBAV", "ETCI2021", "RSVQALR", "RSVQAxBEN", "EuroSATRGB", "EuroSATMS",
     "RESISC45", "RSICD", "OSCD", "S2Looking", "LEVIRCDPlus", "FAIR1M",
-    "SydneyCaptions", "UCMCaptions"
+    "SydneyCaptions", "UCMCaptions", "S2MTCP"
 ]
