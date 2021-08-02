@@ -9,13 +9,11 @@
 pip install torch-rs
 
 # pypi with training extras
-pip install torch-rs[train]
+pip install torch-rs, pytorch-lightning, torchmetrics
 
 # latest
 pip install git+https://github.com/isaaccorley/torchrs
 
-# latest with training extras
-pip install -e git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]
 ```
 
 ## Table of Contents
