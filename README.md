@@ -489,14 +489,11 @@ model(x)                          # (b, num_classes, h, w)
 
 For training purposes, each model and dataset has been adapted into [Pytorch Lightning](https://www.pytorchlightning.ai/) [LightningModules](https://pytorch-lightning.readthedocs.io/en/stable/common/lightning_module.html) and [LightningDataModules](https://pytorch-lightning.readthedocs.io/en/stable/extensions/datamodules.html), respectively. The modules can be found in `torchrs.train.modules` and `torchrs.train.datamodules`. Among other things, Pytorch Lightning has the benefits of reducing boilerplate code, requiring minimal rewrite for multi-gpu/cluster training, supports mixed precision training, gradient accumulation, callbacks, logging metrics, etc.
 
-To use the training features the `train` extras must be installed:
+To use the training features the `train` additional packages must be installed:
 
 ```bash
 # pypi
-pip install torch-rs[train]
-
-# latest
-pip install -e git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]
+pip install pytorch-lightning torchmetrics
 ```
 
 A simple training example:
