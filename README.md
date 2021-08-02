@@ -600,7 +600,7 @@ model = RAMSModule(
     scale_factor=3,
     t=9,
     c=1,
-    loss=nn.MSELoss(),
+    loss_fn=nn.MSELoss(),
     opt=torch.optim.Adam,
     lr=3E-4
 )
@@ -627,7 +627,6 @@ trainer = pl.Trainer(
 )
 trainer.fit(model, datamodule=dm)
 trainer.test(datamodule=dm)
-
 ```
 
 ## Tests
