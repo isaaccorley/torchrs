@@ -27,6 +27,7 @@ class RSICD(torch.utils.data.Dataset):
         self.root = root
         self.transform = transform
         self.captions = self.load_captions(os.path.join(root, "dataset_rsicd.json"), split)
+        self.image_root = "RSICD_images"
 
     @staticmethod
     def load_captions(path: str, split: str) -> List[Dict]:
@@ -39,7 +40,7 @@ class RSICD(torch.utils.data.Dataset):
 
     def __getitem__(self, idx: int) -> Dict:
         captions = self.captions[idx]
-        path = os.path.join(self.root, "RSICD_images", captions["filename"])
+        path = os.path.join(self.root, self.image_root, captions["filename"])
         x = Image.open(path).convert("RGB")
         x = self.transform(x)
         sentences = [sentence["raw"] for sentence in captions["sentences"]]
