@@ -25,7 +25,6 @@ class ConvBlock(nn.Module):
         return self.pool(x), x
 
 
-
 class DeConvBlock(nn.Sequential):
 
     def __init__(self, filters: List[int], kernel_size: int = 3, dropout: float = 0.2):
@@ -154,7 +153,7 @@ class FCSiamConc(nn.Module):
 
         # Concat skips
         skips = [rearrange(skip, "(b t) c h w -> b (t c) h w", t=t) for skip in skips]
-        
+
         # Only first input encoding is passed directly to decoder
         x = rearrange(x, "(b t) c h w -> b t c h w", t=t)
         x = x[:, 0, ...]

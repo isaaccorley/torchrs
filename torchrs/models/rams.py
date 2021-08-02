@@ -1,6 +1,4 @@
 """ Referenced from official TF implementation https://github.com/EscVM/RAMS/blob/master/utils/network.py """
-import math
-
 import torch
 import torch.nn as nn
 from einops import rearrange

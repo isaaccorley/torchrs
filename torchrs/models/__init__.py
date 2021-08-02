@@ -4,5 +4,5 @@ from .fc_cd import FCEF, FCSiamConc, FCSiamDiff
 
 
 __all__ = [
-    "RAMS", "EarlyFusion", "FCEF", "FCSiamConc", "FCSiamDiff"
+    "RAMS", "EarlyFusion", "Siam", "FCEF", "FCSiamConc", "FCSiamDiff"
 ]

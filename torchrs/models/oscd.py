@@ -26,7 +26,6 @@ class EarlyFusion(nn.Module):
     def __init__(self, channels: int = 3, t: int = 2, num_classes: int = 2):
         super().__init__()
         filters = [channels * t, 32, 32, 64, 64, 128, 128]
-        kernel_size = 3
         dropout = 0.2
         self.encoder = nn.Sequential(
             *[ConvBlock(filters[i-1], filters[i]) for i in range(1, len(filters))],
@@ -35,9 +34,9 @@ class EarlyFusion(nn.Module):
         )
         self.mlp = nn.Sequential(
             nn.Linear(128, 8),
-            nn.BatchNorm1d(8), 
+            nn.BatchNorm1d(8),
             nn.ReLU(),
-            nn.Dropout2d(dropout), 
+            nn.Dropout2d(dropout),
             nn.Linear(8, num_classes)
         )
 
@@ -60,7 +59,6 @@ class Siam(nn.Module):
     def __init__(self, channels: int = 3, t: int = 2, num_classes: int = 2):
         super().__init__()
         filters = [channels, 64, 64, 128]
-        kernel_size = 3
         dropout = 0.2
         self.encoder = nn.Sequential(
             *[ConvBlock(filters[i-1], filters[i]) for i in range(1, len(filters))],
@@ -68,9 +66,9 @@ class Siam(nn.Module):
         )
         self.mlp = nn.Sequential(
             nn.Linear(t*128*7*7, 64),
-            nn.BatchNorm1d(64), 
+            nn.BatchNorm1d(64),
             nn.ReLU(),
-            nn.Dropout2d(dropout), 
+            nn.Dropout2d(dropout),
             nn.Linear(64, num_classes)
         )
 
