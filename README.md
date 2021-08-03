@@ -79,7 +79,7 @@ t varies by set of images (minimum of 9)
 
 <img src="./assets/etci2021.jpg" width="450px"></img>
 
-The [ETCI 2021 Dataset](https://nasa-impact.github.io/etci2021/) is a Flood Detection segmentation dataset of SAR images taken by the [ESA Sentinel-1 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-1). The dataset contains pairs of VV and VH polarization images processed by the Hybrid Pluggable Processing Pipeline (hyp3) along with corresponding binary flood and water body ground truth masks.
+The [ETCI 2021 Dataset](https://nasa-impact.github.io/etci2021/) is a flood detection segmentation dataset of SAR images taken by the [ESA Sentinel-1 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-1). The dataset contains pairs of VV and VH polarization images processed by the Hybrid Pluggable Processing Pipeline (hyp3) along with corresponding binary flood and water body ground truth masks.
 
 The dataset can be downloaded (5.6GB) using `scripts/download_etci2021.sh` and instantiated below:
 
@@ -110,7 +110,7 @@ x: dict(
 
 <img src="./assets/fair1m.jpg" width="550px"></img>
 
-The [FAIR1M](https://rcdaudt.github.io/oscd/) dataset, proposed in ["FAIR1M: A Benchmark Dataset for Fine-grained Object Recognition in High-Resolution Remote Sensing Imagery", Sun et al.](https://arxiv.org/abs/2103.05569) is a Fine-grained Object Recognition/Detection dataset of 15,000 high resolution (0.3-0.8m) RGB images taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1) satellites and extracted from [Google Earth](https://earth.google.com/web/). The dataset contains rotated bounding boxes for objects of 5 (ships, vehicles, airplanes, courts, and roads) categories and 37 sub-categories. This dataset is a part of the [ISPRS Benchmark on Object Detection in High-Resolution Satellite Images](http://gaofen-challenge.com/benchmark). Note that only a portion of dataset has been released so far for the challenge (1,732/15,000 images).
+The [FAIR1M](https://rcdaudt.github.io/oscd/) dataset, proposed in ["FAIR1M: A Benchmark Dataset for Fine-grained Object Recognition in High-Resolution Remote Sensing Imagery", Sun et al.](https://arxiv.org/abs/2103.05569) is a fine-grained object recognition/detection dataset of 15,000 high resolution (0.3-0.8m) RGB images taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1) satellites and extracted from [Google Earth](https://earth.google.com/web/). The dataset contains rotated bounding boxes for objects of 5 categories (ships, vehicles, airplanes, courts, and roads) and 37 sub-categories. This dataset is a part of the [ISPRS Benchmark on Object Detection in High-Resolution Satellite Images](http://gaofen-challenge.com/benchmark). Note that so far only a portion of the training dataset has been released for the challenge (1,732/15,000 images).
 
 The dataset can be downloaded (8.7GB) using `scripts/download_fair1m.sh` and instantiated below:
 
@@ -141,7 +141,7 @@ where N is the number of objects in the image
 
 <img src="./assets/oscd.png" width="750px"></img>
 
-The [Onera Satellite Change Detection (OSCD)](https://rcdaudt.github.io/oscd/) dataset, proposed in ["Urban Change Detection for Multispectral Earth Observation Using Convolutional Neural Networks", Daudt et al.](https://arxiv.org/abs/1810.08468) is a Change Detection dataset of 13 band multispectral (MS) images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 24 registered image pairs from multiple continents between 2015-2018 along with binary change masks.
+The [Onera Satellite Change Detection (OSCD)](https://rcdaudt.github.io/oscd/) dataset, proposed in ["Urban Change Detection for Multispectral Earth Observation Using Convolutional Neural Networks", Daudt et al.](https://arxiv.org/abs/1810.08468) is a change detection dataset of multispectral (MS) images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 24 registered image pairs from multiple continents between 2015-2018 along with binary change masks.
 
 The dataset can be downloaded (0.73GB) using `scripts/download_oscd.sh` and instantiated below:
 
@@ -170,7 +170,7 @@ x: dict(
 
 <img src="./assets/s2looking.png" width="500px"></img>
 
-The [S2Looking](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is a rural building Change Detection dataset of 5,000 very high resolution (VHR) 0.5-0.8m registered RGB image pairs of varying off-nadir angles taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1), [SuperView (SV)](https://eos.com/find-satellite/superview-1/), and [BeiJing-2 (BJ-2)](https://space.oscar.wmo.int/satelliteprogrammes/view/beijing_2) satellites. The dataset contains separate new and demolished building masks from regions all over the Earth a time span of 1-3 years. This dataset was proposed along with the LEVIR-CD+ dataset and is considered difficult due to the rural locations and off-nadir angles.
+The [S2Looking](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is a rural building change detection dataset of 5,000 1024x1024 0.5-0.8m registered RGB image pairs of varying off-nadir angles taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1), [SuperView (SV)](https://eos.com/find-satellite/superview-1/), and [BeiJing-2 (BJ-2)](https://space.oscar.wmo.int/satelliteprogrammes/view/beijing_2) satellites. The dataset contains separate new and demolished building masks from regions all over the Earth with a time span of 1-3 years. This dataset was proposed along with the LEVIR-CD+ dataset and is considered difficult due to the rural locations and off-nadir angles.
 
 The dataset can be downloaded (11GB) using `scripts/download_s2looking.sh` and instantiated below:
 
@@ -200,7 +200,7 @@ x: dict(
 
 <img src="./assets/levircd_plus.png" width="600px"></img>
 
-The [LEVIR-CD+](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is an urban building Change Detection dataset of 985 very high resolution (VHR) 0.5m RGB image pairs extracted from Google Earth. The dataset contains building/land use change masks from 20 different regions of Texas between 2002-2020 with a time span of 5 years. This dataset was proposed along with the S2Looking dataset and is considered the easier version due to the urban locations and near-nadir angles.
+The [LEVIR-CD+](https://github.com/AnonymousForACMMM/Dataset) dataset, proposed in ["S2Looking: A Satellite Side-Looking Dataset for Building Change Detection", Shen et al.](https://arxiv.org/abs/2107.09244) is an urban building change detection dataset of 985 1024x1024 0.5m RGB image pairs extracted from Google Earth. The dataset contains building/land use change masks from 20 different regions of Texas between 2002-2020 with a time span of 5 years. This dataset was proposed along with the S2Looking dataset and is considered the easier version due to the urban locations and near-nadir angles.
 
 The dataset can be downloaded (3.6GB) using `scripts/download_levircd_plus.sh` and instantiated below:
 
@@ -229,7 +229,7 @@ x: dict(
 
 <img src="./assets/s2mtcp.png" width="600px"></img>
 
-The [Sentinel-2 Multitemporal Cities Pairs (S2MTCP)](https://zenodo.org/record/4280482) dataset, proposed in ["Self-supervised pre-training enhances change detection in Sentinel-2 imagery", Leenstra et al.](https://arxiv.org/abs/2101.08122) is an urban Change Detection dataset of 1,520 medium resolution 10m optical image pairs taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset does not contain change masks and was originally used for self-supervised pretraining for other downstream change detection tasks (e.g. the [OSCD](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd) dataset). The imagery are roughly 600x600 in shape and contain all Sentinel-2 bands resampled to 10m.
+The [Sentinel-2 Multitemporal Cities Pairs (S2MTCP)](https://zenodo.org/record/4280482) dataset, proposed in ["Self-supervised pre-training enhances change detection in Sentinel-2 imagery", Leenstra et al.](https://arxiv.org/abs/2101.08122) is an urban change detection dataset of 1,520 medium resolution 10m unregistered image pairs taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset does not contain change masks and was originally used for self-supervised pretraining for other downstream change detection tasks (e.g. the [OSCD](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd) dataset). The imagery are roughly 600x600 in shape and contain all Sentinel-2 bands of the [Level 1C (L1C) product](https://sentinel.esa.int/web/sentinel/technical-guides/sentinel-2-msi/level-1c/product-formatting) resampled to 10m.
 
 The dataset can be downloaded (10GB/139GB compressed/uncompressed) using `scripts/download_s2mtcp.sh` and instantiated below:
 
@@ -251,7 +251,7 @@ x = dataset[0]  # (2, 14, h, w)
 
 <img src="./assets/rsvqa_lr.png" width="850px"></img>
 
-The [RSVQA LR](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA: Visual Question Answering for Remote Sensing Data", Lobry et al.](https://arxiv.org/abs/2003.07333) is a visual question answering (VQA) dataset of RGB images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). Each image is annotated with a set of questions and their corresponding answers. Among other applications, this dataset can be used to train VQA models to perform scene understanding of medium resolution remote sensing imagery.
+The [RSVQA LR](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA: Visual Question Answering for Remote Sensing Data", Lobry et al.](https://arxiv.org/abs/2003.07333) is a visual question answering (VQA) dataset of 772 256x256 RGB images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). Each image is annotated with a set of questions and their corresponding answers. Among other applications, this dataset can be used to train VQA models to perform detailed scene understanding of medium resolution remote sensing imagery.
 
 The dataset can be downloaded (0.2GB) using `scripts/download_rsvqa_lr.sh` and instantiated below:
 
@@ -282,7 +282,7 @@ x: dict(
 
 <img src="./assets/rsvqaxben.png" width="600px"></img>
 
-The [RSVQAxBEN](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA Meets BigEarthNet: A New, Large-Scale, Visual Question Answering Dataset for Remote Sensing", Lobry et al.](https://rsvqa.sylvainlobry.com/IGARSS21.pdf) is a visual question answering (VQA) dataset for the [BigEarthNet](http://bigearth.net/) dataset using the same method applied to the [RSVQA LR](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr) to generate VQA annotations. The dataset consists of RGB Sentinel-2 imagery annotated with a set of questions and their corresponding answers.
+The [RSVQAxBEN](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA Meets BigEarthNet: A New, Large-Scale, Visual Question Answering Dataset for Remote Sensing", Lobry et al.](https://rsvqa.sylvainlobry.com/IGARSS21.pdf) is a version of the [BigEarthNet](http://bigearth.net/) dataset with visual question answering (VQA) annotations using the same method applied to generate annotations forthe [RSVQA LR](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr) dataset. The dataset consists of RGB Sentinel-2 imagery annotated with a set of questions and their corresponding answers.
 
 The dataset can be downloaded (35.4GB) using `scripts/download_rsvqaxben.sh` and instantiated below:
 
@@ -313,7 +313,7 @@ x: dict(
 
 <img src="./assets/rsicd.png" width="500px"></img>
 
-The [RSICD](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Exploring Models and Data for Remote Sensing Image Caption Generation", Lu et al.](https://arxiv.org/abs/1712.07835) is an image captioning dataset with 5 captions per image for 10,921 RGB images extracted using [Google Earth](https://earth.google.com/web/), [Baidu Map](https://map.baidu.com/), [MapABC](https://www.mapabc.com/) and [Tianditu](https://www.tianditu.gov.cn/). While one of the larger remote sensing image captioning datasets, this dataset contains very repetitive language with little detail and many captions are duplicated.
+The [RSICD](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Exploring Models and Data for Remote Sensing Image Caption Generation", Lu et al.](https://arxiv.org/abs/1712.07835) is an image captioning dataset with 5 captions per image for 10,921 224x224 RGB images extracted using [Google Earth](https://earth.google.com/web/), [Baidu Map](https://map.baidu.com/), [MapABC](https://www.mapabc.com/) and [Tianditu](https://www.tianditu.gov.cn/). While one of the larger remote sensing image captioning datasets, this dataset contains very repetitive language with little detail and many captions are duplicated.
 
 The dataset can be downloaded (0.57GB) using `scripts/download_rsicd.sh` and instantiated below:
 
@@ -371,9 +371,9 @@ x: dict(
 
 <img src="./assets/ucm_captions.png" width="500px"></img>
 
-The [UC Merced (UCM) Captions](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Deep semantic understanding of high resolution remote sensing image", Qu et al.](https://ieeexplore.ieee.org/document/7546397) is a version of the [UCM dataset](http://weegee.vision.ucmerced.edu/datasets/landuse.html) for land use classification proposed in ["Bag-Of-Visual-Words and Spatial Extensions for Land-Use Classification", Yang et al](https://faculty.ucmerced.edu/snewsam/papers/Yang_ACMGIS10_BagOfVisualWords.pdf). The dataset contains 2100 256x256 1ft resolution RGB images of urban locations around the U.S. extracted from the [USGS National Map Urban Area Imagery collection](https://www.usgs.gov/core-science-systems/national-geospatial-program/national-map) and is annotated with 5 captions per image.
+The [UC Merced (UCM) Captions](https://github.com/201528014227051/RSICD_optimal) dataset, proposed in ["Deep semantic understanding of high resolution remote sensing image", Qu et al.](https://ieeexplore.ieee.org/document/7546397) is a version of the [UCM land use classification dataset](http://weegee.vision.ucmerced.edu/datasets/landuse.html) proposed in ["Bag-Of-Visual-Words and Spatial Extensions for Land-Use Classification", Yang et al](https://faculty.ucmerced.edu/snewsam/papers/Yang_ACMGIS10_BagOfVisualWords.pdf). The dataset contains 2100 256x256 1ft resolution RGB images of urban locations around the U.S. extracted from the [USGS National Map Urban Area Imagery collection](https://www.usgs.gov/core-science-systems/national-geospatial-program/national-map) and is annotated with 5 captions per image.
 
-The dataset can be downloaded (0.40GB) using `scripts/download_ucm_captions.sh` and instantiated below:
+The dataset can be downloaded (0.4GB) using `scripts/download_ucm_captions.sh` and instantiated below:
 
 ```python
 import torchvision.transforms as T
@@ -400,7 +400,7 @@ x: dict(
 
 <img src="./assets/resisc45.png" width="500px"></img>
 
-The [RESISC45](http://www.escience.cn/people/JunweiHan/NWPU-RESISC45.html) dataset, proposed in ["Remote Sensing Image Scene Classification: Benchmark and State of the Art", Cheng et al.](https://arxiv.org/abs/1703.00121) is an image classification dataset of 31,500 RGB images extracted using [Google Earth Engine](https://earthengine.google.com/). The dataset contains 45 scenes with 700 images per class from over 100 countries and was selected to optimize for high variability in image conditions (spatial resolution, occlusion, weather, illumination, etc.).
+The [RESISC45](http://www.escience.cn/people/JunweiHan/NWPU-RESISC45.html) dataset, proposed in ["Remote Sensing Image Scene Classification: Benchmark and State of the Art", Cheng et al.](https://arxiv.org/abs/1703.00121) is an scene classification dataset of 31,500 RGB images extracted using [Google Earth Engine](https://earthengine.google.com/). The dataset contains 45 scenes with 700 images per class from over 100 countries and was selected to optimize for high variability in image conditions (spatial resolution, occlusion, weather, illumination, etc.).
 
 The dataset can be downloaded (0.47GB) using `scripts/download_resisc45.sh` and instantiated below:
 
@@ -436,7 +436,7 @@ dataset.classes
 
 <img src="./assets/eurosat.jpg" width="600px"></img>
 
-The [EuroSAT](https://github.com/phelber/eurosat) dataset, proposed in ["EuroSAT: A Novel Dataset and Deep Learning Benchmark for Land Use and Land Cover Classification", Helber et al.](https://arxiv.org/abs/1709.00029) is a land cover classification dataset of 27,000 images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 10 land cover classes with 2-3k images per class from over 34 European countries. The dataset is available in the form of RGB only or all [Multispectral (MS) Sentinel-2 bands](https://sentinels.copernicus.eu/web/sentinel/user-guides/sentinel-2-msi/resolutions/spatial). This dataset is fairly easy with ~98.6% accuracy achieved with a ResNet-50.
+The [EuroSAT](https://github.com/phelber/eurosat) dataset, proposed in ["EuroSAT: A Novel Dataset and Deep Learning Benchmark for Land Use and Land Cover Classification", Helber et al.](https://arxiv.org/abs/1709.00029) is a land cover classification dataset of 27,000 64x64 images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 10 land cover classes with 2-3k images per class from over 34 European countries. The dataset is available in the form of RGB only or all 13 [Multispectral (MS) Sentinel-2 bands](https://sentinels.copernicus.eu/web/sentinel/user-guides/sentinel-2-msi/resolutions/spatial). This dataset is fairly easy with ~98.6% accuracy achieved with a ResNet-50.
 
 The dataset can be downloaded (.13GB and 2.8GB) using `scripts/download_eurosat_rgb.sh` or `scripts/download_eurosat_ms.sh` and instantiated below:
 
@@ -593,9 +593,10 @@ import pytorch_lightning as pl
 import torchvision.transforms as T
 from torchrs.train.modules import RAMSModule
 from torchrs.train.datamodules import PROBAVDataModule
-from torchrs.transforms import ToTensor
+from torchrs.transforms import ToTensor, ToDtype
 
-
+lr_transform=T.Compose([ToTensor(), ToDtype(torch.float32)])
+hr_transform=T.Compose([ToTensor(), ToDtype(torch.float32)])
 model = RAMSModule(
     scale_factor=3,
     t=9,
@@ -607,8 +608,8 @@ model = RAMSModule(
 dm = PROBAVDataModule(
     root="path/to/dataset",
     band="RED",
-    lr_transform=T.Compose([ToTensor()]),
-    hr_transform=T.Compose([ToTensor()]),
+    lr_transform=lr_transform,
+    hr_transform=hr_transform,
     batch_size=16,
     num_workers=0,
     prefetch_factor=2,
