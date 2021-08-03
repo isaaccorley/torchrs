@@ -10,7 +10,7 @@ from PIL import Image
 from torchrs.transforms import ToTensor, ToDtype
 
 
-def collate_fn(batch, t: int = 9, shuffle: bool = False):
+def collate_fn(batch: List[Dict], t: int = 9, shuffle: bool = False) -> Dict[str, torch.Tensor]:
     lrs = [x["lr"] for x in batch]
     qms = [x["qm"] for x in batch]
 
