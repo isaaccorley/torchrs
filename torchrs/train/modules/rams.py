@@ -33,6 +33,7 @@ class RAMSModule(pl.LightningModule):
             torchmetrics.PSNR(),
             torchmetrics.SSIM()
         ])
+        self.train_metrics = metrics.clone(prefix='train_')
         self.val_metrics = metrics.clone(prefix='val_')
         self.test_metrics = metrics.clone(prefix='test_')
 
@@ -46,14 +47,16 @@ class RAMSModule(pl.LightningModule):
         lr, hr = batch["lr"], batch["hr"]
         sr = self(lr)
         loss = self.loss_fn(sr, hr)
-        self.log("train_loss", loss)
+        metrics = self.train_metrics(sr.to(torch.float32), hr)
+        metrics["train_loss"] = loss
+        self.log_dict(metrics)
         return loss
 
     def validation_step(self, batch: Dict, batch_idx: int):
         lr, hr = batch["lr"], batch["hr"]
         sr = self(lr)
         loss = self.loss_fn(sr, hr)
-        metrics = self.val_metrics(sr, hr)
+        metrics = self.val_metrics(sr.to(torch.float32), hr)
         metrics["val_loss"] = loss
         self.log_dict(metrics)
 
@@ -61,6 +64,6 @@ class RAMSModule(pl.LightningModule):
         lr, hr = batch["lr"], batch["hr"]
         sr = self(lr)
         loss = self.loss_fn(sr, hr)
-        metrics = self.test_metrics(sr, hr)
+        metrics = self.test_metrics(sr.to(torch.float32), hr)
         metrics["test_loss"] = loss
         self.log_dict(metrics)

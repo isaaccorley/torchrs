@@ -7,7 +7,34 @@ import numpy as np
 import torchvision.transforms as T
 from PIL import Image
 
-from torchrs.transforms import ToTensor
+from torchrs.transforms import ToTensor, ToDtype
+
+
+def collate_fn(batch, t: int = 9, shuffle: bool = False):
+    lrs = [x["lr"] for x in batch]
+    qms = [x["qm"] for x in batch]
+
+    # Shuffle lr temporal order
+    if shuffle:
+        perms = [torch.randperm(lr.shape[0]) for lr in lrs]
+        lrs = [lr[perm] for perm, lr in zip(perms, lrs)]
+        qms = [qm[perm] for perm, qm in zip(perms, qms)]
+
+    # Repeat some images if less than temporal length t
+    for i in range(len(lrs)):
+        if lrs[i].shape[0] < t:
+            n = t - lrs[i].shape[0]
+            lrs[i] = torch.cat([lrs[i], lrs[i][:n]], dim=0)
+            qms[i] = torch.cat([qms[i], qms[i][:n]], dim=0)
+
+    # Select t lr images from each set
+    lrs = torch.stack([lr[:t] for lr in lrs])
+    qms = torch.stack([qm[:t] for qm in qms])
+
+    hr = torch.stack([x["hr"] for x in batch])
+    sm = torch.stack([x["sm"] for x in batch])
+
+    return dict(lr=lrs, hr=hr, qm=qms, sm=sm)
 
 
 class PROBAV(torch.utils.data.Dataset):
@@ -35,8 +62,8 @@ class PROBAV(torch.utils.data.Dataset):
         root: str = ".data/probav",
         split: str = "train",
         band: str = "RED",
-        lr_transform: T.Compose = T.Compose([ToTensor()]),
-        hr_transform: T.Compose = T.Compose([ToTensor()]),
+        lr_transform: T.Compose = T.Compose([ToTensor(), ToDtype(torch.float32)]),
+        hr_transform: T.Compose = T.Compose([ToTensor(), ToDtype(torch.float32)]),
     ):
         assert split in ["train", "test"]
         assert band in ["RED", "NIR"]

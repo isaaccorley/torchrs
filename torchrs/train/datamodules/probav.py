@@ -1,11 +1,14 @@
-from typing import Optional
+from typing import Optional, Callable
+from functools import partial
 
+import torch
 import torchvision.transforms as T
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 
 from torchrs.datasets import PROBAV
-from torchrs.transforms import ToTensor
+from torchrs.datasets.probav import collate_fn
+from torchrs.transforms import ToTensor, ToDtype
 
 
 class PROBAVDataModule(pl.LightningDataModule):
@@ -14,12 +17,14 @@ class PROBAVDataModule(pl.LightningDataModule):
         self,
         root: str = ".data/probav",
         band: str = "RED",
-        lr_transform: T.Compose = T.Compose([ToTensor()]),
-        hr_transform: T.Compose = T.Compose([ToTensor()]),
+        lr_transform: T.Compose = T.Compose([ToTensor(), ToDtype(torch.float32)]),
+        hr_transform: T.Compose = T.Compose([ToTensor(), ToDtype(torch.float32)]),
         batch_size: int = 1,
         num_workers: int = 0,
         prefetch_factor: int = 2,
-        pin_memory: bool = False
+        pin_memory: bool = False,
+        collate_fn: Optional[Callable] = collate_fn,
+        test_collate_fn: Optional[Callable] = partial(collate_fn, shuffle=False)
     ):
         super().__init__()
         self.root = root
@@ -29,6 +34,8 @@ class PROBAVDataModule(pl.LightningDataModule):
         self.num_workers = num_workers
         self.prefetch_factor = prefetch_factor
         self.pin_memory = pin_memory
+        self.collate_fn = collate_fn
+        self.test_collate_fn = test_collate_fn
 
     def setup(self, stage: Optional[str] = None):
         self.train_dataset = PROBAV(
@@ -45,7 +52,8 @@ class PROBAVDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             prefetch_factor=self.prefetch_factor,
-            pin_memory=self.pin_memory
+            pin_memory=self.pin_memory,
+            collate_fn=self.collate_fn
         )
 
     def test_dataloader(self) -> DataLoader:
@@ -54,5 +62,6 @@ class PROBAVDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             prefetch_factor=self.prefetch_factor,
-            pin_memory=self.pin_memory
+            pin_memory=self.pin_memory,
+            collate_fn=self.test_collate_fn
         )
