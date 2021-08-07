@@ -1,5 +1,6 @@
 torch
 torchvision
+torchaudio
 einops
 numpy
 pillow

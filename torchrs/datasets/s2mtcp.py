@@ -32,7 +32,7 @@ class S2MTCP(torch.utils.data.Dataset):
         self.files = self.load_files(self.root)
 
     @staticmethod
-    def load_files(root: str) -> List[Dict]: 
+    def load_files(root: str) -> List[Dict]:
         files = glob(os.path.join(root, "*.npy"))
         files = [os.path.basename(f).split("_")[0] for f in files]
         files = sorted(set(files), key=int)

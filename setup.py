@@ -7,6 +7,7 @@ extras = {
 install_requires = [
     "torch",
     "torchvision",
+    "torchaudio",
     "einops",
     "numpy",
     "pillow",

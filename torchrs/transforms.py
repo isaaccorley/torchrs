@@ -33,7 +33,8 @@ class ToTensor(object):
         if x.dtype == "uint16":
             x = x.astype("int32")
 
-        x = torch.from_numpy(x)
+        if isinstance(x, np.ndarray):
+            x = torch.from_numpy(x)
 
         if x.ndim == 2:
             if self.permute_dims:
