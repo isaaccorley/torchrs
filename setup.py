@@ -12,6 +12,7 @@ install_requires = [
     "numpy",
     "pillow",
     "tifffile",
+    "h5py"
 ]
 setup_requires = ["pytest-runner"]
 tests_require = ["pytest", "pytest-cov", "mock", "mypy", "black", "pylint"]

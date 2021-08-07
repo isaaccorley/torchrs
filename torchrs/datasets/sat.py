@@ -34,8 +34,6 @@ class SAT4(torch.utils.data.Dataset):
 
     def __getitem__(self, idx: int) -> Dict:
         captions = self.captions[idx]
-        path = os.path.join(self.root, self.image_root, captions["filename"])
-        x = Image.open(path).convert("RGB")
         x = self.transform(x)
         sentences = [sentence["raw"] for sentence in captions["sentences"]]
         return dict(x=x, captions=sentences)

@@ -5,3 +5,4 @@ einops
 numpy
 pillow
 tifffile
+h5py
