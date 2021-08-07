@@ -9,11 +9,12 @@ from .s2looking import S2LookingDataModule
 from .levircd import LEVIRCDPlusDataModule
 from .fair1m import FAIR1MDataModule
 from .advance import ADVANCEDataModule
+from .sat import SAT4DataModule, SAT6DataModule
 
 
 __all__ = [
     "PROBAVDataModule", "ETCI2021DataModule", "RSVQALRDataModule", "RSVQAxBENDataModule",
     "EuroSATRGBDataModule", "EuroSATMSDataModule", "RESISC45DataModule", "RSICDDataModule",
     "OSCDDataModule", "S2LookingDataModule", "LEVIRCDPlusDataModule", "FAIR1MDataModule",
-    "ADVANCEDataModule"
+    "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule"
 ]
