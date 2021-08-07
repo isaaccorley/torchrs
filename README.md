@@ -41,6 +41,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [UC Merced (UCM) Captions](https://github.com/isaaccorley/torchrs#uc-merced-ucm-captions)
 * [RESISC45 - Remote Sensing Image Scene Classification](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
 * [EuroSAT](https://github.com/isaaccorley/torchrs#eurosat)
+* [SAT-4-&-SAT-6](https://github.com/isaaccorley/torchrs#eurosat)
 
 ### PROBA-V Super Resolution
 
@@ -474,7 +475,7 @@ dataset.classes
 
 <img src="./assets/eurosat.jpg" width="600px"></img>
 
-The [EuroSAT](https://github.com/phelber/eurosat) dataset, proposed in ["EuroSAT: A Novel Dataset and Deep Learning Benchmark for Land Use and Land Cover Classification", Helber et al.](https://arxiv.org/abs/1709.00029) is a land cover classification dataset of 27,000 64x64 images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 10 land cover classes with 2-3k images per class from over 34 European countries. The dataset is available in the form of RGB only or all 13 [Multispectral (MS) Sentinel-2 bands](https://sentinels.copernicus.eu/web/sentinel/user-guides/sentinel-2-msi/resolutions/spatial). This dataset is fairly easy with ~98.6% accuracy achieved with a ResNet-50.
+The [EuroSAT](https://github.com/phelber/eurosat) dataset, proposed in ["EuroSAT: A Novel Dataset and Deep Learning Benchmark for Land Use and Land Cover Classification", Helber et al.](https://arxiv.org/abs/1709.00029) is a land cover classification dataset of 27,000 64x64 images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). The dataset contains 10 land cover classes with 2-3k images per class from over 34 European countries. The dataset is available in the form of RGB only or all 13 [Multispectral (MS) Sentinel-2 bands](https://sentinels.copernicus.eu/web/sentinel/user-guides/sentinel-2-msi/resolutions/spatial). This dataset is fairly easy with ~98.6% accuracy achievable with a ResNet-50.
 
 The dataset can be downloaded (.13GB and 2.8GB) using `scripts/download_eurosat_rgb.sh` or `scripts/download_eurosat_ms.sh` and instantiated below:
 
@@ -513,6 +514,55 @@ dataset.classes
 """
 ['AnnualCrop', 'Forest', 'HerbaceousVegetation', 'Highway', 'Industrial',
 'Pasture', 'PermanentCrop', 'Residential', 'River', 'SeaLake']
+"""
+```
+
+### SAT-4 & SAT-6
+
+<img src="./assets/sat.png" width="600px"></img>
+
+The [SAT-4 & SAT-6](https://csc.lsu.edu/~saikat/deepsat/) datasets, proposed in ["DeepSat - A Learning framework for Satellite Imagery", Basu et al.](https://arxiv.org/abs/1509.03602) are land cover classification datasets of 500k and 405k 28x28 RGBN images, respectively, sampled across the Continental United States (CONUS) and extracted from the [National Agriculture Imagery Program (NAIP)](https://www.fsa.usda.gov/programs-and-services/aerial-photography/imagery-programs/naip-imagery/). The SAT-4 and SAT-6 datasets contain 4 and 6 land cover classes, respectively. This dataset is fairly easy with ~80% accuracy achievable with a 5-layer CNN.
+
+The dataset can be downloaded (2.7GB) using `scripts/download_sat.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import SAT4, SAT6
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = SAT4(
+    root="path/to/dataset/",
+    split="train"   # or 'test'
+    transform=transform
+)
+
+x, y = dataset[0]
+"""
+x: (4, 28, 28)
+y: int
+"""
+
+dataset.classes
+"""
+['barren land', 'trees', 'grassland', 'other']
+"""
+
+dataset = SAT6(
+    root="path/to/dataset/",
+    split="train"   # or 'test'
+    transform=transform
+)
+
+x, y = dataset[0]
+"""
+x: (4, 28, 28)
+y: int
+"""
+
+dataset.classes
+"""
+['barren land', 'trees', 'grassland', 'roads', 'buildings', 'water']
 """
 ```
 
