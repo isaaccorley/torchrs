@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Callable
 
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
@@ -16,7 +16,9 @@ class RSVQALRDataModule(pl.LightningDataModule):
         batch_size: int = 1,
         num_workers: int = 0,
         prefetch_factor: int = 2,
-        pin_memory: bool = False
+        pin_memory: bool = False,
+        collate_fn: Optional[Callable] = None,
+        test_collate_fn: Optional[Callable] = None
     ):
         super().__init__()
         self.root = root
@@ -25,6 +27,8 @@ class RSVQALRDataModule(pl.LightningDataModule):
         self.num_workers = num_workers
         self.prefetch_factor = prefetch_factor
         self.pin_memory = pin_memory
+        self.collate_fn = collate_fn
+        self.test_collate_fn = test_collate_fn
 
     def setup(self, stage: Optional[str] = None):
         self.train_dataset = RSVQALR(root=self.root, split="train", transform=self.transform)
@@ -69,7 +73,9 @@ class RSVQAxBENDataModule(pl.LightningDataModule):
         batch_size: int = 1,
         num_workers: int = 0,
         prefetch_factor: int = 2,
-        pin_memory: bool = False
+        pin_memory: bool = False,
+        collate_fn: Optional[Callable] = None,
+        test_collate_fn: Optional[Callable] = None
     ):
         super().__init__()
         self.root = root
@@ -78,6 +84,8 @@ class RSVQAxBENDataModule(pl.LightningDataModule):
         self.num_workers = num_workers
         self.prefetch_factor = prefetch_factor
         self.pin_memory = pin_memory
+        self.collate_fn = collate_fn
+        self.test_collate_fn = test_collate_fn
 
     def setup(self, stage: Optional[str] = None):
         self.train_dataset = RSVQAxBEN(root=self.root, split="train", transform=self.transform)
@@ -91,7 +99,8 @@ class RSVQAxBENDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             prefetch_factor=self.prefetch_factor,
-            pin_memory=self.pin_memory
+            pin_memory=self.pin_memory,
+            collate_fn=self.collate_fn
         )
 
     def val_dataloader(self) -> DataLoader:
@@ -100,7 +109,8 @@ class RSVQAxBENDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             prefetch_factor=self.prefetch_factor,
-            pin_memory=self.pin_memory
+            pin_memory=self.pin_memory,
+            collate_fn=self.test_collate_fn
         )
 
     def test_dataloader(self) -> DataLoader:
@@ -109,5 +119,6 @@ class RSVQAxBENDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             prefetch_factor=self.prefetch_factor,
-            pin_memory=self.pin_memory
+            pin_memory=self.pin_memory,
+            collate_fn=self.test_collate_fn
         )

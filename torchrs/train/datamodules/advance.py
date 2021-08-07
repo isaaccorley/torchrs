@@ -1,38 +1,39 @@
 from typing import Optional, Callable
 
+import torchvision.transforms as T
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 
-from torchrs.datasets import OSCD
-from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import ADVANCE
 
 
-class OSCDDataModule(pl.LightningDataModule):
+class ADVANCEDataModule(pl.LightningDataModule):
 
     def __init__(
         self,
-        root: str = ".data/oscd",
-        transform: Compose = Compose([ToTensor(permute_dims=False)]),
+        root: str = ".data/advance",
+        image_transform: T.Compose = T.Compose([T.ToTensor()]),
+        audio_transform: T.Compose = T.Compose([]),
         batch_size: int = 1,
         num_workers: int = 0,
         prefetch_factor: int = 2,
         pin_memory: bool = False,
-        collate_fn: Optional[Callable] = None,
-        test_collate_fn: Optional[Callable] = None
+        collate_fn: Optional[Callable] = None
     ):
         super().__init__()
         self.root = root
-        self.transform = transform
+        self.image_transform = image_transform
+        self.audio_transform = audio_transform
         self.batch_size = batch_size
         self.num_workers = num_workers
         self.prefetch_factor = prefetch_factor
         self.pin_memory = pin_memory
         self.collate_fn = collate_fn
-        self.test_collate_fn = test_collate_fn
 
     def setup(self, stage: Optional[str] = None):
-        self.train_dataset = OSCD(root=self.root, split="train", transform=self.transform)
-        self.test_dataset = OSCD(root=self.root, split="test", transform=self.transform)
+        self.train_dataset = ADVANCE(
+            root=self.root, image_transform=self.image_transform, audio_transform=self.audio_transform
+        )
 
     def train_dataloader(self) -> DataLoader:
         return DataLoader(
@@ -43,14 +44,4 @@ class OSCDDataModule(pl.LightningDataModule):
             prefetch_factor=self.prefetch_factor,
             pin_memory=self.pin_memory,
             collate_fn=self.collate_fn
-        )
-
-    def test_dataloader(self) -> DataLoader:
-        return DataLoader(
-            self.test_dataset,
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            prefetch_factor=self.prefetch_factor,
-            pin_memory=self.pin_memory,
-            collate_fn=self.test_collate_fn
         )

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Callable
 
 import torchvision.transforms as T
 import pytorch_lightning as pl
@@ -16,7 +16,8 @@ class RESISC45DataModule(pl.LightningDataModule):
         batch_size: int = 1,
         num_workers: int = 0,
         prefetch_factor: int = 2,
-        pin_memory: bool = False
+        pin_memory: bool = False,
+        collate_fn: Optional[Callable] = None
     ):
         super().__init__()
         self.root = root
@@ -25,6 +26,7 @@ class RESISC45DataModule(pl.LightningDataModule):
         self.num_workers = num_workers
         self.prefetch_factor = prefetch_factor
         self.pin_memory = pin_memory
+        self.collate_fn = collate_fn
 
     def setup(self, stage: Optional[str] = None):
         self.train_dataset = RESISC45(root=self.root, transform=self.transform)
@@ -36,5 +38,6 @@ class RESISC45DataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             prefetch_factor=self.prefetch_factor,
-            pin_memory=self.pin_memory
+            pin_memory=self.pin_memory,
+            collate_fn=self.collate_fn
         )
