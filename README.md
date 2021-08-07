@@ -1,6 +1,6 @@
 # PyTorch Remote Sensing (torchrs)
 
-(WIP) PyTorch implementation of popular datasets and models in remote sensing tasks (Change Detection, Image Super Resolution, Land Cover Classification/Segmentation, Image-to-Image Translation, Image Captioning, etc.) for various Optical (Sentinel-2, Landsat, etc.) and Synthetic Aperture Radar (SAR) (Sentinel-1) sensors.
+(WIP) PyTorch implementation of popular datasets and models in remote sensing tasks (Change Detection, Image Super Resolution, Land Cover Classification/Segmentation, Image Captioning, Audio-visual recognition etc.) for various Optical (Sentinel-2, Landsat, etc.) and Synthetic Aperture Radar (SAR) (Sentinel-1) sensors.
 
 ## Installation
 
@@ -28,7 +28,8 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 
 * [PROBA-V Multi-Image Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
-* [FAIR1M Fine-grained Object Recognition](https://github.com/isaaccorley/torchrs#fair1m---fine-grained-object-recognition)
+* [FAIR1M - Fine-grained Object Recognition](https://github.com/isaaccorley/torchrs#fair1m---fine-grained-object-recognition)
+* [ADVANCE - Audiovisual Aerial Scene Recognition](https://github.com/isaaccorley/torchrs#advance---audiovisual-aerial-scene-recognition)
 * [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
 * [S2Looking - Satellite Side-Looking Change Detection](https://github.com/isaaccorley/torchrs#satellite-side-looking-s2looking-change-detection)
 * [LEVIR-CD+ - LEVIR Change Detection+](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd)
@@ -110,7 +111,7 @@ x: dict(
 
 <img src="./assets/fair1m.jpg" width="550px"></img>
 
-The [FAIR1M](https://rcdaudt.github.io/oscd/) dataset, proposed in ["FAIR1M: A Benchmark Dataset for Fine-grained Object Recognition in High-Resolution Remote Sensing Imagery", Sun et al.](https://arxiv.org/abs/2103.05569) is a fine-grained object recognition/detection dataset of 15,000 high resolution (0.3-0.8m) RGB images taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1) satellites and extracted from [Google Earth](https://earth.google.com/web/). The dataset contains rotated bounding boxes for objects of 5 categories (ships, vehicles, airplanes, courts, and roads) and 37 sub-categories. This dataset is a part of the [ISPRS Benchmark on Object Detection in High-Resolution Satellite Images](http://gaofen-challenge.com/benchmark). Note that so far only a portion of the training dataset has been released for the challenge (1,732/15,000 images).
+The [FAIR1M](http://gaofen-challenge.com/) dataset, proposed in ["FAIR1M: A Benchmark Dataset for Fine-grained Object Recognition in High-Resolution Remote Sensing Imagery", Sun et al.](https://arxiv.org/abs/2103.05569) is a fine-grained object recognition/detection dataset of 15,000 high resolution (0.3-0.8m) RGB images taken by the [Gaogen (GF)](https://earth.esa.int/web/eoportal/satellite-missions/g/gaofen-1) satellites and extracted from [Google Earth](https://earth.google.com/web/). The dataset contains rotated bounding boxes for objects of 5 categories (ships, vehicles, airplanes, courts, and roads) and 37 sub-categories. This dataset is a part of the [ISPRS Benchmark on Object Detection in High-Resolution Satellite Images](http://gaofen-challenge.com/benchmark). Note that so far only a portion of the training dataset has been released for the challenge (1,732/15,000 images).
 
 The dataset can be downloaded (8.7GB) using `scripts/download_fair1m.sh` and instantiated below:
 
@@ -134,6 +135,43 @@ x: dict(
     points: (N, 5, 2)
 )
 where N is the number of objects in the image
+"""
+```
+
+### ADVANCE - Audiovisual Aerial Scene Recognition
+
+<img src="./assets/advance.png" width="700px"></img>
+
+The [AuDio Visual Aerial sceNe reCognition datasEt (ADVANCE)](https://akchen.github.io/ADVANCE-DATASET/) dataset, proposed in ["Cross-Task Transfer for Geotagged Audiovisual Aerial Scene Recognition", Hu et al.](https://arxiv.org/abs/2005.08449) is a dataset composed of 5,075 pairs of geotagged audio recordings and 512x512 RGB images extracted from [FreeSound](https://freesound.org/browse/geotags/?c_lat=24&c_lon=20&z=2) and [Google Earth](https://earth.google.com/web/), respectively. The images are then labeled into 13 scene categories using [OpenStreetMap](https://www.openstreetmap.org/#map=5/38.007/-95.844).
+
+The dataset can be downloaded (4.5GB) using `scripts/download_advance.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import ADVANCE
+
+image_transform = T.Compose([T.ToTensor()])
+audio_transform = T.Compose([])
+
+dataset = ADVANCE(
+    root="path/to/dataset/",
+    image_transform=image_transform,
+    audio_transform=audio_transform,
+)
+
+x = dataset[0]
+"""
+x: dict(
+    image: (3, 512, 512)
+    audio: (1, 220500)
+    cls: int
+)
+"""
+
+dataset.classes
+"""
+['airport', 'beach', 'bridge', 'farmland', 'forest', 'grassland', 'harbour', 'lake',
+'orchard', 'residential', 'sparse shrub land', 'sports land', 'train station']
 """
 ```
 
