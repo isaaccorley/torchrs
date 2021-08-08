@@ -2,6 +2,7 @@ from typing import Optional
 
 import torchvision.transforms as T
 
+from torchrs.transforms import ToTensor
 from torchrs.datasets.utils import dataset_split
 from torchrs.train.datamodules import BaseDataModule
 from torchrs.datasets import EuroSATRGB, EuroSATMS
@@ -31,7 +32,7 @@ class EuroSATMSDataModule(BaseDataModule):
     def __init__(
         self,
         root: str = ".data/eurosat-ms",
-        transform: T.Compose = T.Compose([T.ToTensor()]),
+        transform: T.Compose = T.Compose([ToTensor()]),
         *args, **kwargs
     ):
         super().__init__(*args, **kwargs)
