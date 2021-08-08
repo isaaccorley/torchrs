@@ -1,4 +1,3 @@
-import os
 from typing import Tuple
 
 import h5py
@@ -43,7 +42,7 @@ class SAT4(SAT):
     dataset) were chosen for training and the remaining 100,000 (one-fifths) were chosen as the testing
     dataset. We ensured that the training and test datasets belong to disjoint set of image tiles.
     Each image patch is size normalized to 28x28 pixels. Once generated, both the training and testing
-    datasets were randomized using a pseudo-random number generator.'    
+    datasets were randomized using a pseudo-random number generator.'
     """
     classes = [
         "barren land",
@@ -51,7 +50,8 @@ class SAT4(SAT):
         "grassland",
         "other"
     ]
-    def __init__(self,root: str = ".data/sat/sat4.h5"):
+
+    def __init__(self, root: str = ".data/sat/sat4.h5", *args, **kwargs):
         super().__init__(root, *args, **kwargs)
 
 
@@ -77,5 +77,6 @@ class SAT6(SAT):
         "buildings",
         "water"
     ]
-    def __init__(self,root: str = ".data/sat/sat6.h5"):
+
+    def __init__(self, root: str = ".data/sat/sat6.h5", *args, **kwargs):
         super().__init__(root, *args, **kwargs)

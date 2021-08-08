@@ -1,6 +1,5 @@
-from typing import Optional, Tuple, List
+from typing import Optional, List
 
-import torch
 from torch.utils.data import Dataset, random_split
 
 
