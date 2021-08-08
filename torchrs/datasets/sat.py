@@ -7,13 +7,15 @@ import torchvision.transforms as T
 
 class SAT(torch.utils.data.Dataset):
     """ Base SAT dataset """
+    splits = ["train", "test"]
+
     def __init__(
         self,
         root: str = "",
         split: str = "train",
         transform: T.Compose = T.Compose([T.ToTensor()])
     ):
-        assert split in ["train", "test"]
+        assert split in self.splits
         self.root = root
         self.split = split
         self.transform = transform

@@ -32,13 +32,15 @@ class OSCD(torch.utils.data.Dataset):
     new buildings or new roads. These data can be used for training and setting parameters of change
     detection algorithms.
     """
+    splits = ["train", "test"]
+
     def __init__(
         self,
         root: str = ".data/oscd",
         split: str = "train",
         transform: Compose = Compose([ToTensor(permute_dims=False)]),
     ):
-        assert split in ["train", "test"]
+        assert split in self.splits
         self.root = root
         self.transform = transform
         self.regions = self.load_files(root, split)
