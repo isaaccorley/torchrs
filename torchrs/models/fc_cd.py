@@ -194,7 +194,7 @@ class FCSiamDiff(nn.Module):
         for skip in skips:
             diff, xt = skip[:, 0, ...], skip[:, 1:, ...]
             for i in range(t - 1):
-                diff = diff - xt[:, i, ...]
+                diff = torch.abs(diff - xt[:, i, ...])
                 diffs.append(diff)
 
         # Only first input encoding is passed directly to decoder
