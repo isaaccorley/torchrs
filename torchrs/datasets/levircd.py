@@ -21,13 +21,15 @@ class LEVIRCDPlus(torch.utils.data.Dataset):
     2020. Images of different regions were taken at different times. The
     bitemporal images have a time span of 5 years.'
     """
+    splits = ["train", "test"]
+
     def __init__(
         self,
         root: str = ".data/levircd_plus",
         split: str = "train",
         transform: Compose = Compose([ToTensor()]),
     ):
-        assert split in ["train", "test"]
+        assert split in self.splits
         self.root = root
         self.transform = transform
         self.files = self.load_files(root, split)

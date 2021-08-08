@@ -17,13 +17,15 @@ class RSICD(torch.utils.data.Dataset):
     The images are fixed to 224X224 pixels with various resolutions. The total number of
     remote sensing images are 10921, with five sentences descriptions per image.'
     """
+    splits = ["train", "val", "test"]
+
     def __init__(
         self,
         root: str = ".data/rsicd",
         split: str = "train",
         transform: T.Compose = T.Compose([T.ToTensor()])
     ):
-        assert split in ["train", "val", "test"]
+        assert split in self.splits
         self.root = root
         self.transform = transform
         self.captions = self.load_captions(os.path.join(root, "dataset_rsicd.json"), split)

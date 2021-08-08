@@ -23,7 +23,8 @@ class ETCI2021(torch.utils.data.Dataset):
     Note that hyp3 preprocessing generates 3 band for each band so VV and VH are both of shape (256, 256, 3)
     """
     bands = ["VV", "VH"]
-    splits = dict(train="train", val="test", test="test_internal")
+    splits = ["train", "val", "test"]
+    split_to_folder = dict(train="train", val="test", test="test_internal")
 
     def __init__(
         self,
@@ -31,10 +32,10 @@ class ETCI2021(torch.utils.data.Dataset):
         split: str = "train",
         transform: Compose = Compose([ToTensor()]),
     ):
-        assert split in self.splits.keys()
+        assert split in self.splits
         self.split = split
         self.transform = transform
-        self.images = self.load_files(root, self.splits[split])
+        self.images = self.load_files(root, self.split_to_folder[split])
 
     @staticmethod
     def load_files(root: str, split: str) -> List[Dict]:
