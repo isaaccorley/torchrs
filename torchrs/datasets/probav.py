@@ -57,6 +57,8 @@ class PROBAV(torch.utils.data.Dataset):
     always with at least 9. We expect you to submit a 384x384 image for each of the 290 test-scenes, for which we
     will not provide a high resolution image.'
     """
+    splits = ["train", "test"]
+
     def __init__(
         self,
         root: str = ".data/probav",
@@ -65,7 +67,7 @@ class PROBAV(torch.utils.data.Dataset):
         lr_transform: T.Compose = T.Compose([ToTensor(), ToDtype(torch.float32)]),
         hr_transform: T.Compose = T.Compose([ToTensor(), ToDtype(torch.float32)]),
     ):
-        assert split in ["train", "test"]
+        assert split in self.splits
         assert band in ["RED", "NIR"]
         self.split = split
         self.lr_transform = lr_transform

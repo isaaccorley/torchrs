@@ -74,14 +74,12 @@ class FAIR1M(torch.utils.data.Dataset):
         "Intersection":     {"id": 35, "category": "Road"},
         "Bridge":           {"id": 36, "category": "Road"}
     }
-
     def __init__(
         self,
         root: str = ".data/fair1m",
-        split: str = "train",
         transform: T.Compose = T.Compose([T.ToTensor()]),
     ):
-        assert split in ["train"]
+        split = "train"
         self.root = root
         self.image_root = os.path.join(root, split, "part1", "images")
         self.transform = transform

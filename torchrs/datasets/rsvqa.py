@@ -30,13 +30,15 @@ class RSVQALR(torch.utils.data.Dataset):
     a validation set (11.1%) and a test set (11.1%) at the tile level (the spatial split is shown in Figure 3). This allows
     to limit spatial correlation between the different splits.'
     """
+    splits = ["train", "val", "test"]
+
     def __init__(
         self,
         root: str = ".data/RSVQA_LR",
         split: str = "train",
         transform: Compose = Compose([ToTensor()]),
     ):
-        assert split in ["train", "val", "test"]
+        assert split in self.splits
         self.root = root
         self.split = split
         self.transform = transform
@@ -108,13 +110,15 @@ class RSVQAxBEN(torch.utils.data.Dataset):
     from the BigEarthNet dataset. This new dataset contains close to 15 millions samples and is openly
     available.'
     """
+    splits = ["train", "val", "test"]
+
     def __init__(
         self,
         root: str = ".data/rsvqaxben",
         split: str = "train",
         transform: Compose = Compose([ToTensor()]),
     ):
-        assert split in ["train", "val", "test"]
+        assert split in self.splits
         self.root = root
         self.split = split
         self.transform = transform

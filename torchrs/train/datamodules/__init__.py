@@ -1,3 +1,4 @@
+from .base import BaseDataModule
 from .probav import PROBAVDataModule
 from .etci2021 import ETCI2021DataModule
 from .rsvqa import RSVQALRDataModule, RSVQAxBENDataModule
@@ -8,12 +9,17 @@ from .oscd import OSCDDataModule
 from .s2looking import S2LookingDataModule
 from .levircd import LEVIRCDPlusDataModule
 from .fair1m import FAIR1MDataModule
+from .sydney_captions import SydneyCaptionsDataModule
+from .ucm_captions import UCMCaptionsDataModule
+from .s2mtcp import S2MTCPDataModule
 from .advance import ADVANCEDataModule
+from .sat import SAT4DataModule, SAT6DataModule
 
 
 __all__ = [
-    "PROBAVDataModule", "ETCI2021DataModule", "RSVQALRDataModule", "RSVQAxBENDataModule",
-    "EuroSATRGBDataModule", "EuroSATMSDataModule", "RESISC45DataModule", "RSICDDataModule",
-    "OSCDDataModule", "S2LookingDataModule", "LEVIRCDPlusDataModule", "FAIR1MDataModule",
-    "ADVANCEDataModule"
+    "BaseDataModule", "PROBAVDataModule", "ETCI2021DataModule", "RSVQALRDataModule",
+    "RSVQAxBENDataModule", "EuroSATRGBDataModule", "EuroSATMSDataModule", "RESISC45DataModule",
+    "RSICDDataModule", "OSCDDataModule", "S2LookingDataModule", "LEVIRCDPlusDataModule",
+    "FAIR1MDataModule", "SydneyCaptionsDataModule", "UCMCaptionsDataModule", "S2MTCPDataModule",
+    "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule"
 ]

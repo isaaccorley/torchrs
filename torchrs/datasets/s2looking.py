@@ -20,15 +20,16 @@ class S2Looking(torch.utils.data.Dataset):
     areas throughout the world and more than 65,920 annotated change instances. We provide
     two label maps to separately indicate the newly built and demolished building regions
     for each sample in the dataset.'
-
     """
+    splits = ["train", "val", "test"]
+
     def __init__(
         self,
         root: str = ".data/s2looking",
         split: str = "train",
         transform: Compose = Compose([ToTensor()]),
     ):
-        assert split in ["train", "val", "test"]
+        assert split in self.splits
         self.root = root
         self.transform = transform
         self.files = self.load_files(root, split)
