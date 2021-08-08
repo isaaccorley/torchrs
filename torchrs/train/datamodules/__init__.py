@@ -1,3 +1,4 @@
+from .base import BaseDataModule
 from .probav import PROBAVDataModule
 from .etci2021 import ETCI2021DataModule
 from .rsvqa import RSVQALRDataModule, RSVQAxBENDataModule
@@ -13,8 +14,8 @@ from .sat import SAT4DataModule, SAT6DataModule
 
 
 __all__ = [
-    "PROBAVDataModule", "ETCI2021DataModule", "RSVQALRDataModule", "RSVQAxBENDataModule",
-    "EuroSATRGBDataModule", "EuroSATMSDataModule", "RESISC45DataModule", "RSICDDataModule",
-    "OSCDDataModule", "S2LookingDataModule", "LEVIRCDPlusDataModule", "FAIR1MDataModule",
-    "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule"
+    "BaseDataModule", "PROBAVDataModule", "ETCI2021DataModule", "RSVQALRDataModule",
+    "RSVQAxBENDataModule", "EuroSATRGBDataModule", "EuroSATMSDataModule", "RESISC45DataModule",
+    "RSICDDataModule", "OSCDDataModule", "S2LookingDataModule", "LEVIRCDPlusDataModule",
+    "FAIR1MDataModule", "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule"
 ]

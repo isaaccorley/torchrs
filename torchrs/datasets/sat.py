@@ -51,13 +51,8 @@ class SAT4(SAT):
         "grassland",
         "other"
     ]
-    def __init__(
-        self,
-        root: str = ".data/sat/sat4.h5",
-        split: str = "train",
-        transform: T.Compose = T.Compose([T.ToTensor()])
-    ):
-        super().__init__(root, split, transform)
+    def __init__(self,root: str = ".data/sat/sat4.h5"):
+        super().__init__(root, *args, **kwargs)
 
 
 class SAT6(SAT):
@@ -82,10 +77,5 @@ class SAT6(SAT):
         "buildings",
         "water"
     ]
-    def __init__(
-        self,
-        root: str = ".data/sat/sat6.h5",
-        split: str = "train",
-        transform: T.Compose = T.Compose([T.ToTensor()])
-    ):
-        super().__init__(root, split, transform)
+    def __init__(self,root: str = ".data/sat/sat6.h5"):
+        super().__init__(root, *args, **kwargs)
