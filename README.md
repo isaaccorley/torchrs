@@ -321,7 +321,7 @@ x: dict(
 
 <img src="./assets/rsvqaxben.png" width="600px"></img>
 
-The [RSVQAxBEN](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA Meets BigEarthNet: A New, Large-Scale, Visual Question Answering Dataset for Remote Sensing", Lobry et al.](https://rsvqa.sylvainlobry.com/IGARSS21.pdf) is a version of the [BigEarthNet](http://bigearth.net/) dataset with visual question answering (VQA) annotations using the same method applied to generate annotations forthe [RSVQA LR](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr) dataset. The dataset consists of RGB Sentinel-2 imagery annotated with a set of questions and their corresponding answers.
+The [RSVQAxBEN](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA Meets BigEarthNet: A New, Large-Scale, Visual Question Answering Dataset for Remote Sensing", Lobry et al.](https://rsvqa.sylvainlobry.com/IGARSS21.pdf) is a version of the [BigEarthNet](http://bigearth.net/) dataset with visual question answering (VQA) annotations using the same method applied to generate annotations forthe [RSVQA LR](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr) dataset. The dataset consists of 120x120 RGB Sentinel-2 imagery annotated with a set of questions and their corresponding answers.
 
 The dataset can be downloaded (35.4GB) using `scripts/download_rsvqaxben.sh` and instantiated below:
 
@@ -340,7 +340,7 @@ dataset = RSVQAxBEN(
 x = dataset[0]
 """
 x: dict(
-    x:         (3, h, w)
+    x:         (3, 120, 120)
     questions:  List[str]
     answers:    List[str]
     types:      List[str]
