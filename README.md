@@ -678,38 +678,39 @@ A simple training example:
 import torch
 import torch.nn as nn
 import pytorch_lightning as pl
-import torchvision.transforms as T
-from torchrs.train.modules import RAMSModule
-from torchrs.train.datamodules import PROBAVDataModule
-from torchrs.transforms import ToTensor, ToDtype
 
-lr_transform=T.Compose([ToTensor(), ToDtype(torch.float32)])
-hr_transform=T.Compose([ToTensor(), ToDtype(torch.float32)])
-model = RAMSModule(
-    scale_factor=3,
-    t=9,
-    c=1,
-    loss_fn=nn.MSELoss(),
-    opt=torch.optim.Adam,
-    lr=3E-4
-)
-dm = PROBAVDataModule(
+from torchrs.train.modules import FCEFModule
+from torchrs.train.datamodules import LEVIRCDPlusDataModule
+from torchrs.transforms import Compose, ToTensor
+
+
+def collate_fn(batch):
+    x = torch.stack([x["x"] for x in batch])
+    y = torch.cat([x["mask"] for x in batch])
+    x = x.to(torch.float32)
+    y = y.to(torch.long)
+    return x, y 
+
+transform = Compose([ToTensor()])
+model = FCEFModule(channels=3, t=2, num_classes=2, lr=1E-3)
+dm = LEVIRCDPlusDataModule(
     root="path/to/dataset",
-    band="RED",
-    lr_transform=lr_transform,
-    hr_transform=hr_transform,
-    batch_size=16,
-    num_workers=0,
-    prefetch_factor=2,
-    pin_memory=True
+    transform=transform,
+    batch_size=4,
+    num_workers=2,
+    prefetch_factor=1,
+    collate_fn=collate_fn,
+    test_collate_fn=collate_fn,
+    val_split=0.2
 )
 callbacks = [
-    pl.callbacks.ModelCheckpoint(monitor="train_loss", mode="min", verbose=True, save_top_k=1),
-    pl.callbacks.EarlyStopping(monitor="train_loss", mode="min", patience=5)
+    pl.callbacks.ModelCheckpoint(monitor="val_loss", mode="min", verbose=True, save_top_k=1),
+    pl.callbacks.EarlyStopping(monitor="val_loss", mode="min", patience=10)
 ]
 trainer = pl.Trainer(
     gpus=1,
     precision=16,
+    accumulate_grad_batches=1,
     max_epochs=25,
     callbacks=callbacks,
     weights_summary="top"

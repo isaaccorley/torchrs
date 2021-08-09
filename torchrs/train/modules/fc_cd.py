@@ -26,6 +26,9 @@ class BaseFCCDModule(pl.LightningModule):
 
         metrics = torchmetrics.MetricCollection([
             torchmetrics.Accuracy(threshold=0.5, num_classes=num_classes, average="micro"),
+            torchmetrics.Precision(num_classes=num_classes, threshold=0.5, average="micro"),
+            torchmetrics.Recall(num_classes=num_classes, threshold=0.5, average="micro"),
+            torchmetrics.F1(num_classes=num_classes, threshold=0.5, average="micro"),
             torchmetrics.IoU(threshold=0.5, num_classes=num_classes),
         ])
         self.train_metrics = metrics.clone(prefix='train_')
@@ -39,27 +42,27 @@ class BaseFCCDModule(pl.LightningModule):
         return self.model(x)
 
     def training_step(self, batch: Dict, batch_idx: int):
-        x, y = batch["image"], batch["mask"]
+        x, y = batch
         y_pred = self(x)
         loss = self.loss_fn(y_pred, y)
-        metrics = self.train_metrics(y, y_pred.softmax(dim=1))
+        metrics = self.train_metrics(y_pred.softmax(dim=1), y)
         metrics["train_loss"] = loss
         self.log_dict(metrics)
         return loss
 
     def validation_step(self, batch: Dict, batch_idx: int):
-        x, y = batch["image"], batch["mask"]
+        x, y = batch
         y_pred = self(x)
         loss = self.loss_fn(y_pred, y)
-        metrics = self.val_metrics(y, y_pred.softmax(dim=1))
+        metrics = self.val_metrics(y_pred.softmax(dim=1), y)
         metrics["val_loss"] = loss
         self.log_dict(metrics)
 
     def test_step(self, batch: Dict, batch_idx: int):
-        x, y = batch["image"], batch["mask"]
+        x, y = batch
         y_pred = self(x)
         loss = self.loss_fn(y_pred, y)
-        metrics = self.test_metrics(y, y_pred.softmax(dim=1))
+        metrics = self.test_metrics(y_pred.softmax(dim=1), y)
         metrics["test_loss"] = loss
         self.log_dict(metrics)
 
