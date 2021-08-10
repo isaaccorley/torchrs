@@ -14,10 +14,12 @@ from .ucm_captions import UCMCaptions
 from .s2mtcp import S2MTCP
 from .advance import ADVANCE
 from .sat import SAT4, SAT6
+from .hrscd import HRSCD
 
 
 __all__ = [
     "PROBAV", "ETCI2021", "RSVQALR", "RSVQAxBEN", "EuroSATRGB", "EuroSATMS",
     "RESISC45", "RSICD", "OSCD", "S2Looking", "LEVIRCDPlus", "FAIR1M",
-    "SydneyCaptions", "UCMCaptions", "S2MTCP", "ADVANCE", "SAT4", "SAT6"
+    "SydneyCaptions", "UCMCaptions", "S2MTCP", "ADVANCE", "SAT4", "SAT6",
+    "HRSCD"
 ]
