@@ -10,6 +10,12 @@ from PIL import Image
 from torchrs.transforms import ToTensor, ToDtype
 
 
+STATS = {
+    "RED": {"min": 864.0, "max": 15312.8, "mean": 0.0587, "std": 0.6386},
+    "NIR": {"min": 628.8, "max": 17464.0, "mean": 0.0618, "std": 0.7428}
+}
+
+
 def collate_fn(batch: List[Dict], t: int = 9, shuffle: bool = False) -> Dict[str, torch.Tensor]:
     lrs = [x["lr"] for x in batch]
     qms = [x["qm"] for x in batch]
