@@ -74,6 +74,7 @@ class FAIR1M(torch.utils.data.Dataset):
         "Intersection":     {"id": 35, "category": "Road"},
         "Bridge":           {"id": 36, "category": "Road"}
     }
+
     def __init__(
         self,
         root: str = ".data/fair1m",

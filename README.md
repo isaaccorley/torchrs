@@ -33,6 +33,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
 * [S2Looking - Satellite Side-Looking Change Detection](https://github.com/isaaccorley/torchrs#satellite-side-looking-s2looking-change-detection)
 * [LEVIR-CD+ - LEVIR Change Detection+](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd)
+* [HRSCD - High Resolution Semantic Change Detection](https://github.com/isaaccorley/torchrs#high-resolution-semantic-change-detection-hrscd)
 * [S2MTCP - Sentinel-2 Multitemporal Cities Pairs Change Detection](https://github.com/isaaccorley/torchrs#sentinel-2-multitemporal-cities-pairs-s2mtcp)
 * [RSVQA LR - Remote Sensing Visual Question Answering Low Resolution](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
 * [RSVQAxBEN - Remote Sensing Visual Question Answering BigEarthNet](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-bigearthnet-rsvqaxben)
@@ -260,6 +261,35 @@ x = dataset[0]
 x: dict(
     x: (2, 3, 1024, 1024)
     mask: (1, 1024, 1024)
+)
+"""
+```
+
+### High Resolution Semantic Change Detection (HRSCD)
+
+<img src="./assets/hrscd.png" width="750px"></img>
+
+The [High Resolution Semantic Change Detection (HRSCD)](https://ieee-dataport.org/open-access/hrscd-high-resolution-semantic-change-detection-dataset) dataset, proposed in ["Multitask Learning for Large-scale Semantic Change Detection", Daudt et al.](https://arxiv.org/abs/1810.08452) is a change detection dataset of high resolution (0.5m) aerial RGB image pairs extracted from the [French National Institute of Geographical and Forest Information (IGN) database](https://geoservices.ign.fr/documentation/diffusion/telechargement-donnees-libres.html#bd-ortho-50-cm). The dataset contains 291 coregistered image pairs from 2006 and 2012 along with binary change masks extracted from the [Urban Atlas Change 2006-2012 maps](https://land.copernicus.eu/local/urban-atlas/change-2006-2009) and corresponding land cover masks for each image extracted from the [Urban Atlas 2006](https://land.copernicus.eu/local/urban-atlas/urban-atlas-2006) and [Urban Atlas 2012](https://land.copernicus.eu/local/urban-atlas/urban-atlas-2012).
+
+The dataset can be downloaded (12GB) using `scripts/download_hrscd.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import HRSCD
+
+transform = Compose([ToTensor()])
+
+dataset = HRSCD(
+    root="path/to/dataset/",
+    transform=transform,
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x: (2, 3, 1000, 1000)
+    lc: (2, 1000, 1000)
+    mask: (1, 1000, 1000)
 )
 """
 ```
