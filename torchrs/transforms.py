@@ -1,4 +1,4 @@
-from typing import Union, Any, Sequence, Callable, Tuple
+from typing import Union, Any, Sequence, Callable, Tuple, List
 
 import torch
 import einops
@@ -6,7 +6,7 @@ import numpy as np
 import torchvision.transforms as T
 
 
-__all__ = ["Compose", "ToTensor", "ToDtype", "ExtractChips"]
+__all__ = ["Compose", "ToTensor", "ToDtype", "ExtractChips", "MinMaxNormalize", "Clip"]
 
 
 class Compose(T.Compose):
@@ -66,3 +66,26 @@ class ExtractChips(object):
 
     def __call__(self, x: Union[torch.Tensor, np.ndarray]) -> Union[torch.Tensor, np.ndarray]:
         return einops.rearrange(x, "c (h p1) (w p2) -> (h w) c p1 p2", p1=self.h, p2=self.w)
+
+
+class MinMaxNormalize(object):
+    """ Normalize channels to the range [0, 1] using min/max values """
+    def __init__(self, min: List[float], max: List[float]):
+        self.min = torch.tensor(min)[:, None, None]
+        self.max = torch.tensor(max)[:, None, None]
+        self.denominator = (self.max - self.min)
+
+    def __call__(self, x: torch.Tensor) -> torch.Tensor:
+        return (x - self.min) / self.denominator
+
+
+class Clip(object):
+    """ Clip channels to the range [min, max] """
+    def __init__(self, min: List[float], max: List[float]):
+        self.min = torch.tensor(min)[:, None, None]
+        self.max = torch.tensor(max)[:, None, None]
+
+    def __call__(self, x: torch.Tensor) -> torch.Tensor:
+        x = torch.where(x < self.min, self.min, x)
+        x = torch.where(x > self.max, self.max, x)
+        return x
