@@ -2,6 +2,7 @@ from typing import Optional
 
 import torch
 import torchvision.transforms as T
+from einops import rearrange
 
 from torchrs.datasets.utils import dataset_split
 from torchrs.train.datamodules import BaseDataModule
@@ -33,3 +34,11 @@ class PROBAVDataModule(BaseDataModule):
         self.test_dataset = PROBAV(
             root=self.root, split="test", band=self.band, lr_transform=self.lr_transform, hr_transform=self.hr_transform
         )
+
+    def on_before_batch_transfer(self, batch, dataloader_idx):
+        """ Handle if lr and hr are chipped by ExtractChips transform """
+        if batch["lr"].ndim == 6:
+            batch["lr"] = rearrange(batch["lr"], "b t d c h w -> (b d) t c h w")
+        if batch["hr"].ndim == 5:
+            batch["hr"] = rearrange(batch["hr"], "b d c h w -> (b d) c h w")
+        return batch
