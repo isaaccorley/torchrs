@@ -1,12 +1,30 @@
 import torch
 import torch.nn as nn
+from einops import repeat
 from einops.layers.torch import Rearrange
 
 
+class ResidualBlock(nn.Module):
+
+    def __init__(channels: int = 64, kernel_size: int = 3):
+        self.model = nn.Sequential(
+            nn.Conv2d(channels, channels, kernel_size, stride=1, padding=kernel_size//2),
+            nn.ReLU(),
+            nn.Conv2d(channels, channels, kernel_size, stride=1, padding=kernel_size//2),
+            nn.ReLU()
+        )
+    
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return x + self.model(x)
+
+
 class Encoder(nn.Sequential):
-    def __init__(self, in_channels: int, out_channels: int, kernel_size: int):
+
+    def __init__(self, in_channels: int, out_channels: int, kernel_size: int = 3, num_res_blocks: int = 2):
         super().__init__(
-            nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=0)
+            nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=kernel_size//2),
+            *[ResidualBlock() for _ in range(num_res_blocks)],
+            nn.Conv2d(out_channels, out_channels, kernel_size, stride=1, padding=kernel_size//2),
         )
 
 
@@ -18,7 +36,7 @@ class CLSToken(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         b = x.shape[0]
-        cls_tokens = self.cls_token.repeat(b, 1, 1)
+        cls_tokens = repeat(self.cls_token, "() n d -> b n d", b=b)
         x = torch.cat([cls_tokens, x], dim=1)
         return x
 
@@ -28,13 +46,18 @@ class Fusion(nn.Sequential):
     def __init__(
         self,
         dim: int,
-        num_heads: int,
-        num_layers: int,
+        num_heads: int = 8,
+        num_layers: int = 6,
+        ff_dim: int = 128,
+        dropout: float = 0.1
     ):
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=dim,
             nhead=num_heads,
-            activation="gelu"
+            dim_feedforward=ff_dim,
+            dropout=dropout,
+            activation="gelu",
+            batch_first=True
         )
         super().__init__(
             nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
@@ -60,9 +83,10 @@ class Pooling(nn.Module):
 
 class Decoder(nn.Sequential):
 
-    def __init__(self, patch_size: int):
+    def __init__(self, scale_factor: int = 3, in_channels: int = 64, kernel_size: int = 1):
         super().__init__(
-            Rearrange("b (h w) -> b () h w", h=patch_size, w=patch_size)
+            nn.Conv2d(in_channels, channels * scale_factor ** 2, kernel_size, stride=1, padding=kernel_size//2),
+            nn.PixelShuffle(scale_factor)
         )
 
 
@@ -74,21 +98,25 @@ class TRMISR(nn.Module):
         input_dim: int = 32,
         channels: int = 1,
         t: int = 9,
-        num_layers: int = 8,
-        num_heads: int = 16,
+        emb_dim: int = 64,
+        num_layers: int = 6,
+        num_heads: int = 8,
         pool: str = "cls"
     ):
         super().__init__()
-        emb_dim = (input_dim ** 2) * scale_factor
+        output_dim = input_dim * scale_factor
         self.encoder = nn.Sequential(
             Rearrange("b t c h w -> (b t) c h w"),
-            Encoder(in_channels=channels, out_channels=emb_dim, kernel_size=input_dim),
-            Rearrange("(b t) c -> b t c", t=t)
+            Encoder(channels, emb_dim),
+            Rearrange("(b t) c () () -> b t c", t=t)
         )
         self.cls_token = CLSToken(emb_dim)
         self.fusion = Fusion(emb_dim, num_heads, num_layers)
         self.pool = Pooling(pool)
-        self.decoder = Decoder(patch_size=input_dim * scale_factor)
+        self.decoder = nn.Sequential(
+            Rearrange("b (h w) -> b () h w", h=output_dim, w=output_dim)
+            Decoder(scale_factor, channels)
+        )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         b, t, c, h, w = x.shape
