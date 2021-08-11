@@ -5,17 +5,20 @@ import torch.nn as nn
 import torchmetrics
 import pytorch_lightning as pl
 
-from torchrs.models import RAMS
+from torchrs.models import TRMISR
 
 
-class RAMSModule(pl.LightningModule):
+class TRMISRModule(pl.LightningModule):
 
     def __init__(
         self,
         scale_factor: int = 3,
+        input_dim: int = 32,
+        channels: int = 1,
         t: int = 9,
-        c: int = 1,
-        num_feature_attn_blocks: int = 12,
+        num_layers: int = 8,
+        num_heads: int = 16,
+        pool: str = "cls",
         loss_fn: nn.Module = nn.MSELoss(),
         opt: torch.optim.Optimizer = torch.optim.Adam,
         lr: float = 3E-4
@@ -24,7 +27,10 @@ class RAMSModule(pl.LightningModule):
         self.loss_fn = loss_fn
         self.opt = opt
         self.lr = lr
-        self.model = RAMS(scale_factor, t, c, num_feature_attn_blocks)
+        self.model = TRMISR(
+            scale_factor, input_dim, channels,
+            t, num_layers, num_heads, pool
+        )
 
         metrics = torchmetrics.MetricCollection([
             torchmetrics.MeanSquaredError(),
