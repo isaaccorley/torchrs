@@ -25,10 +25,10 @@ class BaseFCCDModule(pl.LightningModule):
         self.lr = lr
 
         metrics = torchmetrics.MetricCollection([
-            torchmetrics.Accuracy(threshold=0.5, num_classes=num_classes, average="micro"),
-            torchmetrics.Precision(num_classes=num_classes, threshold=0.5, average="micro"),
-            torchmetrics.Recall(num_classes=num_classes, threshold=0.5, average="micro"),
-            torchmetrics.F1(num_classes=num_classes, threshold=0.5, average="micro"),
+            torchmetrics.Accuracy(threshold=0.5, num_classes=num_classes, average="micro", mdmc_average="global"),
+            torchmetrics.Precision(num_classes=num_classes, threshold=0.5, average="micro", mdmc_average="global"),
+            torchmetrics.Recall(num_classes=num_classes, threshold=0.5, average="micro", mdmc_average="global"),
+            torchmetrics.F1(num_classes=num_classes, threshold=0.5, average="micro", mdmc_average="global"),
             torchmetrics.IoU(threshold=0.5, num_classes=num_classes),
         ])
         self.train_metrics = metrics.clone(prefix='train_')
