@@ -673,9 +673,9 @@ dataset.classes
 
 ### ZueriCrop
 
-<img src="./assets/zuericrop.png" width="400px"></img>
+<img src="./assets/zuericrop.png" width="750px"></img>
 
-The [ZueriCrop](https://github.com/0zgur0/ms-convSTAR) dataset is a time-series instance segmentation dataset proposed in ["Crop mapping from image time series: deep learning with multi-scale label hierarchies", Turkoglu et al.](https://arxiv.org/abs/2102.08820) of 116k medium resolution (10m) 24x24 multispectral imagery taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2) and contains pixel level semantic and instance annotations for 48 categories of crop types. Note that there is only a single ground truth semantic & instance mask per time-series.
+The [ZueriCrop](https://github.com/0zgur0/ms-convSTAR) dataset is a time-series instance segmentation dataset proposed in ["Crop mapping from image time series: deep learning with multi-scale label hierarchies", Turkoglu et al.](https://arxiv.org/abs/2102.08820) of 116k medium resolution (10m) 24x24 multispectral 9-band imagery of Zurich and Thurgau, Switzerland taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2) and contains pixel level semantic and instance annotations for 48 fine-grained, hierarchical categories of crop types. Note that there is only a single ground truth semantic & instance mask per time-series.
 
 The dataset can be downloaded (39GB) using `scripts/download_zuericrop.sh` and instantiated below:
 
@@ -699,14 +699,11 @@ x: dict(
 )
 """
 
-dataset.classes
+[cls.label for cls in ds.classes]
 """
-['background', 'industrial_land', 'urban_residential', 'rural_residential', 'traffic_land', 'paddy_field',
-'irrigated_land', 'dry_cropland', 'garden_plot', 'arbor_woodland', 'shrub_land', 'natural_grassland',
-'artificial_grassland', 'river', 'lake', 'pond']
+['Unknown', 'SummerBarley', 'WinterBarley', 'Oat', 'Wheat', 'Grain', ...]
 """
 ```
-
 
 ### TiSeLaC
 
