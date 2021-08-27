@@ -44,8 +44,9 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [EuroSAT](https://github.com/isaaccorley/torchrs#eurosat)
 * [SAT-4-&-SAT-6](https://github.com/isaaccorley/torchrs#sat-4--sat-6)
 * [Inria Aerial Image Labeling - Building Segmentation](https://github.com/isaaccorley/torchrs#inria-aerial-image-labeling)
-* [TiSeLaC - Time-series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
 * [GID-15 - Semantic Segmentation](https://github.com/isaaccorley/torchrs#gid-15)
+* [ZueriCrop - Time-Series Instance Segmentation](https://github.com/isaaccorley/torchrs#zuericrop)
+* [TiSeLaC - Time-series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
 
 ### PROBA-V Super Resolution
 
@@ -662,13 +663,50 @@ x: dict(
 )
 """
 
-dataset.regions
+dataset.classes
 """
 ['background', 'industrial_land', 'urban_residential', 'rural_residential', 'traffic_land', 'paddy_field',
 'irrigated_land', 'dry_cropland', 'garden_plot', 'arbor_woodland', 'shrub_land', 'natural_grassland',
 'artificial_grassland', 'river', 'lake', 'pond']
 """
 ```
+
+### ZueriCrop
+
+<img src="./assets/zuericrop.png" width="400px"></img>
+
+The [ZueriCrop](https://github.com/0zgur0/ms-convSTAR) dataset is a time-series instance segmentation dataset proposed in ["Crop mapping from image time series: deep learning with multi-scale label hierarchies", Turkoglu et al.](https://arxiv.org/abs/2102.08820) of 116k medium resolution (10m) 24x24 multispectral imagery taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2) and contains pixel level semantic and instance annotations for 48 categories of crop types. Note that there is only a single ground truth semantic & instance mask per time-series.
+
+The dataset can be downloaded (39GB) using `scripts/download_zuericrop.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import ZueriCrop
+
+transform = Compose([ToTensor()])
+
+dataset = ZueriCrop(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:              (142, 9, 24, 24)    (t, c, h, w)
+    mask:           (1, 24, 24)
+    instance_mask:  (1, 24, 24)
+)
+"""
+
+dataset.classes
+"""
+['background', 'industrial_land', 'urban_residential', 'rural_residential', 'traffic_land', 'paddy_field',
+'irrigated_land', 'dry_cropland', 'garden_plot', 'arbor_woodland', 'shrub_land', 'natural_grassland',
+'artificial_grassland', 'river', 'lake', 'pond']
+"""
+```
+
 
 ### TiSeLaC
 
