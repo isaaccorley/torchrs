@@ -43,6 +43,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [RESISC45 - Remote Sensing Image Scene Classification](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
 * [EuroSAT](https://github.com/isaaccorley/torchrs#eurosat)
 * [SAT-4-&-SAT-6](https://github.com/isaaccorley/torchrs#eurosat)
+* [Inria Aerial Image Labeling - Building Segmentation](https://github.com/isaaccorley/torchrs#inria-aerial-image-labeling)
 
 ### PROBA-V Super Resolution
 
@@ -593,6 +594,41 @@ y: int
 dataset.classes
 """
 ['barren land', 'trees', 'grassland', 'roads', 'buildings', 'water']
+"""
+```
+
+### Inria Aerial Image Labeling
+
+<img src="./assets/inria_ail.png" width="950px"></img>
+
+The [Inria Aerial Image Labeling Dataset](https://project.inria.fr/aerialimagelabeling/) is a building segmentation dataset proposed in ["Can semantic labeling methods generalize to any city? the inria aerial image labeling benchmark", Maggiori et al.](https://ieeexplore.ieee.org/document/8127684) of 360 high resolution (0.3m) 5000x5000 RGB imagery extracted from various international GIS services (e.g. [USGS National Map](https://www.usgs.gov/core-science-systems/national-geospatial-program/national-map). The dataset contains imagery from 10 regions around the world (both urban and rural) with train/test sets split into different cities for the purpose of evaluating if models can generalize across dramatically different locations. The dataset was originally used in the [Inria Aerial Image Labeling Dataset Contest](https://project.inria.fr/aerialimagelabeling/contest/) and the test set ground truth masks have not been disclosed.
+
+The dataset can be downloaded (26GB) using `scripts/download_inria_ail.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import InriaAIL
+
+transform = Compose([ToTensor()])
+
+dataset = InriaAIL(
+    root="path/to/dataset/",
+    split="train",  # or 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:         (3, 5000, 5000)
+    mask:      (1, 5000, 5000)
+    region:     str
+)
+"""
+
+dataset.regions
+"""
+['austin', 'chicago', 'kitsap', 'tyrol', 'vienna']
 """
 ```
 
