@@ -8,7 +8,7 @@ from torchrs import datasets
 skip = ["RSVQAxBEN", "S2MTCP"]
 
 
-@pytest.mark.parametrize("dataset", datasets.__all__)
+@pytest.mark.parametrize("dataset", reversed(datasets.__all__))
 def test_datamodules(dataset: Dataset):
 
     if dataset in skip:

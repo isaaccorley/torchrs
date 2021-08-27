@@ -1,11 +1,11 @@
 import os
-import json
 from typing import Tuple
 
 import torch
 import numpy as np
-import torchvision.transforms as T
 from einops import rearrange
+
+from torchrs.transforms import Compose, ToTensor
 
 
 class Tiselac(torch.utils.data.Dataset):
@@ -34,12 +34,12 @@ class Tiselac(torch.utils.data.Dataset):
         self,
         root: str = ".data/tiselac",
         split: str = "train",
-        transform: T.Compose = T.Compose([T.ToTensor()])
+        transform: Compose = Compose([ToTensor(permute_dims=False)])
     ):
         assert split in self.splits
         self.root = root
         self.transform = transform
-        self.series, labels = self.load_file(root, split)
+        self.series, self.labels = self.load_file(root, split)
 
     @staticmethod
     def load_file(path: str, split: str) -> Tuple[np.ndarray, np.ndarray]:
@@ -53,5 +53,5 @@ class Tiselac(torch.utils.data.Dataset):
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
         x, y = self.series[idx], self.labels[idx] - 1
-        x, y = self.transform(x), torch.from_numpy(y).to(torch.long)
+        x, y = self.transform(x).squeeze(dim=0), torch.tensor(y).to(torch.long)
         return x, y
