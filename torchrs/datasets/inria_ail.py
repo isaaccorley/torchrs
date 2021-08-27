@@ -1,11 +1,11 @@
 import os
-import json
+import re
 from glob import glob
 from typing import List, Dict
 
 import torch
-import tifffile
 import numpy as np
+from PIL import Image
 
 from torchrs.transforms import Compose, ToTensor
 
@@ -22,25 +22,50 @@ class InriaAIL(torch.utils.data.Dataset):
     correspond exactly to those of the color images. In the case of the reference data, the tiles are
     single-channel images with values 255 for the building class and 0 for the not building class.'
     """
+    splits = ["train", "test"]
 
     def __init__(
         self,
-        root: str = ".data/inria_ail",
+        root: str = ".data/AerialImageDataset",
+        split: str = "train",
         transform: Compose = Compose([ToTensor()]),
     ):
-        self.root = root
+        self.split = split
         self.transform = transform
-        self.images = self.load_images(self.image_root)
+        self.images = self.load_images(root, split)
+        self.regions = sorted(list(set(image["region"] for image in self.images)))
 
     @staticmethod
-    def load_images(path: str) -> List[Dict]:
-        pass
+    def load_images(path: str, split: str) -> List[Dict]:
+        images = sorted(glob(os.path.join(path, split, "images", "*.tif")))
+        pattern = re.compile("[a-zA-Z]+")
+        regions = [re.findall(pattern, os.path.basename(image))[0] for image in images]
+
+        if split == "train":
+            targets = sorted(glob(os.path.join(path, split, "gt", "*.tif")))
+        else:
+            targets = [None] * len(images)
+
+        files = [
+            dict(image=image, target=target, region=region)
+            for image, target, region in zip(images, targets, regions)
+        ]
+        return files
 
     def __len__(self) -> int:
         return len(self.images)
 
     def __getitem__(self, idx: int) -> Dict:
         image_path, target_path = self.images[idx]["image"], self.images[idx]["target"]
-        x, y = np.load(image_path), np.load(target_path)
-        x, y = self.transform([x, y])
-        return dict(x=x, mask=y)
+        x = np.array(Image.open(image_path))
+
+        if self.split == "train":
+            y = np.array(Image.open(target_path))
+            y = np.clip(y, a_min=0, a_max=1)
+            x, y = self.transform([x, y])
+            output = dict(x=x, mask=y, region=self.images[idx]["region"])
+        else:
+            x = self.transform(x)
+            output = dict(x=x)
+
+        return output
