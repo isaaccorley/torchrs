@@ -15,6 +15,7 @@ from .s2mtcp import S2MTCPDataModule
 from .advance import ADVANCEDataModule
 from .sat import SAT4DataModule, SAT6DataModule
 from .hrscd import HRSCDDataModule
+from .inria_ail import InriaAILDataModule
 
 
 __all__ = [
@@ -22,5 +23,5 @@ __all__ = [
     "RSVQAxBENDataModule", "EuroSATRGBDataModule", "EuroSATMSDataModule", "RESISC45DataModule",
     "RSICDDataModule", "OSCDDataModule", "S2LookingDataModule", "LEVIRCDPlusDataModule",
     "FAIR1MDataModule", "SydneyCaptionsDataModule", "UCMCaptionsDataModule", "S2MTCPDataModule",
-    "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule", "HRSCDDataModule"
+    "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule", "HRSCDDataModule", "InriaAILDataModule"
 ]
