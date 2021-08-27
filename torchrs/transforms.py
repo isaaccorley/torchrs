@@ -45,7 +45,10 @@ class ToTensor(object):
 
         # Convert HWC->CHW
         if self.permute_dims:
-            x = x.permute((2, 0, 1)).contiguous()
+            if x.ndim == 4:
+                x = x.permute((0, 3, 1, 2)).contiguous()
+            else:
+                x = x.permute((2, 0, 1)).contiguous()
 
         return x
 

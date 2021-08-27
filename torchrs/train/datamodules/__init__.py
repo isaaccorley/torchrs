@@ -18,6 +18,8 @@ from .hrscd import HRSCDDataModule
 from .inria_ail import InriaAILDataModule
 from .tiselac import TiselacDataModule
 from .gid15 import GID15DataModule
+from .zuericrop import ZueriCropDataModule
+
 
 __all__ = [
     "BaseDataModule", "PROBAVDataModule", "ETCI2021DataModule", "RSVQALRDataModule",
@@ -25,5 +27,5 @@ __all__ = [
     "RSICDDataModule", "OSCDDataModule", "S2LookingDataModule", "LEVIRCDPlusDataModule",
     "FAIR1MDataModule", "SydneyCaptionsDataModule", "UCMCaptionsDataModule", "S2MTCPDataModule",
     "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule", "HRSCDDataModule", "InriaAILDataModule",
-    "TiselacDataModule", "GID15DataModule"
+    "TiselacDataModule", "GID15DataModule", "ZueriCropDataModule"
 ]
