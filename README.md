@@ -42,9 +42,10 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [UC Merced (UCM) Captions](https://github.com/isaaccorley/torchrs#uc-merced-ucm-captions)
 * [RESISC45 - Remote Sensing Image Scene Classification](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
 * [EuroSAT](https://github.com/isaaccorley/torchrs#eurosat)
-* [SAT-4-&-SAT-6](https://github.com/isaaccorley/torchrs#eurosat)
+* [SAT-4-&-SAT-6](https://github.com/isaaccorley/torchrs#sat-4--sat-6)
 * [Inria Aerial Image Labeling - Building Segmentation](https://github.com/isaaccorley/torchrs#inria-aerial-image-labeling)
 * [TiSeLaC - Time-series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
+* [GID-15 - Semantic Segmentation](https://github.com/isaaccorley/torchrs#gid-15)
 
 ### PROBA-V Super Resolution
 
@@ -630,6 +631,42 @@ x: dict(
 dataset.regions
 """
 ['austin', 'chicago', 'kitsap', 'tyrol', 'vienna']
+"""
+```
+
+### GID-15
+
+<img src="./assets/gid15.png" width="400px"></img>
+
+The [Gaofen Image Dataset (GID-15)](https://captain-whu.github.io/GID15/) is a semantic segmentation dataset proposed in ["Land-Cover Classification with High-Resolution Remote Sensing Images Using Transferable Deep Models", Tong et al.](https://arxiv.org/abs/1807.05713) of 150 high resolution (3m) 6800x7200 RGB imagery taken by the [Gaofen-2 satellite](https://directory.eoportal.org/web/eoportal/satellite-missions/g/gaofen-2) and contains pixel level annotations for 15 categories. The dataset was used in a challenge hosted by the [IEEE ICCV 2021 1st Workshop on Learning to Understand Aerial Images](https://captain-whu.github.io/LUAI2021/index.html) and the test set ground truth masks have not been released publicly.
+
+The dataset can be downloaded (36GB) using `scripts/download_gid15.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import GID15
+
+transform = Compose([ToTensor()])
+
+dataset = GID15(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:         (3, 6800, 7200)
+    mask:      (1, 6800, 7200)
+)
+"""
+
+dataset.regions
+"""
+['background', 'industrial_land', 'urban_residential', 'rural_residential', 'traffic_land', 'paddy_field',
+'irrigated_land', 'dry_cropland', 'garden_plot', 'arbor_woodland', 'shrub_land', 'natural_grassland',
+'artificial_grassland', 'river', 'lake', 'pond']
 """
 ```
 
