@@ -44,6 +44,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [EuroSAT](https://github.com/isaaccorley/torchrs#eurosat)
 * [SAT-4-&-SAT-6](https://github.com/isaaccorley/torchrs#eurosat)
 * [Inria Aerial Image Labeling - Building Segmentation](https://github.com/isaaccorley/torchrs#inria-aerial-image-labeling)
+* [TiSeLaC - Time-series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
 
 ### PROBA-V Super Resolution
 
@@ -630,6 +631,40 @@ dataset.regions
 """
 ['austin', 'chicago', 'kitsap', 'tyrol', 'vienna']
 """
+```
+
+### TiSeLaC
+
+<img src="./assets/tiselac.png" width="900px"></img>
+
+The TiSeLaC dataset from the [Time Series Land Cover Classification Challenge](https://sites.google.com/site/dinoienco/tiselac-time-series-land-cover-classification-challenge) is a time series land cover classification dataset consisting of 23 2866x2633 medium resolution (30m) multispectral 10 band (7 reflectance + NDVI/NDWI/Brightness Index) images taken by the [USGS Landsat 8 satellite](https://www.usgs.gov/core-science-systems/nli/landsat/landsat-8). The imagery was captured over Reunion Island in 2014 and contains 9 land cover classes derived from the [Corine Land Cover (CLC) map](https://land.copernicus.eu/pan-european/corine-land-cover). Note that the dataset is formatted for pixelwise time-series classification where each time series is of the form `(t, b)` where `t=23 samples` and `b=10 bands`.
+
+The dataset can be downloaded (.08GB) using `scripts/download_tiselac.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import Tiselac
+
+transform = Compose([ToTensor()])
+
+dataset = Tiselac(
+    root="path/to/dataset/",
+    split="train"   # or 'test'
+    transform=transform
+)
+
+x, y = dataset[0]
+"""
+x: (23, 10)
+y: int
+"""
+
+dataset.classes
+"""
+['Urban Areas', 'Other built-up surfaces', 'Forests', 'Sparse Vegetation', 'Rocks and bare soil',
+'Grassland', 'Sugarcane crops', 'Other crops', 'Water']
+"""
+
 ```
 
 ## Models

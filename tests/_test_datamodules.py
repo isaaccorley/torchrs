@@ -9,7 +9,7 @@ skip = ["BaseDataModule", "RSVQAxBENDataModule", "S2MTCPDataModule"]
 
 
 @torch.no_grad()
-@pytest.mark.parametrize("datamodule", datamodules.__all__)
+@pytest.mark.parametrize("datamodule", reversed(datamodules.__all__))
 def test_datamodules(datamodule: pl.LightningDataModule):
 
     if datamodule in skip:
