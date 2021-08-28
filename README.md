@@ -40,13 +40,14 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [RSICD - Remote Sensing Image Captioning Dataset](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
 * [Sydney Captions](https://github.com/isaaccorley/torchrs#sydney-captions)
 * [UC Merced (UCM) Captions](https://github.com/isaaccorley/torchrs#uc-merced-ucm-captions)
-* [RESISC45 - Remote Sensing Image Scene Classification](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
-* [EuroSAT](https://github.com/isaaccorley/torchrs#eurosat)
-* [SAT-4-&-SAT-6](https://github.com/isaaccorley/torchrs#sat-4--sat-6)
-* [Inria Aerial Image Labeling - Building Segmentation](https://github.com/isaaccorley/torchrs#inria-aerial-image-labeling)
+* [RESISC45 - Scene Classification](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
+* [EuroSAT - Scene Classification](https://github.com/isaaccorley/torchrs#eurosat)
+* [SAT-4-&-SAT-6 - Scene Classification](https://github.com/isaaccorley/torchrs#sat-4--sat-6)
+* [AID - Scene Classification](https://github.com/isaaccorley/torchrs#aid)
+* [Inria Aerial Image Labeling - Building Semantic Segmentation](https://github.com/isaaccorley/torchrs#inria-aerial-image-labeling)
 * [GID-15 - Semantic Segmentation](https://github.com/isaaccorley/torchrs#gid-15)
 * [ZueriCrop - Time-Series Instance Segmentation](https://github.com/isaaccorley/torchrs#zuericrop)
-* [TiSeLaC - Time-series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
+* [TiSeLaC - Time-Series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
 
 ### PROBA-V Super Resolution
 
@@ -473,7 +474,7 @@ x: dict(
 
 <img src="./assets/resisc45.png" width="500px"></img>
 
-The [RESISC45](http://www.escience.cn/people/JunweiHan/NWPU-RESISC45.html) dataset, proposed in ["Remote Sensing Image Scene Classification: Benchmark and State of the Art", Cheng et al.](https://arxiv.org/abs/1703.00121) is an scene classification dataset of 31,500 RGB images extracted using [Google Earth Engine](https://earthengine.google.com/). The dataset contains 45 scenes with 700 images per class from over 100 countries and was selected to optimize for high variability in image conditions (spatial resolution, occlusion, weather, illumination, etc.).
+The [RESISC45](http://www.escience.cn/people/JunweiHan/NWPU-RESISC45.html) dataset, proposed in ["Remote Sensing Image Scene Classification: Benchmark and State of the Art", Cheng et al.](https://arxiv.org/abs/1703.00121) is a scene classification dataset of 31,500 RGB images extracted using [Google Earth](https://earth.google.com/web/). The dataset contains 45 scenes with 700 images per class from over 100 countries and was selected to optimize for high variability in image conditions (spatial resolution, occlusion, weather, illumination, etc.).
 
 The dataset can be downloaded (0.47GB) using `scripts/download_resisc45.sh` and instantiated below:
 
@@ -597,6 +598,40 @@ y: int
 dataset.classes
 """
 ['barren land', 'trees', 'grassland', 'roads', 'buildings', 'water']
+"""
+```
+
+### Aerial Image Dataset (AID)
+
+<img src="./assets/aid.png" width="500px"></img>
+
+The [AID](https://captain-whu.github.io/AID/) dataset, proposed in ["AID: A Benchmark Dataset for Performance Evaluation of Aerial Scene Classification", Xia et al.](https://arxiv.org/abs/1608.05167) is a scene classification dataset of 10k 600x600 RGB images extracted using [Google Earth](https://earth.google.com/web/). The dataset contains 30 scenes with several hundred images per class from regions and countries around the world. This dataset is fairly easy with ~90% accuracy achievable with a VGG-16.
+
+The dataset can be downloaded (2.6GB) using `scripts/download_aid.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import AID
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = AID(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x, y = dataset[0]
+"""
+x: (3, 600, 600)
+y: int
+"""
+
+dataset.classes
+"""
+['Airport', 'BareLand', 'BaseballField', 'Beach', 'Bridge', 'Center', 'Church', 'Commercial',
+'DenseResidential', 'Desert', 'Farmland', 'Forest', 'Industrial', 'Meadow', 'MediumResidential',
+'Mountain', 'Park', 'Parking', 'Playground', 'Pond', 'Port', 'RailwayStation', 'Resort',
+'River', 'School', 'SparseResidential', 'Square', 'Stadium', 'StorageTanks', 'Viaduct']
 """
 ```
 
