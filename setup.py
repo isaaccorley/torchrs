@@ -13,7 +13,8 @@ install_requires = [
     "pillow>=8.3.1",
     "tifffile>=2021.7.2",
     "h5py>=3.3.0",
-    "imagecodecs>=2021.7.30"
+    "imagecodecs>=2021.7.30",
+    "pycocotools>=2.0.2"
 ]
 setup_requires = ["pytest-runner"]
 tests_require = ["pytest", "pytest-cov", "mock", "mypy", "black", "pylint"]

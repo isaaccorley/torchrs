@@ -7,3 +7,4 @@ pillow>=8.3.1
 tifffile>=2021.7.2
 h5py>=3.3.0
 imagecodecs>=2021.7.30
+pycocotools>=2.0.2
