@@ -20,6 +20,7 @@ from .tiselac import TiselacDataModule
 from .gid15 import GID15DataModule
 from .zuericrop import ZueriCropDataModule
 from .aid import AIDDataModule
+from .dubai_segmentation import DubaiSegmentationDataModule
 
 
 __all__ = [
@@ -28,5 +29,5 @@ __all__ = [
     "RSICDDataModule", "OSCDDataModule", "S2LookingDataModule", "LEVIRCDPlusDataModule",
     "FAIR1MDataModule", "SydneyCaptionsDataModule", "UCMCaptionsDataModule", "S2MTCPDataModule",
     "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule", "HRSCDDataModule", "InriaAILDataModule",
-    "TiselacDataModule", "GID15DataModule", "ZueriCropDataModule", "AIDDataModule"
+    "TiselacDataModule", "GID15DataModule", "ZueriCropDataModule", "AIDDataModule", "DubaiSegmentationDataModule"
 ]

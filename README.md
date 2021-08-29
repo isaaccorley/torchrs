@@ -51,6 +51,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [SAT-4-&-SAT-6 - Scene Classification](https://github.com/isaaccorley/torchrs#sat-4--sat-6)
 * [AID - Scene Classification](https://github.com/isaaccorley/torchrs#aerial-image-dataset-aid)
 * [Inria Aerial Image Labeling - Building Semantic Segmentation](https://github.com/isaaccorley/torchrs#inria-aerial-image-labeling)
+* [Dubai - Semantic Segmentation](https://github.com/isaaccorley/torchrs#dubai-segmentation)
 * [GID-15 - Semantic Segmentation](https://github.com/isaaccorley/torchrs#gid-15)
 * [ZueriCrop - Time-Series Instance Segmentation](https://github.com/isaaccorley/torchrs#zuericrop)
 * [TiSeLaC - Time-Series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
@@ -609,7 +610,7 @@ dataset.classes
 
 ### Aerial Image Dataset (AID)
 
-<img src="./assets/aid.png" width="500px"></img>
+<img src="./assets/aid.png" width="700px"></img>
 
 The [AID](https://captain-whu.github.io/AID/) dataset, proposed in ["AID: A Benchmark Dataset for Performance Evaluation of Aerial Scene Classification", Xia et al.](https://arxiv.org/abs/1608.05167) is a scene classification dataset of 10k 600x600 RGB images extracted using [Google Earth](https://earth.google.com/web/). The dataset contains 30 scenes with several hundred images per class from regions and countries around the world. This dataset is fairly easy with ~90% accuracy achievable with a VGG-16.
 
@@ -673,6 +674,40 @@ x: dict(
 dataset.regions
 """
 ['austin', 'chicago', 'kitsap', 'tyrol', 'vienna']
+"""
+```
+
+### Dubai Segmentation
+
+<img src="./assets/dubai.jpg" width="800px"></img>
+
+The [Dubai Segmentation](https://humansintheloop.org/resources/datasets/semantic-segmentation-dataset/) dataset is a semantic segmentation dataset of 72 high resolution ~700x700 RGB imagery taken by the [MBRSC satellites](https://www.mbrsc.ae/satellite-programme/services/satellite-imagery). The dataset contains imagery from 9 regions across Dubai and contains masks with 6 categories.
+
+The dataset can be downloaded (0.03GB) using `scripts/download_dubai_segmentation.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import DubaiSegmentation
+
+transform = Compose([ToTensor()])
+
+dataset = DubaiSegmentation(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:         (3, h, w)
+    mask:      (1, h, w)
+    region:    str
+)
+"""
+
+dataset.classes.keys()
+"""
+['Unlabeled', 'Water', 'Land (unpaved area)', 'Road', 'Building', 'Vegetation']
 """
 ```
 
