@@ -21,6 +21,7 @@ from .gid15 import GID15DataModule
 from .zuericrop import ZueriCropDataModule
 from .aid import AIDDataModule
 from .dubai_segmentation import DubaiSegmentationDataModule
+from .hkh_glacier import HKHGlacierMappingDataModule
 
 
 __all__ = [
@@ -29,5 +30,6 @@ __all__ = [
     "RSICDDataModule", "OSCDDataModule", "S2LookingDataModule", "LEVIRCDPlusDataModule",
     "FAIR1MDataModule", "SydneyCaptionsDataModule", "UCMCaptionsDataModule", "S2MTCPDataModule",
     "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule", "HRSCDDataModule", "InriaAILDataModule",
-    "TiselacDataModule", "GID15DataModule", "ZueriCropDataModule", "AIDDataModule", "DubaiSegmentationDataModule"
+    "TiselacDataModule", "GID15DataModule", "ZueriCropDataModule", "AIDDataModule",
+    "DubaiSegmentationDataModule", "HKHGlacierMappingDataModule"
 ]

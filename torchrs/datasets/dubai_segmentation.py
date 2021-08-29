@@ -10,9 +10,8 @@ from torchrs.transforms import Compose, ToTensor
 
 
 class DubaiSegmentation(torch.utils.data.Dataset):
-    """ Inria Aerial Image Labeling dataset from 'Can semantic labeling methods
-    generalize to any city? the inria aerial image labeling benchmark', Maggiori et al. (2017)
-    https://ieeexplore.ieee.org/document/8127684
+    """ Semantic segmentation dataset of Dubai imagery taken by MBRSC satellites
+    https://humansintheloop.org/resources/datasets/semantic-segmentation-dataset/
 
     """
     classes = {
