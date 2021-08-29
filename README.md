@@ -49,7 +49,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [RESISC45 - Scene Classification](https://github.com/isaaccorley/torchrs#remote-sensing-image-scene-classification-resisc45)
 * [EuroSAT - Scene Classification](https://github.com/isaaccorley/torchrs#eurosat)
 * [SAT-4-&-SAT-6 - Scene Classification](https://github.com/isaaccorley/torchrs#sat-4--sat-6)
-* [AID - Scene Classification](https://github.com/isaaccorley/torchrs#aid)
+* [AID - Scene Classification](https://github.com/isaaccorley/torchrs#aerial-image-dataset-aid)
 * [Inria Aerial Image Labeling - Building Semantic Segmentation](https://github.com/isaaccorley/torchrs#inria-aerial-image-labeling)
 * [GID-15 - Semantic Segmentation](https://github.com/isaaccorley/torchrs#gid-15)
 * [ZueriCrop - Time-Series Instance Segmentation](https://github.com/isaaccorley/torchrs#zuericrop)
