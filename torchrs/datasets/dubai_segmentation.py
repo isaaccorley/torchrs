@@ -10,9 +10,8 @@ from torchrs.transforms import Compose, ToTensor
 
 
 class DubaiSegmentation(torch.utils.data.Dataset):
-    """ Inria Aerial Image Labeling dataset from 'Can semantic labeling methods
-    generalize to any city? the inria aerial image labeling benchmark', Maggiori et al. (2017)
-    https://ieeexplore.ieee.org/document/8127684
+    """ Semantic segmentation dataset of Dubai imagery taken by MBRSC satellites
+    https://humansintheloop.org/resources/datasets/semantic-segmentation-dataset/
 
     """
     classes = {
@@ -50,7 +49,10 @@ class DubaiSegmentation(torch.utils.data.Dataset):
         h, w = rgb.shape[:2]
         mask = np.zeros(shape=(h, w), dtype=np.uint8)
         for i, c in enumerate(colors):
-            mask[(rgb == c).all(axis=-1)] = i
+            cmask = (rgb == c)
+            if isinstance(cmask, np.ndarray):
+                mask[cmask.all(axis=-1)] = i
+
         return mask
 
     def __len__(self) -> int:
@@ -58,8 +60,8 @@ class DubaiSegmentation(torch.utils.data.Dataset):
 
     def __getitem__(self, idx: int) -> Dict:
         image_path, target_path = self.images[idx]["image"], self.images[idx]["mask"]
-        x = np.array(Image.open(image_path))
-        y = np.array(Image.open(target_path))
+        x = np.array(Image.open(image_path).convert("RGB"))
+        y = np.array(Image.open(target_path).convert("RGB"))
         y = self.rgb_to_mask(y, self.colors)
         x, y = self.transform([x, y])
         return dict(x=x, mask=y, region=self.images[idx]["region"])

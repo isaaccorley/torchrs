@@ -34,13 +34,15 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 
 * [PROBA-V Multi-Image Super Resolution](https://github.com/isaaccorley/torchrs#proba-v-super-resolution)
 * [ETCI 2021 Flood Detection](https://github.com/isaaccorley/torchrs#etci-2021-flood-detection)
+* [HKH Glacier Mapping](https://github.com/isaaccorley/torchrs#hkh-glacier-mapping)
+* [ZueriCrop - Time-Series Instance Segmentation](https://github.com/isaaccorley/torchrs#zuericrop)
 * [FAIR1M - Fine-grained Object Recognition](https://github.com/isaaccorley/torchrs#fair1m---fine-grained-object-recognition)
 * [ADVANCE - Audiovisual Aerial Scene Recognition](https://github.com/isaaccorley/torchrs#advance---audiovisual-aerial-scene-recognition)
 * [OSCD - Onera Satellite Change Detection](https://github.com/isaaccorley/torchrs#onera-satellite-change-detection-oscd)
 * [S2Looking - Satellite Side-Looking Change Detection](https://github.com/isaaccorley/torchrs#satellite-side-looking-s2looking-change-detection)
 * [LEVIR-CD+ - LEVIR Change Detection+](https://github.com/isaaccorley/torchrs#levir-change-detection-levir-cd)
 * [HRSCD - High Resolution Semantic Change Detection](https://github.com/isaaccorley/torchrs#high-resolution-semantic-change-detection-hrscd)
-* [S2MTCP - Sentinel-2 Multitemporal Cities Pairs Change Detection](https://github.com/isaaccorley/torchrs#sentinel-2-multitemporal-cities-pairs-s2mtcp)
+* [S2MTCP - Sentinel-2 Multitemporal Cities Pairs](https://github.com/isaaccorley/torchrs#sentinel-2-multitemporal-cities-pairs-s2mtcp)
 * [RSVQA LR - Remote Sensing Visual Question Answering Low Resolution](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
 * [RSVQAxBEN - Remote Sensing Visual Question Answering BigEarthNet](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-bigearthnet-rsvqaxben)
 * [RSICD - Remote Sensing Image Captioning Dataset](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
@@ -53,7 +55,6 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [Inria Aerial Image Labeling - Building Semantic Segmentation](https://github.com/isaaccorley/torchrs#inria-aerial-image-labeling)
 * [Dubai - Semantic Segmentation](https://github.com/isaaccorley/torchrs#dubai-segmentation)
 * [GID-15 - Semantic Segmentation](https://github.com/isaaccorley/torchrs#gid-15)
-* [ZueriCrop - Time-Series Instance Segmentation](https://github.com/isaaccorley/torchrs#zuericrop)
 * [TiSeLaC - Time-Series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
 
 ### PROBA-V Super Resolution
@@ -118,6 +119,77 @@ x: dict(
     flood_mask: (1, 256, 256)
     water_mask: (1, 256, 256)
 )
+"""
+```
+
+### HKH Glacier Mapping
+
+<img src="./assets/hkh_glacier.png" width="400px"></img>
+
+The [Hindu Kush Himalayas (HKH) Glacier Mapping](https://lila.science/datasets/hkh-glacier-mapping) dataset is a semantic segmentation dataset of 7,095 512x512 multispectral images taken by the [USGS LandSat 7 satellite](https://landsat.gsfc.nasa.gov/landsat-7). The dataset contains imagery from 2002-2008 of the HKH region (spanning 8 countries) along with separate masks of clean-iced and debris-covered glaciers. The imagery contains 15 bands which includes 10 LandSat 7 bands, 3 precomputed NVDI/NDSI/NDWI indices, and 2 digital elevation and slope maps from the [SRTM 90m DEM Digital Elevation Database](https://srtm.csi.cgiar.org/).
+
+The dataset can be downloaded (18GB/109GB compressed/uncompressed) using `scripts/download_hkh_glacier.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import HKHGlacierMapping
+
+transform = Compose([ToTensor()])
+
+dataset = HKHGlacierMapping(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:                   (15, 512, 512)
+    clean_ice_mask:      (1, 512, 512)
+    debris_covered_mask: (1, 256, 256)
+)
+"""
+
+dataset.bands
+"""
+['LE7 B1 (blue)', 'LE7 B2 (green)', 'LE7 B3 (red)', 'LE7 B4 (near infrared)', 'LE7 B5 (shortwave infrared 1)',
+'LE7 B6_VCID_1 (low-gain thermal infrared)', 'LE7 B6_VCID_2 (high-gain thermal infrared)',
+'LE7 B7 (shortwave infrared 2)', 'LE7 B8 (panchromatic)', 'LE7 BQA (quality bitmask)', 'NDVI (vegetation index)',
+'NDSI (snow index)', 'NDWI (water index)', 'SRTM 90 elevation', 'SRTM 90 slope']
+"""
+```
+
+### ZueriCrop
+
+<img src="./assets/zuericrop.png" width="650px"></img>
+
+The [ZueriCrop](https://github.com/0zgur0/ms-convSTAR) dataset is a time-series instance segmentation dataset proposed in ["Crop mapping from image time series: deep learning with multi-scale label hierarchies", Turkoglu et al.](https://arxiv.org/abs/2102.08820) of 116k medium resolution (10m) 24x24 multispectral 9-band imagery of Zurich and Thurgau, Switzerland taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2) and contains pixel level semantic and instance annotations for 48 fine-grained, hierarchical categories of crop types. Note that there is only a single ground truth semantic & instance mask per time-series.
+
+The dataset can be downloaded (39GB) using `scripts/download_zuericrop.sh` and instantiated below:
+
+```python
+from torchrs.transforms import Compose, ToTensor
+from torchrs.datasets import ZueriCrop
+
+transform = Compose([ToTensor()])
+
+dataset = ZueriCrop(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:              (142, 9, 24, 24)    (t, c, h, w)
+    mask:           (1, 24, 24)
+    instance_mask:  (1, 24, 24)
+)
+"""
+
+[cls.label for cls in ds.classes]
+"""
+['Unknown', 'SummerBarley', 'WinterBarley', 'Oat', 'Wheat', 'Grain', ...]
 """
 ```
 
@@ -744,40 +816,6 @@ dataset.classes
 ['background', 'industrial_land', 'urban_residential', 'rural_residential', 'traffic_land', 'paddy_field',
 'irrigated_land', 'dry_cropland', 'garden_plot', 'arbor_woodland', 'shrub_land', 'natural_grassland',
 'artificial_grassland', 'river', 'lake', 'pond']
-"""
-```
-
-### ZueriCrop
-
-<img src="./assets/zuericrop.png" width="750px"></img>
-
-The [ZueriCrop](https://github.com/0zgur0/ms-convSTAR) dataset is a time-series instance segmentation dataset proposed in ["Crop mapping from image time series: deep learning with multi-scale label hierarchies", Turkoglu et al.](https://arxiv.org/abs/2102.08820) of 116k medium resolution (10m) 24x24 multispectral 9-band imagery of Zurich and Thurgau, Switzerland taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2) and contains pixel level semantic and instance annotations for 48 fine-grained, hierarchical categories of crop types. Note that there is only a single ground truth semantic & instance mask per time-series.
-
-The dataset can be downloaded (39GB) using `scripts/download_zuericrop.sh` and instantiated below:
-
-```python
-from torchrs.transforms import Compose, ToTensor
-from torchrs.datasets import ZueriCrop
-
-transform = Compose([ToTensor()])
-
-dataset = ZueriCrop(
-    root="path/to/dataset/",
-    transform=transform
-)
-
-x = dataset[0]
-"""
-x: dict(
-    x:              (142, 9, 24, 24)    (t, c, h, w)
-    mask:           (1, 24, 24)
-    instance_mask:  (1, 24, 24)
-)
-"""
-
-[cls.label for cls in ds.classes]
-"""
-['Unknown', 'SummerBarley', 'WinterBarley', 'Oat', 'Wheat', 'Grain', ...]
 """
 ```
 
