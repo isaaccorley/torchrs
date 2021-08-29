@@ -1,5 +1,11 @@
 # PyTorch Remote Sensing (torchrs)
 
+![github actions](https://github.com/isaaccorley/torchrs/actions/workflows/python-package.yml/badge.svg)
+![pypi](https://img.shields.io/pypi/v/torch-rs)
+![pypi downloads](https://img.shields.io/pypi/dm/torch-rs)
+![license](https://img.shields.io/github/license/isaaccorley/torchrs)
+
+
 (WIP) PyTorch implementation of popular datasets and models in remote sensing tasks (Change Detection, Image Super Resolution, Land Cover Classification/Segmentation, Image Captioning, Audio-visual recognition etc.) for various Optical (Sentinel-2, Landsat, etc.) and Synthetic Aperture Radar (SAR) (Sentinel-1) sensors.
 
 ## Installation
