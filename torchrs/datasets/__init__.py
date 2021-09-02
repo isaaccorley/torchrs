@@ -1,7 +1,7 @@
 from . import utils
 from .probav import PROBAV
 from .etci2021 import ETCI2021
-from .rsvqa import RSVQALR, RSVQAxBEN
+from .rsvqa import RSVQALR, RSVQAHR, RSVQAxBEN
 from .eurosat import EuroSATRGB, EuroSATMS
 from .resisc45 import RESISC45
 from .rsicd import RSICD
@@ -31,5 +31,5 @@ __all__ = [
     "RESISC45", "RSICD", "OSCD", "S2Looking", "LEVIRCDPlus", "FAIR1M",
     "SydneyCaptions", "UCMCaptions", "S2MTCP", "ADVANCE", "SAT4", "SAT6",
     "HRSCD", "InriaAIL", "Tiselac", "GID15", "ZueriCrop", "AID", "DubaiSegmentation",
-    "HKHGlacierMapping", "UCM", "PatternNet"
+    "HKHGlacierMapping", "UCM", "PatternNet", "RSVQAHR"
 ]
