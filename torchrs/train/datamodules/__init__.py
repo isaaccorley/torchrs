@@ -24,6 +24,7 @@ from .dubai_segmentation import DubaiSegmentationDataModule
 from .hkh_glacier import HKHGlacierMappingDataModule
 from .ucm import UCMDataModule
 from .patternnet import PatternNetDataModule
+from .whu_rs19 import WHURS19DataModule
 
 
 __all__ = [
@@ -34,5 +35,5 @@ __all__ = [
     "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule", "HRSCDDataModule", "InriaAILDataModule",
     "TiselacDataModule", "GID15DataModule", "ZueriCropDataModule", "AIDDataModule",
     "DubaiSegmentationDataModule", "HKHGlacierMappingDataModule", "UCMDataModule", "PatternNetDataModule",
-    "RSVQAHRDataModule"
+    "RSVQAHRDataModule", "WHURS19DataModule"
 ]
