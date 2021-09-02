@@ -22,6 +22,7 @@ from .zuericrop import ZueriCropDataModule
 from .aid import AIDDataModule
 from .dubai_segmentation import DubaiSegmentationDataModule
 from .hkh_glacier import HKHGlacierMappingDataModule
+from .ucm import UCMDataModule
 
 
 __all__ = [
@@ -31,5 +32,5 @@ __all__ = [
     "FAIR1MDataModule", "SydneyCaptionsDataModule", "UCMCaptionsDataModule", "S2MTCPDataModule",
     "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule", "HRSCDDataModule", "InriaAILDataModule",
     "TiselacDataModule", "GID15DataModule", "ZueriCropDataModule", "AIDDataModule",
-    "DubaiSegmentationDataModule", "HKHGlacierMappingDataModule"
+    "DubaiSegmentationDataModule", "HKHGlacierMappingDataModule", "UCMDataModule"
 ]
