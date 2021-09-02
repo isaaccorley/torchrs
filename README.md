@@ -59,6 +59,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [TiSeLaC - Time-Series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
 * [UC Merced - Land Use Classification](https://github.com/isaaccorley/torchrs#uc-merced-ucm)
 * [PatternNet - Image Retrieval / Scene Classification](https://github.com/isaaccorley/torchrs#patternnet)
+* [WHU-RS19 - Scene Classification](https://github.com/isaaccorley/torchrs#whu-rs19)
 
 ### PROBA-V Super Resolution
 
@@ -921,7 +922,7 @@ dataset.classes
 
 ### PatternNet
 
-<img src="./assets/patternnet.png" width="500px"></img>
+<img src="./assets/patternnet.png" width="450px"></img>
 
 The [PatternNet](https://sites.google.com/view/zhouwx/dataset) dataset, proposed in ["PatternNet: A Benchmark Dataset for Performance Evaluation of Remote Sensing Image Retrieval", Yang et al.](https://arxiv.org/abs/1706.03424) is a image retrieval and scene classification dataset of 30,400 256x256 high resolution (.06-5m) RGB images extracted using [Google Earth](https://earth.google.com/web/) and [Google Maps](https://developers.google.com/maps) with 38 scene classes (800 images per class). This dataset was originally proposed as a remote sensing image retrieval (RSIR) dataset with classes selected for high intra-class diversity and inter-class similarity such that image retrieval requires learning fine-grained details between multiple classes. Additionally, this dataset has some unique classes not found in other scene classification datasets, e.g. oil well, nursing home, solar panel, etc.
 
@@ -952,6 +953,39 @@ dataset.classes
 'mobile_home_park', 'nursing_home', 'oil_gas_field', 'oil_well', 'overpass', 'parking_lot', 'parking_space',
 'railway', 'river', 'runway', 'runway_marking', 'shipping_yard', 'solar_panel','sparse_residential',
 'storage_tank', 'swimming_pool', 'tennis_court', 'transformer_station', 'wastewater_treatment_plant']
+"""
+```
+
+### WHU-RS19
+
+<img src="./assets/whu_rs19.png" width="500px"></img>
+
+The [WHU-RS19](https://captain-whu.github.io/BED4RS/#) dataset, proposed in ["Structural High-resolution Satellite Image Indexing", Xia et al.](https://hal.archives-ouvertes.fr/file/index/docid/458685/filename/structural_satellite_indexing_XYDG.pdf) is a scene classification dataset of 1,005 600x600 high resolution (up to 0.5m) RGB images extracted using [Google Earth](https://earth.google.com/web/) with 19 scene classes (~50 images per class).
+
+The dataset can be downloaded (0.11GB) using `scripts/download_whu_rs19.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import WHURS19
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = WHURS19(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x, y = dataset[0]
+"""
+x: (3, 600, 600)
+y: int
+"""
+
+dataset.classes
+"""
+['Airport', 'Beach', 'Bridge', 'Commercial', 'Desert', 'Farmland','Forest', 'Industrial',
+'Meadow', 'Mountain', 'Park', 'Parking', 'Pond', 'Port', 'Residential', 'River', 'Viaduct',
+'footballField', 'railwayStation']
 """
 ```
 

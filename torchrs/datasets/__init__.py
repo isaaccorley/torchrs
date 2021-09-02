@@ -24,6 +24,7 @@ from .dubai_segmentation import DubaiSegmentation
 from .hkh_glacier import HKHGlacierMapping
 from .ucm import UCM
 from .patternnet import PatternNet
+from .whu_rs19 import WHURS19
 
 
 __all__ = [
@@ -31,5 +32,5 @@ __all__ = [
     "RESISC45", "RSICD", "OSCD", "S2Looking", "LEVIRCDPlus", "FAIR1M",
     "SydneyCaptions", "UCMCaptions", "S2MTCP", "ADVANCE", "SAT4", "SAT6",
     "HRSCD", "InriaAIL", "Tiselac", "GID15", "ZueriCrop", "AID", "DubaiSegmentation",
-    "HKHGlacierMapping", "UCM", "PatternNet", "RSVQAHR"
+    "HKHGlacierMapping", "UCM", "PatternNet", "RSVQAHR", "WHURS19"
 ]

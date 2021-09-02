@@ -4,10 +4,10 @@ import torchvision.transforms as T
 
 from torchrs.datasets.utils import dataset_split
 from torchrs.train.datamodules import BaseDataModule
-from torchrs.datasets import WHU_RS19
+from torchrs.datasets import WHURS19
 
 
-class WHU_RS19DataModule(BaseDataModule):
+class WHURS19DataModule(BaseDataModule):
 
     def __init__(
         self,
@@ -20,7 +20,7 @@ class WHU_RS19DataModule(BaseDataModule):
         self.transform = transform
 
     def setup(self, stage: Optional[str] = None):
-        dataset = WHU_RS19(root=self.root, transform=self.transform)
+        dataset = WHURS19(root=self.root, transform=self.transform)
         self.train_dataset, self.val_dataset, self.test_dataset = dataset_split(
             dataset, val_pct=self.val_split, test_pct=self.test_split
         )
