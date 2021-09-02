@@ -44,6 +44,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [HRSCD - High Resolution Semantic Change Detection](https://github.com/isaaccorley/torchrs#high-resolution-semantic-change-detection-hrscd)
 * [S2MTCP - Sentinel-2 Multitemporal Cities Pairs](https://github.com/isaaccorley/torchrs#sentinel-2-multitemporal-cities-pairs-s2mtcp)
 * [RSVQA LR - Remote Sensing Visual Question Answering Low Resolution](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-low-resolution-lr)
+* [RSVQA HR - Remote Sensing Visual Question Answering High Resolution](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-rsvqa-high-resolution-hr)
 * [RSVQAxBEN - Remote Sensing Visual Question Answering BigEarthNet](https://github.com/isaaccorley/torchrs#remote-sensing-visual-question-answering-bigearthnet-rsvqaxben)
 * [RSICD - Remote Sensing Image Captioning Dataset](https://github.com/isaaccorley/torchrs#remote-sensing-image-captioning-dataset-rsicd)
 * [Sydney Captions](https://github.com/isaaccorley/torchrs#sydney-captions)
@@ -406,9 +407,40 @@ x = dataset[0]  # (2, 14, h, w)
 
 <img src="./assets/rsvqa_lr.png" width="850px"></img>
 
-The [RSVQA LR](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA: Visual Question Answering for Remote Sensing Data", Lobry et al.](https://arxiv.org/abs/2003.07333) is a visual question answering (VQA) dataset of 772 256x256 RGB images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). Each image is annotated with a set of questions and their corresponding answers. Among other applications, this dataset can be used to train VQA models to perform detailed scene understanding of medium resolution remote sensing imagery.
+The [RSVQA LR](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA: Visual Question Answering for Remote Sensing Data", Lobry et al.](https://arxiv.org/abs/2003.07333) is a visual question answering (VQA) dataset of 772 256x256 low resolution (10m) RGB images taken by the [ESA Sentinel-2 satellite](https://sentinel.esa.int/web/sentinel/missions/sentinel-2). Each image is annotated with a set of questions and their corresponding answers. Among other applications, this dataset can be used to train VQA models to perform detailed scene understanding of medium resolution remote sensing imagery.
 
 The dataset can be downloaded (0.2GB) using `scripts/download_rsvqa_lr.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import RSVQALR
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = RSVQALR(
+    root="path/to/dataset/",
+    split="train",  # or 'val', 'test'
+    transform=transform
+)
+
+x = dataset[0]
+"""
+x: dict(
+    x:         (3, 256, 256)
+    questions:  List[str]
+    answers:    List[str]
+    types:      List[str]
+)
+"""
+```
+
+### Remote Sensing Visual Question Answering (RSVQA) High Resolution (HR)
+
+<img src="./assets/rsvqa_hr.png" width="500px"></img>
+
+The [RSVQA HR](https://rsvqa.sylvainlobry.com/) dataset, proposed in ["RSVQA: Visual Question Answering for Remote Sensing Data", Lobry et al.](https://arxiv.org/abs/2003.07333) is a visual question answering (VQA) dataset of 772 512x512 high resolution (15cm) aerial RGB images extracted from the [USGS High Resolution Orthoimagery (HRO) collection](https://www.usgs.gov/centers/eros/science/usgs-eros-archive-aerial-photography-high-resolution-orthoimagery-hro?qt-science_center_objects=0#qt-science_center_objects). Each image is annotated with a set of questions and their corresponding answers. Among other applications, this dataset can be used to train VQA models to perform detailed scene understanding of high resolution remote sensing imagery.
+
+The dataset can be downloaded (15GB) using `scripts/download_rsvqa_hr.sh` and instantiated below:
 
 ```python
 import torchvision.transforms as T

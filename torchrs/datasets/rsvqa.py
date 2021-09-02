@@ -76,7 +76,7 @@ class RSVQA(torch.utils.data.Dataset):
 
 
 class RSVQALR(RSVQA):
-    """Remote Sensing Visual Question Answering (RSVQA) dataset from
+    """Remote Sensing Visual Question Answering Low Resolution (RSVQA LR) dataset from
     'RSVQA: Visual Question Answering for Remote Sensing Data', Lobry et al (2020)
     https://arxiv.org/abs/2003.07333
 
@@ -93,6 +93,33 @@ class RSVQALR(RSVQA):
     prefix = "LR"
 
     def __init__(self, root: str = ".data/RSVQA_LR", *args, **kwargs):
+        super().__init__(root, *args, **kwargs)
+
+
+class RSVQAHR(RSVQA):
+    """Remote Sensing Visual Question Answering High Resolution (RSVQA HR) dataset from
+    'RSVQA: Visual Question Answering for Remote Sensing Data', Lobry et al (2020)
+    https://arxiv.org/abs/2003.07333
+
+    'This dataset uses 15cm resolution aerial RGB images extracted from the High Resolution
+    Orthoimagery (HRO) data collection of the USGS. This collection covers most urban areas of the
+    USA, along with a few areas of interest (e.g. national parks). For most areas covered by the dataset,
+    only one tile is available with acquisition dates ranging from year 2000 to 2016, with various sensors.
+    The tiles are openly accessible through USGS' EarthExplorer tool.
+
+    From this collection, we extracted 161 tiles belonging to the North-East coast of the USA
+    that were split into 100659 images of size 512x512 (each covering 5898m^2).We constructed 100,660,316
+    questions and answers following the methodology presented in subsection II-A. We split the data in
+    a training set (61.5% of the tiles), a validation set (11.2%), and test sets (20.5% for test set 1,
+    6.8% for test set 2). As it can be seen in Figure 4, test set 1 covers similar regions as the training
+    and validation sets, while test set 2 covers the city of Philadelphia, which is not seen during the
+    training. Note that this second test set also uses another sensor (marked as unknown on the USGS
+    data catalog), not seen during training.
+    """
+    image_root = "Data"
+    prefix = "USGS"
+
+    def __init__(self, root: str = ".data/RSVQA_HR", *args, **kwargs):
         super().__init__(root, *args, **kwargs)
 
 
