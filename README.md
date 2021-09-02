@@ -57,6 +57,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [GID-15 - Semantic Segmentation](https://github.com/isaaccorley/torchrs#gid-15)
 * [TiSeLaC - Time-Series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
 * [UC Merced - Land Use Classification](https://github.com/isaaccorley/torchrs#uc-merced-ucm)
+* [PatternNet - Image Retrieval / Scene Classification](https://github.com/isaaccorley/torchrs#patternnet)
 
 ### PROBA-V Super Resolution
 
@@ -883,6 +884,42 @@ dataset.classes
 ['agricultural', 'airplane', 'baseballdiamond', 'beach', 'buildings', 'chaparral', 'denseresidential',
 'forest', 'freeway', 'golfcourse', 'harbor', 'intersection', 'mediumresidential', 'mobilehomepark',
 'overpass', 'parkinglot', 'river', 'runway', 'sparseresidential', 'storagetanks', 'tenniscourt']
+"""
+```
+
+### PatternNet
+
+<img src="./assets/patternnet.png" width="500px"></img>
+
+The [PatternNet](https://sites.google.com/view/zhouwx/dataset) dataset, proposed in ["PatternNet: A Benchmark Dataset for Performance Evaluation of Remote Sensing Image Retrieval", Yang et al.](https://arxiv.org/abs/1706.03424) is a image retrieval and scene classification dataset of 30,400 256x256 high resolution (.06-5m) RGB images extracted using [Google Earth](https://earth.google.com/web/) and [Google Maps](https://developers.google.com/maps) with 38 scene classes (800 images per class). This dataset was originally proposed as a remote sensing image retrieval (RSIR) dataset with classes selected for high intra-class diversity and inter-class similarity such that image retrieval requires learning fine-grained details between multiple classes. Additionally, this dataset has some unique classes not found in other scene classification datasets, e.g. oil well, nursing home, solar panel, etc.
+
+The dataset can be downloaded (1.4GB) using `scripts/download_patternnet.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import PatternNet
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = PatternNet(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x, y = dataset[0]
+"""
+x: (3, 256, 256)
+y: int
+"""
+
+dataset.classes
+"""
+['airplane', 'baseball_field', 'basketball_court', 'beach', 'bridge', 'cemetery', 'chaparral',
+'christmas_tree_farm', 'closed_road', 'coastal_mansion', 'crosswalk', 'dense_residential',
+'ferry_terminal', 'football_field', 'forest', 'freeway', 'golf_course', 'harbor', 'intersection',
+'mobile_home_park', 'nursing_home', 'oil_gas_field', 'oil_well', 'overpass', 'parking_lot', 'parking_space',
+'railway', 'river', 'runway', 'runway_marking', 'shipping_yard', 'solar_panel','sparse_residential',
+'storage_tank', 'swimming_pool', 'tennis_court', 'transformer_station', 'wastewater_treatment_plant']
 """
 ```
 
