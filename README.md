@@ -56,6 +56,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [Dubai - Semantic Segmentation](https://github.com/isaaccorley/torchrs#dubai-segmentation)
 * [GID-15 - Semantic Segmentation](https://github.com/isaaccorley/torchrs#gid-15)
 * [TiSeLaC - Time-Series Land Cover Classification](https://github.com/isaaccorley/torchrs#tiselac)
+* [UC Merced - Land Use Classification](https://github.com/isaaccorley/torchrs#uc-merced-ucm)
 
 ### PROBA-V Super Resolution
 
@@ -825,7 +826,7 @@ dataset.classes
 
 The TiSeLaC dataset from the [Time Series Land Cover Classification Challenge](https://sites.google.com/site/dinoienco/tiselac-time-series-land-cover-classification-challenge) is a time series land cover classification dataset consisting of 23 2866x2633 medium resolution (30m) multispectral 10 band (7 reflectance + NDVI/NDWI/Brightness Index) images taken by the [USGS Landsat 8 satellite](https://www.usgs.gov/core-science-systems/nli/landsat/landsat-8). The imagery was captured over Reunion Island in 2014 and contains 9 land cover classes derived from the [Corine Land Cover (CLC) map](https://land.copernicus.eu/pan-european/corine-land-cover). Note that the dataset is formatted for pixelwise time-series classification where each time series is of the form `(t, b)` where `t=23 samples` and `b=10 bands`. This dataset is very easy with the top score currently standing at `0.9929` F1 Score.
 
-The dataset can be downloaded (.08GB) using `scripts/download_tiselac.sh` and instantiated below:
+The dataset can be downloaded (0.08GB) using `scripts/download_tiselac.sh` and instantiated below:
 
 ```python
 from torchrs.transforms import Compose, ToTensor
@@ -850,7 +851,39 @@ dataset.classes
 ['Urban Areas', 'Other built-up surfaces', 'Forests', 'Sparse Vegetation', 'Rocks and bare soil',
 'Grassland', 'Sugarcane crops', 'Other crops', 'Water']
 """
+```
 
+### UC Merced (UCM)
+
+<img src="./assets/ucm_captions.png" width="500px"></img>
+
+The [UC Merced (UCM)](http://weegee.vision.ucmerced.edu/datasets/landuse.html) dataset, proposed in ["Bag-Of-Visual-Words and Spatial Extensions for Land-Use Classification", Yang et al.](https://faculty.ucmerced.edu/snewsam/papers/Yang_ACMGIS10_BagOfVisualWords.pdf) is a land use classification dataset of 21k 256x256 1ft resolution RGB images of urban locations around the U.S. extracted from the [USGS National Map Urban Area Imagery collection](https://www.usgs.gov/core-science-systems/national-geospatial-program/national-map) with 21 land use classes (100 images per class).
+
+The dataset can be downloaded (0.42GB) using `scripts/download_ucm.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import UCM
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = UCM(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x, y = dataset[0]
+"""
+x: (3, 256, 256)
+y: int
+"""
+
+dataset.classes
+"""
+['agricultural', 'airplane', 'baseballdiamond', 'beach', 'buildings', 'chaparral', 'denseresidential',
+'forest', 'freeway', 'golfcourse', 'harbor', 'intersection', 'mediumresidential', 'mobilehomepark',
+'overpass', 'parkinglot', 'river', 'runway', 'sparseresidential', 'storagetanks', 'tenniscourt']
+"""
 ```
 
 ## Models
