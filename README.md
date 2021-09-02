@@ -60,6 +60,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [UC Merced - Land Use Classification](https://github.com/isaaccorley/torchrs#uc-merced-ucm)
 * [PatternNet - Image Retrieval / Scene Classification](https://github.com/isaaccorley/torchrs#patternnet)
 * [WHU-RS19 - Scene Classification](https://github.com/isaaccorley/torchrs#whu-rs19)
+* [RSSCN7 - Scene Classification](https://github.com/isaaccorley/torchrs#rsscn7)
 
 ### PROBA-V Super Resolution
 
@@ -986,6 +987,37 @@ dataset.classes
 ['Airport', 'Beach', 'Bridge', 'Commercial', 'Desert', 'Farmland','Forest', 'Industrial',
 'Meadow', 'Mountain', 'Park', 'Parking', 'Pond', 'Port', 'Residential', 'River', 'Viaduct',
 'footballField', 'railwayStation']
+"""
+```
+
+### RSSCN7
+
+<img src="./assets/rsscn7.png" width="500px"></img>
+
+The [RSSCN7](https://github.com/palewithout/RSSCN7) dataset, proposed in ["Deep Learning Based Feature Selection for Remote Sensing Scene Classification", Zou et al.](https://ieeexplore.ieee.org/abstract/document/7272047) is a scene classification dataset of 2,800 400x400 high resolution RGB images extracted using [Google Earth](https://earth.google.com/web/) with 7 scene classes (400 images per class).
+
+The dataset can be downloaded (0.36GB) using `scripts/download_rsscn7.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import RSSCN7
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = RSSCN7(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x, y = dataset[0]
+"""
+x: (3, 400, 400)
+y: int
+"""
+
+dataset.classes
+"""
+['aGrass', 'bField', 'cIndustry', 'dRiverLake', 'eForest', 'fResident', 'gParking']
 """
 ```
 
