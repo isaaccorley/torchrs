@@ -1,7 +1,7 @@
 from .base import BaseDataModule
 from .probav import PROBAVDataModule
 from .etci2021 import ETCI2021DataModule
-from .rsvqa import RSVQALRDataModule, RSVQAxBENDataModule
+from .rsvqa import RSVQALRDataModule, RSVQAHRDataModule, RSVQAxBENDataModule
 from .eurosat import EuroSATRGBDataModule, EuroSATMSDataModule
 from .resisc45 import RESISC45DataModule
 from .rsicd import RSICDDataModule
@@ -23,6 +23,7 @@ from .aid import AIDDataModule
 from .dubai_segmentation import DubaiSegmentationDataModule
 from .hkh_glacier import HKHGlacierMappingDataModule
 from .ucm import UCMDataModule
+from .patternnet import PatternNetDataModule
 
 
 __all__ = [
@@ -32,5 +33,6 @@ __all__ = [
     "FAIR1MDataModule", "SydneyCaptionsDataModule", "UCMCaptionsDataModule", "S2MTCPDataModule",
     "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule", "HRSCDDataModule", "InriaAILDataModule",
     "TiselacDataModule", "GID15DataModule", "ZueriCropDataModule", "AIDDataModule",
-    "DubaiSegmentationDataModule", "HKHGlacierMappingDataModule", "UCMDataModule"
+    "DubaiSegmentationDataModule", "HKHGlacierMappingDataModule", "UCMDataModule", "PatternNetDataModule",
+    "RSVQALRDataModule"
 ]
