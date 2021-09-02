@@ -106,7 +106,7 @@ class RSVQAHR(RSVQA):
     USA, along with a few areas of interest (e.g. national parks). For most areas covered by the dataset,
     only one tile is available with acquisition dates ranging from year 2000 to 2016, with various sensors.
     The tiles are openly accessible through USGS' EarthExplorer tool.
-    
+
     From this collection, we extracted 161 tiles belonging to the North-East coast of the USA
     that were split into 100659 images of size 512x512 (each covering 5898m^2).We constructed 100,660,316
     questions and answers following the methodology presented in subsection II-A. We split the data in

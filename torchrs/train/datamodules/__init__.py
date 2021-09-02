@@ -34,5 +34,5 @@ __all__ = [
     "ADVANCEDataModule", "SAT4DataModule", "SAT6DataModule", "HRSCDDataModule", "InriaAILDataModule",
     "TiselacDataModule", "GID15DataModule", "ZueriCropDataModule", "AIDDataModule",
     "DubaiSegmentationDataModule", "HKHGlacierMappingDataModule", "UCMDataModule", "PatternNetDataModule",
-    "RSVQALRDataModule"
+    "RSVQAHRDataModule"
 ]
