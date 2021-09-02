@@ -61,6 +61,7 @@ pip install 'git+https://github.com/isaaccorley/torchrs.git#egg=torch-rs[train]'
 * [PatternNet - Image Retrieval / Scene Classification](https://github.com/isaaccorley/torchrs#patternnet)
 * [WHU-RS19 - Scene Classification](https://github.com/isaaccorley/torchrs#whu-rs19)
 * [RSSCN7 - Scene Classification](https://github.com/isaaccorley/torchrs#rsscn7)
+* [Brazilian Coffee Scenes - Scene Classification](https://github.com/isaaccorley/torchrs#brazilian-coffee-scenes)
 
 ### PROBA-V Super Resolution
 
@@ -1018,6 +1019,37 @@ y: int
 dataset.classes
 """
 ['aGrass', 'bField', 'cIndustry', 'dRiverLake', 'eForest', 'fResident', 'gParking']
+"""
+```
+
+### Brazilian Coffee Scenes
+
+<img src="./assets/brazilian_coffee.jpg" width="600px"></img>
+
+The [Brazilian Coffee Scenes](http://patreo.dcc.ufmg.br/2017/11/12/brazilian-coffee-scenes-dataset/) dataset, proposed in ["Do Deep Features Generalize from Everyday Objects to Remote Sensing and Aerial Scenes Domains?", Penatti et al.](https://ieeexplore.ieee.org/document/7301382) is a scene classification dataset of 2,876 64x64 3-band (Green, Red, NIR) images taken by the [SPOT satellites](https://www.wikiwand.com/en/SPOT_(satellite)) in 2005 over four counties in the State of Minas Gerais, Brazil. This dataset was developed to classify coffee crops from non-coffee crops.
+
+The dataset can be downloaded (0.01GB) using `scripts/download_brazilian_coffee_.sh` and instantiated below:
+
+```python
+import torchvision.transforms as T
+from torchrs.datasets import BrazilianCoffeeScenes
+
+transform = T.Compose([T.ToTensor()])
+
+dataset = BrazilianCoffeeScenes(
+    root="path/to/dataset/",
+    transform=transform
+)
+
+x, y = dataset[0]
+"""
+x: (3, 64, 64)
+y: int
+"""
+
+dataset.classes
+"""
+['non-coffee', 'coffee']
 """
 ```
 
