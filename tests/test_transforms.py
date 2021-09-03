@@ -4,7 +4,6 @@ import torch
 from torchrs.transforms import ExtractChips
 
 
-
 def test_extract_chips():
     x = torch.ones(3, 128, 128)
     f = ExtractChips((32, 32))
