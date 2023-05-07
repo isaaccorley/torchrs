@@ -8,7 +8,7 @@
 
 UPDATE: torchrs is currently being merged into [TorchGeo](https://github.com/microsoft/torchgeo). Please go star & follow our progress.
 
-(WIP) PyTorch implementation of popular datasets and models in remote sensing tasks (Change Detection, Image Super Resolution, Land Cover Classification/Segmentation, Image Captioning, Audio-visual recognition etc.) for various Optical (Sentinel-2, Landsat, etc.) and Synthetic Aperture Radar (SAR) (Sentinel-1) sensors.
+PyTorch implementation of popular datasets and models in remote sensing tasks (Change Detection, Image Super Resolution, Land Cover Classification/Segmentation, Image Captioning, Audio-visual recognition etc.) for various Optical (Sentinel-2, Landsat, etc.) and Synthetic Aperture Radar (SAR) (Sentinel-1) sensors.
 
 ## Installation
 
